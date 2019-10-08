@@ -64,7 +64,7 @@ for i, target_folder in enumerate(dirs):
         full_fname = root+'/label/'+target_folder+'/'+fname
         tmp_img = Image.open(full_fname)
         tmp_arr = np.array(tmp_img.resize(resized_shape), dtype='uint8')
-        answers.append(tmp_arr[1:-1,:])
+        answers.append(tmp_arr[2:-2,1:-1])
         del(tmp_img)
         del(tmp_arr)
     y_train = np.array(answers)[... ,np.newaxis]
