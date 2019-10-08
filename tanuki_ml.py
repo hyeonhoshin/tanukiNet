@@ -21,7 +21,7 @@ def give_time(X, y, memory_size = 3):
         try:
             X_t[i] = X[i:i + memory_size]
         except:
-            print('* Error : stop at idx {}'.format(i))
+            print('* Give time : timed array has length = {}'.format(i))
             break
 
     return X_t, y_t
