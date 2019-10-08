@@ -11,7 +11,6 @@ and added back to the initial road image.
 import os
 from PIL import Image
 import tanuki_ml
-
 import numpy as np
 
 # 초기화
@@ -30,6 +29,6 @@ model.load_weights("full_CNN_model.h5","r")
 
 X_test, y_test = tanuki_ml.read_set('/home/mary/ml/test', resized_shape)
 
-loss_and_metrics = model.evaluate(X_test, y_test, batch_size, verbose = 1)
+loss_and_metrics = model.evaluate(X_test, y_test[..., np.newaxis], batch_size, verbose = 1)
 
 print('Loss is {:3f}, Accuracy is {:3f}'.format(loss_and_metrics[0],loss_and_metrics[1]*100))
