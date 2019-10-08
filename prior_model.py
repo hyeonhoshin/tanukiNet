@@ -67,7 +67,7 @@ for i, target_folder in enumerate(dirs):
         answers.append(tmp_arr[1:-1,:])
         del(tmp_img)
         del(tmp_arr)
-    y_train = np.array(answers)
+    y_train = np.array(answers)[... ,np.newaxis]
     print('X_train is {}, and y_train is {}'.format(X_train.shape, y_train.shape))
 
     # 학습
