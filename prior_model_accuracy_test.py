@@ -26,7 +26,7 @@ pool_size = (2, 2)
 
 model = tanuki_ml.generate_prior_model(input_shape, pool_size)
 model.compile(optimizer='Adam', loss='mean_squared_error', metrics = ['accuracy'])
-model.summary()
+model.load_weights("full_CNN_model.h5","r")
 
 X_test, y_test = tanuki_ml.read_set('/home/mary/ml/test', resized_shape)
 
