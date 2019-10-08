@@ -14,7 +14,7 @@ import tanuki_ml
 import sys
 
 # 초기화
-memory_size = sys.argv[1]
+memory_size = int(sys.argv[1])
 color_num = 3
 scaler = 3
 input_shape = (memory_size, 590//scaler, 1640//scaler, color_num)
