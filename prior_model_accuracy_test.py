@@ -28,7 +28,7 @@ model.compile(optimizer='Adam', loss='mean_squared_error', metrics = ['accuracy'
 model.load_weights("full_CNN_model.h5","r")
 
 X_test, y_test = tanuki_ml.read_set('/home/mary/ml/test', resized_shape)
-y_test = [..., np.newaxis]
+y_test = y_test[..., np.newaxis]
 
 loss_and_metrics = model.evaluate(X_test, y_test[2:-2, 1:-1], batch_size, verbose = 1)
 
