@@ -18,7 +18,7 @@ model.load_weights("tanuki_network_memory_is_5.h5","r")
 # Data load
 X_test, y_test = tanuki_ml.read_set('/home/mary/ml/test', resized_shape)
 
-X_test_t, y_test_t = tanuki_ml.give_time(X_test, y_test, memory_size = 3)
+X_test_t, y_test_t = tanuki_ml.give_time(X_test, y_test, memory_size = memory_size)
 del X_test; del y_test;
 
 loss_and_metrics = model.evaluate(X_test_t, y_test_t, batch_size, verbose = 1)
