@@ -17,14 +17,17 @@ def give_time(X, y, memory_size = 3):
     X_t = np.zeros((data_size, memory_size, width, height, 3), dtype='uint8')
     y_t = np.expand_dims(y, axis=3)
 
+    end_idx = 0
+
     for i, e in enumerate(X):
         try:
             X_t[i] = X[i:i + memory_size]
         except:
-            print('* Give time : timed array has length = {}'.format(i))
+            end_idx = i
+            print('* Give time : timed array has length = {}'.format(end_idx))
             break
 
-    return X_t, y_t
+    return X_t[:end_idx], y_t[:end_idx]
 
 def generate_model(input_shape, pool_size):
     ### Here is the actual neural network ###
