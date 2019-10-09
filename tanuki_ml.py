@@ -12,10 +12,14 @@ from keras import regularizers
 
 def give_time(X, y, memory_size = 3):
     # Make time-dependent data
-    # (data_idx, x, y) -> (data_idx, looking, x, y)
+    # X : (data_idx, x, y) -> (data_idx, looking, x, y)
     data_size, width, height = X.shape[0], X.shape[1], X.shape[2]
     X_t = np.zeros((data_size, memory_size, width, height, 3), dtype='uint8')
+
+    # y : (data_idx, x, y) -> (data_idx - memory_size, x, y)
+    # memory_size가 3일때, idx 0~2 의 데이터를 바탕으로 idx 2의 답이 답임.
     y_t = np.expand_dims(y, axis=3)
+    y_t = np.roll(y_t, memory_size - 1, axis=0)
 
     end_idx = 0
 
