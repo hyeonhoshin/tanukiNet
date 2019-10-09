@@ -2,7 +2,7 @@
 모델을 생성하고 학습시킨다.
 폴더 하나씩에 대해서 학습시킨다.
 
-python train_model_with_mem 5 "tanuki_network.h5"
+python train_model_with_mem 5
 '''
 
 # File open
@@ -12,6 +12,10 @@ from PIL import Image
 import numpy as np
 import tanuki_ml
 import sys
+import time
+
+start_total = time.time()
+train_total = 0
 
 # 초기화
 memory_size = int(sys.argv[1])
@@ -24,7 +28,7 @@ epochs = 2
 pool_size = (2, 2)
 
 print("Training model with memory size =", memory_size)
-print("Final data will be written in", sys.argv[2])
+print("Final data will be written in", "mem_is_{}.h5".format(memory_size))
 
 model = tanuki_ml.generate_model(input_shape, pool_size)
 model.compile(optimizer='Adam', loss='mean_squared_error')
@@ -76,13 +80,36 @@ for i, target_folder in enumerate(dirs):
     del(X_train)
     del(y_train)
 
+    start_train = time.time()
     # 학습
     hist = model.fit(x=X_train_t, y=y_train_t, batch_size=batch_size, epochs=epochs, verbose=1)
+    end_train = time.time()
+    train_total += end_train - start_train
 
     del(X_train_t)
     del(y_train_t)
     # 끝나면 free하고 다른 디렉토리에서 데이터 불러옴
 
-# h5 파일 출력
-model.save_weights(sys.argv[2])
+end_total = time.time()
+
+# Weights 저장
+model.save_weights("mem_is_{}.h5".format(memory_size))
 print("Saved model to disk")
+
+# Model 구조 저장
+model_json = model.to_json()
+with open("model_structure_when_mem_is_{}.json".format(memory_size), "w") as json_file :
+    json_file.write(model_json)
+
+## 실험 데이터 저장
+f=open("train_result_mem_is_{}.txt".format(memory_size),'w')
+
+# 총 걸린 시간
+min, sec = divmod(end_total-start_total, 60)
+f.write("Total run time : {}min {}sec".format(min,sec))
+
+# 총 걸린 학습 시간
+min, sec = divmod(train_total, 60)
+f.write("Pure training time : {}min {}sec".format(min,sec))
+
+f.close()
