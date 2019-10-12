@@ -4,7 +4,7 @@ draw_lanes.py json_file h5_file input_video output_video
 
 import numpy as np
 import cv2
-from PIL.Image import resize, fromarray
+from PIL.Image import fromarray
 from moviepy.editor import VideoFileClip
 from IPython.display import HTML
 from keras.models import model_from_json
