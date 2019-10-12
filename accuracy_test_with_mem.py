@@ -47,13 +47,13 @@ f=open("Test_result_mem_is_{}.txt".format(memory_size),'w')
 
 # 총 걸린 시간
 min, sec = divmod(end_total-start_total, 60)
-f.write("Total run time : {}min {}sec".format(min,sec))
+f.write("Total run time : {}min {}sec\n".format(min,sec))
 
 # 총 걸린 평가 시간
 min, sec = divmod(end_test-start_test, 60)
-f.write("Pure test time : {}min {}sec".format(min,sec))
+f.write("Pure test time : {}min {}sec\n".format(min,sec))
 
 # Loss and Accuracy
-f.write('Loss is {}, Accuracy is {}%'.format(loss_and_metrics[0],loss_and_metrics[1]*100))
+f.write('Loss is {}, Accuracy is {}%\n'.format(loss_and_metrics[0],loss_and_metrics[1]*100))
 
 f.close()

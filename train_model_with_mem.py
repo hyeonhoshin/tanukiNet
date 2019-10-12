@@ -106,10 +106,10 @@ f=open("train_result_mem_is_{}.txt".format(memory_size),'w')
 
 # 총 걸린 시간
 min, sec = divmod(end_total-start_total, 60)
-f.write("Total run time : {}min {}sec".format(min,sec))
+f.write("Total run time : {}min {}sec\n".format(min,sec))
 
 # 총 걸린 학습 시간
 min, sec = divmod(train_total, 60)
-f.write("Pure training time : {}min {}sec".format(min,sec))
+f.write("Pure training time : {}min {}sec\n".format(min,sec))
 
 f.close()

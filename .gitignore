@@ -1,0 +1,5 @@
+train/
+test/
+.ipynb_checkpoints/
+.vscode/
+__pycache__/
