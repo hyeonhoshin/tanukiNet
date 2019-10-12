@@ -4,7 +4,7 @@ draw_lanes.py json_file h5_file input_video output_video
 
 import numpy as np
 import cv2
-from scipy.misc import imresize
+from PIL.Image import resize, fromarray
 from moviepy.editor import VideoFileClip
 from IPython.display import HTML
 from keras.models import model_from_json
@@ -34,8 +34,7 @@ def road_lines(image):
     """
 
     # Get image ready for feeding into model
-    small_img = imresize(image, resized_shape)
-    small_img = np.array(small_img)
+    small_img = fromarray(image).resize(resized_shape)
     small_img = small_img[None,:,:,:]
 
     # Make prediction with neural network (un-normalize value by multiplying by 255)
@@ -55,7 +54,7 @@ def road_lines(image):
     lane_drawn = np.dstack((blanks, lanes.avg_fit, blanks))
 
     # Re-size to match the original image
-    lane_image = imresize(lane_drawn, (720, 1280, 3))
+    lane_image = resize(lane_drawn, (720, 1280, 3))
 
     # Merge the lane drawing onto the original image
     result = cv2.addWeighted(image, 1, lane_image, 1, 0)
