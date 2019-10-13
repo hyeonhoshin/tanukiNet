@@ -9,6 +9,8 @@ from moviepy.editor import VideoFileClip
 from IPython.display import HTML
 from keras.models import model_from_json
 import sys
+import warnings
+warnings.filterwarnings(action='ignore') # 귀찮은 경고 감추기
 
 scaler = 3
 resized_shape = (1640//scaler, 590//scaler)
@@ -51,10 +53,11 @@ def road_lines(image):
     lanes.avg_fit = np.mean(np.array([i for i in lanes.recent_fit]), axis = 0)
 
     # Generate fake R & B color dimensions, stack with G
-    blanks = np.zeros_like(lanes.avg_fit,dtype='uint8')
+    blanks = np.zeros_like(lanes.avg_fit)
     lane_drawn = np.dstack((blanks, lanes.avg_fit, blanks))
+    lane_drawn = lane_drawn.astype("uint8")
     print("lane_drawn shape is {}".format(lane_drawn.shape))
-    print("lane_drwan has dtype =", lane_drawn.dtype)
+    print("lane_drawn has dtype =", lane_drawn.dtype)
 
     # Re-size to match the original image
     lane_image = fromarray(lane_drawn)
