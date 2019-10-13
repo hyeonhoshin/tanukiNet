@@ -61,7 +61,7 @@ def road_lines(image):
 
     # Re-size to match the original image
     lane_image = fromarray(lane_drawn)
-    lane_image = lane_image.resize((720, 1280))
+    lane_image = lane_image.resize((1280, 720))
     lane_image = np.asarray(lane_image,dtype="uint8")
 
     # Merge the lane drawing onto the original image
