@@ -38,10 +38,10 @@ def road_lines(image):
     # Get image ready for feeding into model
     small_img = fromarray(image).resize(resized_shape)
     small_img = np.asarray(small_img,dtype="uint8")
-    small_img = small_img[None,:,:,:]
+    small_img = small_img[None,:,:,:]/255.0
 
     # Make prediction with neural network (un-normalize value by multiplying by 255)
-    prediction = model.predict(small_img)[0]
+    prediction = model.predict(small_img)[0]*255
 
     ##### debug code
     print("Prediction is ",prediction.shape)
