@@ -22,6 +22,8 @@ json_file.close()
 model = model_from_json(json_model)
 model.load_weights(sys.argv[2])
 
+model.summary()
+
 # Class to average lanes with
 class Lanes():
     def __init__(self):
