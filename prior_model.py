@@ -19,7 +19,6 @@ start_total = time.time()
 train_total = 0
 
 # 초기화
-memory_size = 3
 color_num = 3
 scaler = 3
 input_shape = (590//scaler, 1640//scaler, color_num)
@@ -55,11 +54,11 @@ for i, target_folder in enumerate(dirs):
     for fname in fnames:
         full_fname = root+'/data/'+target_folder+'/'+fname
         tmp_img = Image.open(full_fname)
-        tmp_arr = np.array(tmp_img.resize(resized_shape), dtype='uint8')
+        tmp_arr = np.array(tmp_img.resize(resized_shape))
         questions.append(tmp_arr)
         del(tmp_img)
         del(tmp_arr)
-    X_train = np.array(questions)
+    X_train = np.array(questions)/255.0
 
     # y_train load
     fnames = os.listdir(root + '/label/' + target_folder)
@@ -71,7 +70,7 @@ for i, target_folder in enumerate(dirs):
         answers.append(tmp_arr[2:-2,1:-1])
         del(tmp_img)
         del(tmp_arr)
-    y_train = np.array(answers)[... ,np.newaxis]
+    y_train = np.array(answers)[... ,np.newaxis]/255.0
     print('X_train is {}, and y_train is {}'.format(X_train.shape, y_train.shape))
 
     start_train = time.time()
