@@ -55,7 +55,7 @@ def road_lines(image):
     lane_drawn = np.dstack((blanks, lanes.avg_fit, blanks))
 
     # Re-size to match the original image
-    lane_image = fromarray(lane_image).resize((720, 1280))
+    lane_image = fromarray(lane_drawn).resize((720, 1280))
     lane_image = np.asarray(lane_image,dtype="uint8")
 
     # Merge the lane drawing onto the original image
