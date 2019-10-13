@@ -48,5 +48,5 @@ y_train = np.array(y_train)
 folder_name = np.array(folder_name)
 
 # 저장
-with open('tanuki_train.p','wb') as f :
+with open('tanuki_test.p','wb') as f :
     pickle.dump((X_train, y_train, folder_name), f, protocol=4)
