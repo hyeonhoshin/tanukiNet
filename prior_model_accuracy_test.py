@@ -30,8 +30,8 @@ model = tanuki_ml.generate_prior_model(input_shape, pool_size)
 model.compile(optimizer='Adam', loss='mean_squared_error', metrics = ['accuracy'])
 model.load_weights("prior_model.h5","r")
 
-X_test, y_test = tanuki_ml.read_set('/home/mary/ml/test', resized_shape)
-y_test = y_test[..., np.newaxis]
+X_test, y_test = tanuki_ml.read_set('/home/mary/ml/test', resized_shape)/255.0
+y_test = y_test[..., np.newaxis]/255.0
 
 print("Dimension of y_test is {}".format(y_test.shape))
 
