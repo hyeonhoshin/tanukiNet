@@ -25,5 +25,5 @@ for a_dir in dirs_data:
         del(data)
 
 # 저장
-with open('tanuki_foldername.p','wb') as f :
+with open('tanuki_train.p','wb') as f :
     pickle.dump((X_train), f, protocol=4)
