@@ -23,8 +23,8 @@ color_num = 3
 scaler = 3
 input_shape = (590//scaler, 1640//scaler, color_num)
 resized_shape = (1640//scaler, 590//scaler)
-batch_size =30
-epochs = 2
+batch_size =35
+epochs = 10
 pool_size = (2, 2)
 
 model = tanuki_ml.generate_prior_model(input_shape, pool_size)
