@@ -51,7 +51,7 @@ def road_lines(image):
     lanes.avg_fit = np.mean(np.array([i for i in lanes.recent_fit]), axis = 0)
 
     # Generate fake R & B color dimensions, stack with G
-    blanks = np.zeros_like(lanes.avg_fit).astype(np.uint8)
+    blanks = np.zeros_like(lanes.avg_fit,dtype='uint8')
     lane_drawn = np.dstack((blanks, lanes.avg_fit, blanks))
     print("lane_drawn shape is {}".format(lane_drawn.shape))
     print("lane_drwan has dtype =", lane_drawn.dtype)
