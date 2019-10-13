@@ -26,4 +26,4 @@ for a_dir in dirs_data:
 
 # 저장
 with open('tanuki_label.p','wb') as f :
-    pickle.dump(y_train), f, protocol=4)
+    pickle.dump((y_train), f, protocol=4)
