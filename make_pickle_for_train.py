@@ -4,8 +4,8 @@ import numpy as np
 import os
 
 # 불러오기
-path_data = '/home/mary/ml/test/data/'
-path_label = '/home/mary/ml/reinforced_imgs/test/label/'
+path_data = '/home/mary/ml/train/data/'
+path_label = '/home/mary/ml/reinforced_imgs/train/label/'
 dirs_data = os.listdir(path_data)
 dirs_data.sort()
 
