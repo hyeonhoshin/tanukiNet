@@ -41,7 +41,15 @@ def road_lines(image):
     small_img = small_img[None,:,:,:]
 
     # Make prediction with neural network (un-normalize value by multiplying by 255)
-    prediction = model.predict(small_img)[0]*255
+    prediction = model.predict(small_img)[0]
+
+    ##### debug code
+    f = open("predicted data.txt","w")
+    f.write(prediction)
+    f.close()
+
+    break
+    ######
 
     # Add lane prediction to list for averaging
     lanes.recent_fit.append(prediction)
