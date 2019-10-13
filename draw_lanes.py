@@ -44,9 +44,7 @@ def road_lines(image):
     prediction = model.predict(small_img)[0]
 
     ##### debug code
-    f = open("predicted data.txt","w")
-    f.write(prediction)
-    f.close()
+    np.savetxt("predicted_array.txt",prediction)
 
     return 0
     ######
