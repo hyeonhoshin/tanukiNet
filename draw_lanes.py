@@ -48,7 +48,7 @@ def road_lines(image):
     f.write(prediction)
     f.close()
 
-    break
+    return 0
     ######
 
     # Add lane prediction to list for averaging
