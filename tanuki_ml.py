@@ -125,13 +125,13 @@ def read_set(target, resized_shape):
     # Output
     imgs, labels = 데이터와 정답. numpy 형식
     '''
-    print('Start to read {} and {}'.format(target+'/data', target+'/label'))
+    print('Start to read {} and {}'.format(target+'/test/data', target+'/label'))
     
     # Train data Read
     imgs = []
 
     ## data Read
-    for root, dirs, files in os.walk(target+'/data'):
+    for root, dirs, files in os.walk(target+'/test/data'):
         # 일정 순서대로 읽기
         dirs.sort()
         files.sort()
@@ -146,7 +146,7 @@ def read_set(target, resized_shape):
     ##label Read
     labels = []
 
-    for root, dirs, files in os.walk(target+'/label'):
+    for root, dirs, files in os.walk(target+'/reinforced_imgs/test/label'):
         # 일정 순서대로 읽기
         dirs.sort()
         files.sort()

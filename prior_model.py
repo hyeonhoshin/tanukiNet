@@ -64,7 +64,7 @@ for i, target_folder in enumerate(dirs):
     fnames = os.listdir(root + '/label/' + target_folder)
     fnames.sort()
     for fname in fnames:
-        full_fname = root+'/label/'+target_folder+'/'+fname
+        full_fname = '/home/mary/ml/reinforced_imgs/train/'+target_folder+'/'+fname
         tmp_img = Image.open(full_fname)
         tmp_arr = np.array(tmp_img.resize(resized_shape), dtype='uint8')
         answers.append(tmp_arr[2:-2,1:-1])

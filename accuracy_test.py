@@ -16,7 +16,7 @@ model.compile(optimizer='Adam', loss='mean_squared_error', metrics = ['accuracy'
 model.load_weights("tanuki_network.h5","r")
 
 # Data load
-X_test, y_test = tanuki_ml.read_set('/home/mary/ml/test', resized_shape)
+X_test, y_test = tanuki_ml.read_set('/home/mary/ml', resized_shape)
 
 X_test_t, y_test_t = tanuki_ml.give_time(X_test, y_test, memory_size = 3)
 del X_test; del y_test;

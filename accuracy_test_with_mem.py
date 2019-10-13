@@ -29,10 +29,11 @@ model.compile(optimizer='Adam', loss='mean_squared_error', metrics = ['accuracy'
 model.load_weights("mem_is_{}.h5".format(memory_size),"r")
 
 # Data load
-X_test, y_test = tanuki_ml.read_set('/home/mary/ml/test', resized_shape)
+X_test, y_test = tanuki_ml.read_set('/home/mary/ml', resized_shape)
 
 X_test_t, y_test_t = tanuki_ml.give_time(X_test, y_test, memory_size = memory_size)
-del X_test; del y_test;
+del(X_test)
+del(y_test)
 
 start_test = time.time()
 loss_and_metrics = model.evaluate(X_test_t, y_test_t, batch_size, verbose = 1)
