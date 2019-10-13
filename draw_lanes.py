@@ -10,7 +10,6 @@ from IPython.display import HTML
 from keras.models import model_from_json
 import sys
 
-flag = False
 scaler = 3
 resized_shape = (1640//scaler, 590//scaler)
 
@@ -54,10 +53,8 @@ def road_lines(image):
     # Generate fake R & B color dimensions, stack with G
     blanks = np.zeros_like(lanes.avg_fit).astype(np.uint8)
     lane_drawn = np.dstack((blanks, lanes.avg_fit, blanks))
-    if flag is False:
-        print("lane_drawn shape is {}".format(lane_drawn.shape))
-        print("lane_drwan has dtype =", lane_drawn.dtype)
-        flag = True
+    print("lane_drawn shape is {}".format(lane_drawn.shape))
+    print("lane_drwan has dtype =", lane_drawn.dtype)
 
     # Re-size to match the original image
     lane_image = fromarray(lane_drawn)
