@@ -41,11 +41,11 @@ def road_lines(image):
     small_img = small_img[None,:,:,:]
 
     # Make prediction with neural network (un-normalize value by multiplying by 255)
-    prediction = model.predict(small_img)
+    prediction = model.predict(small_img)[0]
 
     ##### debug code
     print("Prediction is ",prediction.shape)
-    np.savetxt("predicted_array.txt",prediction[0])
+    np.savetxt("predicted_array.txt",prediction[..., 0])
 
     return 0
     ######
