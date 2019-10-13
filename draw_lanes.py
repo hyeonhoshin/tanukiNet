@@ -65,6 +65,8 @@ def road_lines(image):
     lane_image = np.asarray(lane_image,dtype="uint8")
 
     # Merge the lane drawing onto the original image
+    print("Image = {}".format(image.shape))
+    print('Lane image = {}'.format(lane_image.shape))
     result = cv2.addWeighted(image, 1, lane_image, 1, 0)
 
     return result
