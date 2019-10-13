@@ -43,9 +43,8 @@ for a_dir in dirs_data:
         del(data)
         del(label)
 
-X_train = np.array(X_train)
-y_train = np.array(y_train)
-folder_name = np.array(folder_name)
+X_train = np.array(X_train, dtype='uint8')
+y_train = np.array(y_train, dtype='uint8')
 
 # 저장
 with open('tanuki_test.p','wb') as f :
