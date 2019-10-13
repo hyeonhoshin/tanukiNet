@@ -42,16 +42,18 @@ def road_lines(image):
     small_img = np.asarray(small_img,dtype="uint8")
     small_img = small_img[None,:,:,:]/255.0
 
-    np.savetxt("small_img.txt",small_img[0, ..., 0])
+    # np.savetxt("small_img.txt",small_img[0, ..., 0])
 
     # Make prediction with neural network (un-normalize value by multiplying by 255)
     prediction = model.predict(small_img)[0]*255
 
     ##### debug code
+    '''
     print("Prediction is ",prediction[..., 0].shape)
     np.savetxt("predicted_array.txt",prediction[..., 0])
 
     return 0
+    '''
     ######
 
     # Add lane prediction to list for averaging
