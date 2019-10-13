@@ -5,6 +5,9 @@ from PIL import Image
 import tanuki_ml
 import numpy as np
 
+import warnings
+warnings.filterwarnings("ignore",category=FutureWarning)
+
 output_path = "/home/mary/ml/reinforced_imgs"
 
 # train 폴더 진입
@@ -29,7 +32,7 @@ for i, target_folder in enumerate(dirs):
 
         # 가공
         tmp_arr = np.array(tmp_img)
-        np.place(tmp_arr, tmp_arr>=2 and tmp_arr<=4, [255])
+        np.place(tmp_arr, tmp_arr>=2, [255])
 
         # 기록
         f = open(output_path+'/train/label/'+target_folder+'/'+fname,"w")
