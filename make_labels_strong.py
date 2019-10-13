@@ -35,10 +35,8 @@ for i, target_folder in enumerate(dirs):
         np.place(tmp_arr, tmp_arr>=2, [255])
 
         # 기록
-        f = open(output_path+'/train/label/'+target_folder+'/'+fname,"w")
         img_to_write = Image.fromarray(tmp_arr)
-        img_to_write.save(f)
-        f.close()
+        img_to_write.save(output_path+'/train/label/'+target_folder+'/'+fname)
 
         del(tmp_img)
         del(tmp_arr)
@@ -67,13 +65,11 @@ for i, target_folder in enumerate(dirs):
 
         # 가공
         tmp_arr = np.array(tmp_img)
-        np.place(tmp_arr, tmp_arr>=2 and tmp_arr<=4, [255])
+        np.place(tmp_arr, tmp_arr>=2, [255])
 
         # 기록
-        f = open(output_path+'/train/label/'+target_folder+'/'+fname,"w")
         img_to_write = Image.fromarray(tmp_arr)
-        img_to_write.save(f)
-        f.close()
+        img_to_write.save(output_path+'/test/label/'+target_folder+'/'+fname)
 
         del(tmp_img)
         del(tmp_arr)
