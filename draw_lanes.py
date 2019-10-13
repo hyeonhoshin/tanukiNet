@@ -41,7 +41,7 @@ def road_lines(image):
     small_img = small_img[None,:,:,:]
 
     # Make prediction with neural network (un-normalize value by multiplying by 255)
-    prediction = model.predict(small_img)[0]
+    prediction = model.predict(small_img)[0]*255
 
     # Add lane prediction to list for averaging
     lanes.recent_fit.append(prediction)
@@ -56,8 +56,6 @@ def road_lines(image):
     blanks = np.zeros_like(lanes.avg_fit)
     lane_drawn = np.dstack((blanks, lanes.avg_fit, blanks))
     lane_drawn = lane_drawn.astype("uint8")
-    print("lane_drawn shape is {}".format(lane_drawn.shape))
-    print("lane_drawn has dtype =", lane_drawn.dtype)
 
     # Re-size to match the original image
     lane_image = fromarray(lane_drawn)
@@ -65,8 +63,6 @@ def road_lines(image):
     lane_image = np.asarray(lane_image,dtype="uint8")
 
     # Merge the lane drawing onto the original image
-    print("Image = {}".format(image.shape))
-    print('Lane image = {}'.format(lane_image.shape))
     result = cv2.addWeighted(image, 1, lane_image, 1, 0)
 
     return result
