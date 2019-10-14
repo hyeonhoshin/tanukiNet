@@ -41,32 +41,23 @@ y_train = y_train[:,1:-1,:-1, np.newaxis] # 차원 조정
 # Give time data
 # First step, Find boundary index
 boundary = [0]
-for i, e in enumerate(fnames):
-    try:
-        if fnames[i] != fnames[i+1]:
-            boundary.append(i)
-    except:
-        break
+for i, e in range(0,len(fnames)-1):
+    if fnames[i] != fnames[i+1]:
+        boundary.append(i)
 
 # Second step, calculate separate timed matrix and combine
-X_train_temp = []
-y_train_temp = []
+# do - Make first array, i = 0
 
-for i, e in enumerate(boundary):
+first = boundary[i]
+second = boundary[i+1]
+X_train_t = tanuki_ml.give_time(X_train[first:second],y_train[first:second], memory_size = memory_size)
+
+for i in range(1, len(boundary)-1):
     first = boundary[i]
-    try:
-        second = boundary[i+1]
-    except:
-        break
+    second = boundary[i+1]
     X_t, y_t = tanuki_ml.give_time(X_train[first:second],y_train[first:second], memory_size = memory_size)
-    X_train_temp.append(X_t)
-    y_train_temp.append(y_t)
-
-X_train_t = np.array(X_train_temp)
-y_train_t = np.array(y_train_temp)
-
-del(X_train_temp)
-del(y_train_temp)
+    X_train_t = np.append(X_train_t, X_t, axis=0)
+    y_train_t = np.append(y_train_t, y_t, axis=0)
 
 print("X_train_t is {}, y_train_t is {}".format(X_train_t.shape,y_train_t.shape))
 print("Element of X_train_ is {}".format(X_train_t[0].shape))
