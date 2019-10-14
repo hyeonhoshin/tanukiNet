@@ -41,7 +41,7 @@ y_train = y_train[:,1:-1,:-1, np.newaxis] # 차원 조정
 # Give time data
 # First step, Find boundary index
 boundary = [0]
-for i, e in fnames:
+for i, e in enumerate(fnames):
     if fnames[i] != fnames[i+1]:
         boundary.append(i)
 
@@ -49,7 +49,7 @@ for i, e in fnames:
 X_train_t = []
 y_train_t = []
 
-for i, e in boundary:
+for i, e in enumerate(boundary):
     first = boundary[i]
     second = boundary[i+1]
     X_t, y_t = tanuki_ml.give_time(X_train[first:second],y_train[first:second], memory_size = memory_size)
