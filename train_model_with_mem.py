@@ -62,8 +62,8 @@ for i, e in enumerate(boundary):
     X_train_t.append(X_t)
     y_train_t.append(y_t)
 
-X_train_t = np.asarray(X_train_t)
-y_train_t = np.asarray(y_train_t)
+X_train_t = np.array(X_train_t, dtype="uint8")
+y_train_t = np.array(y_train_t, dtype="float64")
 
 print("X_train_t is {}, y_train_t is {}".format(X_train_t.shape,y_train_t.shape))
 
