@@ -41,7 +41,7 @@ y_train = y_train[:,1:-1,:-1, np.newaxis] # 차원 조정
 # Give time data
 # First step, Find boundary index
 boundary = [0]
-for i, e in range(0,len(fnames)-1):
+for i in range(0,len(fnames)-1):
     if fnames[i] != fnames[i+1]:
         boundary.append(i)
 
