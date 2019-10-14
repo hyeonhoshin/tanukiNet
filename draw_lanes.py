@@ -12,7 +12,7 @@ import sys
 import warnings
 warnings.filterwarnings(action='ignore') # 귀찮은 경고 감추기
 
-scaler = 3
+scaler = 6
 resized_shape = (1640//scaler, 590//scaler)
 
 # Load Keras model

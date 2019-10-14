@@ -13,82 +13,63 @@ import numpy as np
 import tanuki_ml
 import sys
 import time
+import pickle
 
+from sklearn.utils import shuffle
 start_total = time.time()
-train_total = 0
 
 # 초기화
 memory_size = int(sys.argv[1])
 color_num = 3
-scaler = 3
+scaler = 6
 input_shape = (memory_size, 590//scaler, 1640//scaler, color_num)
 resized_shape = (1640//scaler, 590//scaler)
-batch_size = 30//memory_size + 1
-epochs = 2
+batch_size = 50
+epochs = 20
 pool_size = (2, 2)
 
 print("Training model with memory size =", memory_size)
 print("Final data will be written in", "mem_is_{}.h5".format(memory_size))
 
+# Load training images
+X_train, y_train, fnames = pickle.load(open("tanuki_train.p", "rb" ))
+
+# Normalize labels - training images get normalized to start in the network
+y_train = y_train/255
+y_train = y_train[:,1:-1,:-1, np.newaxis] # 차원 조정
+
+# Give time data
+# First step, Find boundary index
+boundary = [0]
+for i, e in fnames:
+    if fnames[i] != fnames[i+1]:
+        boundary.append(i)
+
+# Second step, calculate separate timed matrix and combine
+X_train_t = []
+y_train_t = []
+
+for i, e in boundary:
+    first = boundary[i]
+    second = boundary[i+1]
+    X_t, y_t = tanuki_ml.give_time(X_train[first:second],y_train[first:second], memory_size = memory_size)
+    X_train_t.append(X_t)
+    y_train_t.append(y_t)
+
+X_train_t = np.array(X_train_t)
+y_train_t = np.array(y_train_t)
+
+# Model generation
 model = tanuki_ml.generate_model(input_shape, pool_size)
 model.compile(optimizer='Adam', loss='mean_squared_error')
 model.summary()
 
-# train 폴더 진입
-# directory 목록 저장.
-root = '/home/mary/ml/train'
-dirs = os.listdir(root + '/data')
-dirs.sort()
-# 맥북용 더미 파일은 세지 않기.
-if dirs[0] == '.DS_Store':
-    del dirs[0]
+# Data 부풀리기 - 일단 안함. Flip 정도는 후에 구현
 
-# 그 중 한 디렉토리에서 데이터 불러옴.
-for i, target_folder in enumerate(dirs):
-    # 초기화
-    questions = []
-    answers = []
-    print("Start to train model with files in {}".format(target_folder))
-
-    fnames = os.listdir(root+'/data/'+target_folder)
-    fnames.sort()
-    # Train question imgs load
-    for fname in fnames:
-        full_fname = root+'/data/'+target_folder+'/'+fname
-        tmp_img = Image.open(full_fname)
-        tmp_arr = np.array(tmp_img.resize(resized_shape), dtype='uint8')
-        questions.append(tmp_arr)
-        del(tmp_img)
-        del(tmp_arr)
-    X_train = np.array(questions)
-
-    # y_train load
-    fnames = os.listdir(root + '/label/' + target_folder)
-    fnames.sort()
-    for fname in fnames:
-        full_fname = root+'/label/'+target_folder+'/'+fname
-        tmp_img = Image.open(full_fname)
-        tmp_arr = np.array(tmp_img.resize(resized_shape), dtype='uint8')
-        answers.append(tmp_arr[1:-1,:])
-        del(tmp_img)
-        del(tmp_arr)
-    y_train = np.array(answers)
-    print('X_train is {}, and y_train is {}'.format(X_train.shape, y_train.shape))
-
-    # 시간 부여
-    X_train_t, y_train_t = tanuki_ml.give_time(X_train, y_train, memory_size)
-    del(X_train)
-    del(y_train)
-
-    start_train = time.time()
-    # 학습
-    hist = model.fit(x=X_train_t, y=y_train_t, batch_size=batch_size, epochs=epochs, verbose=1)
-    end_train = time.time()
-    train_total += end_train - start_train
-
-    del(X_train_t)
-    del(y_train_t)
-    # 끝나면 free하고 다른 디렉토리에서 데이터 불러옴
+# 학습
+start_train = time.time()
+model.fit(X_train_t, y_train_t, batch_size, epochs, shuffle = True)
+end_train = time.time()
 
 end_total = time.time()
 
@@ -106,10 +87,10 @@ f=open("train_result_mem_is_{}.txt".format(memory_size),'w')
 
 # 총 걸린 시간
 min, sec = divmod(end_total-start_total, 60)
-f.write("Total run time : {}min {}sec\n".format(min,sec))
+f.write("Total run time : {}min {}sec\n".format(int(min),int(sec)))
 
 # 총 걸린 학습 시간
-min, sec = divmod(train_total, 60)
-f.write("Pure training time : {}min {}sec\n".format(min,sec))
+min, sec = divmod(end_train-start_train, 60)
+f.write("Pure training time : {}min {}sec\n".format(int(min),int(sec)))
 
 f.close()
