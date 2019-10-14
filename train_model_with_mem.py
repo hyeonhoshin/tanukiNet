@@ -49,8 +49,8 @@ for i, e in enumerate(fnames):
         break
 
 # Second step, calculate separate timed matrix and combine
-X_train_t = []
-y_train_t = []
+X_train_temp = []
+y_train_temp = []
 
 for i, e in enumerate(boundary):
     first = boundary[i]
@@ -59,11 +59,14 @@ for i, e in enumerate(boundary):
     except:
         break
     X_t, y_t = tanuki_ml.give_time(X_train[first:second],y_train[first:second], memory_size = memory_size)
-    X_train_t.append(X_t)
-    y_train_t.append(y_t)
+    X_train_temp.append(X_t)
+    y_train_temp.append(y_t)
 
-X_train_t = np.array(X_train_t, dtype="uint8")
-y_train_t = np.array(y_train_t, dtype="float64")
+X_train_t = np.array(X_train_temp, dtype="uint8")
+y_train_t = np.array(y_train_temp, dtype="float64")
+
+del(X_train_temp)
+del(y_train_temp)
 
 print("X_train_t is {}, y_train_t is {}".format(X_train_t.shape,y_train_t.shape))
 
