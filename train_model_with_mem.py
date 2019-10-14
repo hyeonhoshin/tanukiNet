@@ -36,7 +36,7 @@ X_train, y_train, fnames = pickle.load(open("tanuki_train.p", "rb" ))
 
 # Normalize labels - training images get normalized to start in the network
 y_train = y_train/255
-y_train = y_train[:,1:-1,:-1, np.newaxis] # 차원 조정
+y_train = y_train[:,1:-1,:-1] # 차원 조정
 
 # Give time data
 # First step, Find boundary index
@@ -57,8 +57,6 @@ for i in range(1, len(boundary)-1):
     second = boundary[i+1]
     X_t, y_t = tanuki_ml.give_time(X_train[first:second],y_train[first:second], memory_size = memory_size)
     X_train_t = np.append(X_train_t, X_t, axis=0)
-    print("X_train_t is {}, y_train_t is {}".format(X_train_t.shape,y_train_t.shape))
-    print("y_t is {}".format(y_t.shape))
     y_train_t = np.append(y_train_t, y_t, axis=0)
 
 print("X_train_t is {}, y_train_t is {}".format(X_train_t.shape,y_train_t.shape))
