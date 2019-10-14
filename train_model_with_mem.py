@@ -62,6 +62,15 @@ for i in range(1, len(boundary)-1):
 print("X_train_t is {}, y_train_t is {}".format(X_train_t.shape,y_train_t.shape))
 print("Element of X_train_ is {}".format(X_train_t[0].shape))
 
+# --pickle 입력 시, pickle 파일 생성
+if sys.argv[2] == "--pickle":
+    print("Make pickle")
+
+    with open('train_mem_{}.p'.format(memory_size),'wb') as f :
+        pickle.dump((X_train_t, y_train_t), f, protocol=4)
+    
+    print("Pickle is enougly cooked!")
+
 # Model generation
 model = tanuki_ml.generate_model(input_shape, pool_size)
 model.compile(optimizer='Adam', loss='mean_squared_error')
