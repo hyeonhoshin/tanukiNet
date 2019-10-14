@@ -41,37 +41,37 @@ def generate_model(input_shape, pool_size):
 
     # Below layers were re-named for easier reading of model summary; this not necessary
     # LSTM Conv Layer 1
-    model.add(ConvLSTM2D(filters=8, kernel_size=(3, 3), strides=(1, 1), data_format='channels_last',
+    model.add(ConvLSTM2D(filters=60, kernel_size=(3, 3), strides=(1, 1), data_format='channels_last',
                          padding='valid', return_sequences=True))
 
     # LSTM Conv Layer 2
-    model.add(ConvLSTM2D(filters=16, kernel_size=(3, 3), strides=(1, 1), data_format='channels_last',
+    model.add(ConvLSTM2D(filters=50, kernel_size=(3, 3), strides=(1, 1), data_format='channels_last',
                          padding='valid'))
 
     # Pooling 1
     model.add(MaxPooling2D(pool_size=pool_size))
 
     # Conv Layer 3
-    model.add(Conv2D(16, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Conv3'))
+    model.add(Conv2D(40, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Conv3'))
     model.add(Dropout(0.2))
 
     # Conv Layer 4
-    model.add(Conv2D(32, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Conv4'))
+    model.add(Conv2D(30, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Conv4'))
     model.add(Dropout(0.2))
 
     # Conv Layer 5
-    model.add(Conv2D(32, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Conv5'))
+    model.add(Conv2D(20, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Conv5'))
     model.add(Dropout(0.2))
 
     # Pooling 2
     model.add(MaxPooling2D(pool_size=pool_size))
 
     # Conv Layer 6
-    model.add(Conv2D(64, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Conv6'))
+    model.add(Conv2D(10, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Conv6'))
     model.add(Dropout(0.2))
 
     # Conv Layer 7
-    model.add(Conv2D(64, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Conv7'))
+    model.add(Conv2D(5, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Conv7'))
     model.add(Dropout(0.2))
 
     # Pooling 3
@@ -81,36 +81,33 @@ def generate_model(input_shape, pool_size):
     model.add(UpSampling2D(size=pool_size))
 
     # Deconv 1
-    model.add(Conv2DTranspose(64, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Deconv1'))
+    model.add(Conv2DTranspose(10, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Deconv1'))
     model.add(Dropout(0.2))
 
     # Deconv 2
-    model.add(Conv2DTranspose(64, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Deconv2'))
+    model.add(Conv2DTranspose(20, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Deconv2'))
     model.add(Dropout(0.2))
 
     # Upsample 2
     model.add(UpSampling2D(size=pool_size))
 
     # Deconv 3
-    model.add(Conv2DTranspose(32, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Deconv3'))
+    model.add(Conv2DTranspose(30, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Deconv3'))
     model.add(Dropout(0.2))
 
     # Deconv 4
-    model.add(Conv2DTranspose(32, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Deconv4'))
+    model.add(Conv2DTranspose(40, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Deconv4'))
     model.add(Dropout(0.2))
 
     # Deconv 5
-    model.add(Conv2DTranspose(16, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Deconv5'))
+    model.add(Conv2DTranspose(50, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Deconv5'))
     model.add(Dropout(0.2))
 
     # Upsample 3
     model.add(UpSampling2D(size=pool_size))
 
     # Deconv 6
-    model.add(Conv2DTranspose(16, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Deconv6'))
-
-    # Deconv 7
-    model.add(Conv2DTranspose(8, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Deconv7'))
+    model.add(Conv2DTranspose(60, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Deconv6'))
 
     # Final layer - only including one channel so 1 filter
     model.add(Conv2DTranspose(1, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Final'))

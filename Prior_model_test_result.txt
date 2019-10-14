@@ -1,3 +1,0 @@
-Total run time : 1.0min 13.277709007263184sec
-Pure test time : 0.0min 17.53861713409424sec
-Loss is 0.24355435094773756, Accuracy is 96.8592514301433%
