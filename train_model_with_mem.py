@@ -48,8 +48,8 @@ for i in range(0,len(fnames)-1):
 # Second step, calculate separate timed matrix and combine
 # do - Make first array, i = 0
 
-first = boundary[i]
-second = boundary[i+1]
+first = boundary[0]
+second = boundary[1]
 X_train_t = tanuki_ml.give_time(X_train[first:second],y_train[first:second], memory_size = memory_size)
 
 for i in range(1, len(boundary)-1):
