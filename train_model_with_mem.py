@@ -24,7 +24,7 @@ color_num = 3
 scaler = 6
 input_shape = (memory_size, 590//scaler, 1640//scaler, color_num)
 resized_shape = (1640//scaler, 590//scaler)
-batch_size = 20
+batch_size = 5
 epochs = 20
 pool_size = (2, 2)
 
