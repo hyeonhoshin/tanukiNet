@@ -62,8 +62,8 @@ for i, e in enumerate(boundary):
     X_train_temp.append(X_t)
     y_train_temp.append(y_t)
 
-X_train_t = np.array(X_train_temp, dtype="uint8")
-y_train_t = np.array(y_train_temp, dtype="float64")
+X_train_t = np.array(X_train_temp)
+y_train_t = np.array(y_train_temp)
 
 del(X_train_temp)
 del(y_train_temp)
