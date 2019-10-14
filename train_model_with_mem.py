@@ -69,6 +69,7 @@ del(X_train_temp)
 del(y_train_temp)
 
 print("X_train_t is {}, y_train_t is {}".format(X_train_t.shape,y_train_t.shape))
+print("Element of X_train_ is {}".format(X_train_t[0].shape))
 
 # Model generation
 model = tanuki_ml.generate_model(input_shape, pool_size)
