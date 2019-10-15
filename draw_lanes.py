@@ -31,7 +31,7 @@ model.summary()
 # Class to average lanes with
 class Lanes():
     def __init__(self):
-        self.recent_fit = np.empty((1, 96, 272, 1))
+        self.recent_fit = np.empty((96, 272, 1))
 
 def road_lines(image):
     """ Takes in a road image, re-sizes for the model,
@@ -45,17 +45,22 @@ def road_lines(image):
     small_img = np.asarray(small_img,dtype="uint8")
     small_img = small_img[None,:,:,:]/255.0
 
-    if lanes.recent_fit.shape[0] > memory_size:
+    if lanes.recent_fit.shape[0] >= memory_size:
+        print("=== Case 0 : memory size overflow ===")
         # 이 경우에만 예측과 갈아치우기를 한다.
         # 이전 프레임 지우기
         lanes.recent_fit = np.vstack(lanes.recent_fit, small_img)
         lanes.recent_fit = lanes.recent_fit[1:]
         prediction = model.predict(lanes.recent_fit)[0]*255
 
+        print("prediction is {}".format(prediction.shape))
+
         # Generate fake R & B color dimensions, stack with G
         blanks = np.zeros_like(prediction)
         lane_drawn = np.dstack((blanks, prediction, blanks))
         lane_drawn = lane_drawn.astype("uint8")
+
+        print("lane_drawn is {}".format(lane_drawn.shape))
 
         # Re-size to match the original image
         lane_image = fromarray(lane_drawn)
@@ -64,16 +69,20 @@ def road_lines(image):
 
         # Merge the lane drawing onto the original image
         result = cv2.addWeighted(image, 1, lane_image, 1, 0)
-        
+
     elif lanes.recent_fit.shape[0] > 1:
+        print("=== Case 1 : image stacking only ===")
         lanes.recent_fit = np.vstack(lanes.recent_fit, small_img)
         result = fromarray(image).resize((1280, 720))
         result = np.array(result)
 
     elif lanes.recent_fit.shape[0] == 1:
+        print("=== Case 2 : initializing ===")
         lanes.recent_fit = small_img
         result = fromarray(image).resize((1280, 720))
         result = np.array(result)
+
+    print("result is {}".format(result.shape))
 
     return result
 
