@@ -19,7 +19,7 @@ def give_time(X, y, memory_size = 3):
     # y : (data_idx, x, y) -> (data_idx - memory_size, x, y)
     # memory_size가 3일때, idx 0~2 의 데이터를 바탕으로 idx 2의 답이 답임.
     y_t = np.expand_dims(y, axis=3)
-    y_t = np.roll(y_t, memory_size - 1, axis=0)
+    y_t = np.roll(y_t, - (memory_size - 1), axis=0)
 
     end_idx = 0
 
