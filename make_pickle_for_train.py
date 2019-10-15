@@ -19,6 +19,7 @@ folder_name = []
 
 for a_dir in dirs_data:
     fnames_data = os.listdir(path_data+a_dir)
+    fnames_data.sort()
     for fname in fnames_data:
         data = Image.open(path_data+a_dir+'/'+fname,'r')
         label = Image.open(path_label+a_dir+'/'+fname.replace('.jpg','.png'),'r')
