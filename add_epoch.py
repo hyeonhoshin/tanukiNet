@@ -35,6 +35,8 @@ json_file.close()
 model = model_from_json(json_model)
 model.load_weights(weights_fname)
 
+model.compile(optimizer='Adam', loss='mean_squared_error')
+
 model.summary()
 
 model.fit(X_train_t, y_train_t, batch_size, epochs, shuffle = True)
