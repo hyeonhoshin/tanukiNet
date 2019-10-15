@@ -77,7 +77,7 @@ def generate_model(input_shape, pool_size):
 
     # Conv Layer 7
     model.add(ConvLSTM2D(filters=5, kernel_size=(3, 3), strides=(1, 1), data_format='channels_last',
-                         padding='valid', return_sequences=True))
+                         padding='valid', return_sequences=False))
     model.add(Dropout(0.2))
 
     # Pooling 3
