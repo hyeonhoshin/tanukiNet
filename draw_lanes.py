@@ -82,6 +82,7 @@ def road_lines(image):
         lanes.recent_fit = small_img
         result = fromarray(image).resize((1280, 720))
         result = np.array(result)
+        lanes.initialized = True
 
     print("result is {}".format(result.shape))
 
