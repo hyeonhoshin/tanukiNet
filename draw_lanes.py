@@ -31,7 +31,8 @@ model.summary()
 # Class to average lanes with
 class Lanes():
     def __init__(self):
-        self.recent_fit = np.empty((1,96, 272, 1))
+        self.recent_fit = np.empty((96, 272, 1))
+        self.initialized = False
 
 def road_lines(image):
     """ Takes in a road image, re-sizes for the model,
@@ -70,13 +71,13 @@ def road_lines(image):
         # Merge the lane drawing onto the original image
         result = cv2.addWeighted(image, 1, lane_image, 1, 0)
 
-    elif lanes.recent_fit.shape[0] > 1:
+    elif lanes.initialized == True:
         print("=== Case 1 : image stacking only ===")
         lanes.recent_fit = np.vstack(lanes.recent_fit, small_img)
         result = fromarray(image).resize((1280, 720))
         result = np.array(result)
 
-    elif lanes.recent_fit.shape[0] == 1:
+    elif lanes.initialized == False:
         print("=== Case 2 : initializing ===")
         lanes.recent_fit = small_img
         result = fromarray(image).resize((1280, 720))
