@@ -84,7 +84,7 @@ def generate_model(input_shape, pool_size):
     model.add(MaxPooling2D(pool_size=pool_size))
 
     # Upsample 1
-    model.add(UpSampling2D(size=pool_sizeL)
+    model.add(UpSampling2D(size=pool_size))
 
     # Deconv 1
     model.add(Conv2DTranspose(10, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Deconv1'))
