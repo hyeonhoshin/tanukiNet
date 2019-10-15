@@ -47,44 +47,44 @@ def generate_model(input_shape, pool_size):
 
     # Below layers were re-named for easier reading of model summary; this not necessary
     # LSTM Conv Layer 1
-    model.add(ConvLSTM2D(filters=60, kernel_size=(3, 3), strides=(1, 1), data_format='channels_last',
-                         padding='valid', return_sequences=True))
+    model.add(TimeDistributed(Conv2D(60, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Conv1')))
 
     # LSTM Conv Layer 2
-    model.add(ConvLSTM2D(filters=50, kernel_size=(3, 3), strides=(1, 1), data_format='channels_last',
-                         padding='valid'))
+    model.add(TimeDistributed(Conv2D(50, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Conv2')))
 
     # Pooling 1
     model.add(MaxPooling2D(pool_size=pool_size))
 
     # Conv Layer 3
-    model.add(Conv2D(40, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Conv3'))
+    model.add(TimeDistributed(Conv2D(40, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Conv3')))
     model.add(Dropout(0.2))
 
     # Conv Layer 4
-    model.add(Conv2D(30, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Conv4'))
+    model.add(TimeDistributedConv2D(30, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Conv4')))
     model.add(Dropout(0.2))
 
     # Conv Layer 5
-    model.add(Conv2D(20, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Conv5'))
+    model.add(TimeDistributed(Conv2D(20, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Conv5')))
     model.add(Dropout(0.2))
 
     # Pooling 2
     model.add(MaxPooling2D(pool_size=pool_size))
 
     # Conv Layer 6
-    model.add(Conv2D(10, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Conv6'))
+    model.add(ConvLSTM2D(filters=10, kernel_size=(3, 3), strides=(1, 1), data_format='channels_last',
+                         padding='valid', return_sequences=True))
     model.add(Dropout(0.2))
 
     # Conv Layer 7
-    model.add(Conv2D(5, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Conv7'))
+    model.add(ConvLSTM2D(filters=5, kernel_size=(3, 3), strides=(1, 1), data_format='channels_last',
+                         padding='valid', return_sequences=True))
     model.add(Dropout(0.2))
 
     # Pooling 3
     model.add(MaxPooling2D(pool_size=pool_size))
 
     # Upsample 1
-    model.add(UpSampling2D(size=pool_size))
+    model.add(UpSampling2D(size=pool_size)
 
     # Deconv 1
     model.add(Conv2DTranspose(10, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Deconv1'))
@@ -351,8 +351,7 @@ def unet(pretrained_weights = None,input_size = (256,256,1)):
     conv7 = Conv2D(256, 3, activation = 'relu', padding = 'same', kernel_initializer = 'he_normal')(conv7)
 
     up8 = Conv2D(128, 2, activation = 'relu', padding = 'same', kernel_initializer = 'he_normal')(UpSampling2D(size = (2,2))(conv7))
-    up8_reshaped = Reshape((49, 136, 128))(up8)
-    merge8 = concatenate([conv2,up8_reshaped], axis = 3)
+    merge8 = concatenate([conv2,up8], axis = 3)
     conv8 = Conv2D(128, 3, activation = 'relu', padding = 'same', kernel_initializer = 'he_normal')(merge8)
     conv8 = Conv2D(128, 3, activation = 'relu', padding = 'same', kernel_initializer = 'he_normal')(conv8)
 
