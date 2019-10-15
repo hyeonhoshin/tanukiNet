@@ -351,7 +351,7 @@ def unet(pretrained_weights = None,input_size = (256,256,1)):
     conv7 = Conv2D(256, 3, activation = 'relu', padding = 'same', kernel_initializer = 'he_normal')(conv7)
 
     up8 = Conv2D(128, 2, activation = 'relu', padding = 'same', kernel_initializer = 'he_normal')(UpSampling2D(size = (2,2))(conv7))
-    up8_reshaped = Reshape((49, 136, 128))
+    up8_reshaped = Reshape((None, 49, 136, 128))
     merge8 = concatenate([conv2,up8_reshaped], axis = 3)
     conv8 = Conv2D(128, 3, activation = 'relu', padding = 'same', kernel_initializer = 'he_normal')(merge8)
     conv8 = Conv2D(128, 3, activation = 'relu', padding = 'same', kernel_initializer = 'he_normal')(conv8)
