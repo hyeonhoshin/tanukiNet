@@ -32,44 +32,7 @@ print("Training model with memory size =", memory_size)
 print("Final data will be written in", "mem_is_{}.h5".format(memory_size))
 
 # Load training images
-X_train, y_train, fnames = pickle.load(open("tanuki_train.p", "rb" ))
-
-# Normalize labels - training images get normalized to start in the network
-y_train = y_train/255
-y_train = y_train[:,1:-1,:-1] # 차원 조정
-
-# Give time data
-# First step, Find boundary index
-boundary = [0]
-for i in range(0,len(fnames)-1):
-    if fnames[i] != fnames[i+1]:
-        boundary.append(i)
-
-# Second step, calculate separate timed matrix and combine
-# do - Make first array, i = 0
-
-first = boundary[0]
-second = boundary[1]
-X_train_t, y_train_t = tanuki_ml.give_time(X_train[first:second],y_train[first:second], memory_size = memory_size)
-
-for i in range(1, len(boundary)-1):
-    first = boundary[i]
-    second = boundary[i+1]
-    X_t, y_t = tanuki_ml.give_time(X_train[first:second],y_train[first:second], memory_size = memory_size)
-    X_train_t = np.append(X_train_t, X_t, axis=0)
-    y_train_t = np.append(y_train_t, y_t, axis=0)
-
-print("X_train_t is {}, y_train_t is {}".format(X_train_t.shape,y_train_t.shape))
-print("Element of X_train_ is {}".format(X_train_t[0].shape))
-
-# --pickle 입력 시, pickle 파일 생성
-if sys.argv[2] == "--pickle":
-    print("Make pickle")
-
-    with open('train_mem_{}.p'.format(memory_size),'wb') as f :
-        pickle.dump((X_train_t, y_train_t), f, protocol=4)
-    
-    print("Pickle is enougly cooked!")
+X_train_t, y_train_t = pickle.load(open("train_mem_{}.p".format(memory_size), "rb" ))
 
 # Model generation
 model = tanuki_ml.generate_model(input_shape, pool_size)
