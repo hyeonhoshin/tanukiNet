@@ -47,24 +47,24 @@ def generate_model(input_shape, pool_size):
 
     # Below layers were re-named for easier reading of model summary; this not necessary
     # LSTM Conv Layer 1
-    model.add(TimeDistributed(Conv2D(60, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Conv1'))))
+    model.add(TimeDistributed(Conv2D(60, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Conv1')))
 
     # LSTM Conv Layer 2
-    model.add(TimeDistributed(Conv2D(50, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Conv2'))))
+    model.add(TimeDistributed(Conv2D(50, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Conv2')))
 
     # Pooling 1
     model.add(MaxPooling2D(pool_size=pool_size))
 
     # Conv Layer 3
-    model.add(TimeDistributed(Conv2D(40, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Conv3'))))
+    model.add(TimeDistributed(Conv2D(40, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Conv3')))
     model.add(Dropout(0.2))
 
     # Conv Layer 4
-    model.add(TimeDistributedConv2D(30, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Conv4'))))
+    model.add(TimeDistributed(Conv2D(30, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Conv4')))
     model.add(Dropout(0.2))
 
     # Conv Layer 5
-    model.add(TimeDistributed(Conv2D(20, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Conv5'))))
+    model.add(TimeDistributed(Conv2D(20, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Conv5')))
     model.add(Dropout(0.2))
 
     # Pooling 2
