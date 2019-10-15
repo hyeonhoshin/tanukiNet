@@ -59,7 +59,7 @@ def road_lines(image):
         lanes.recent_ans.append(prediction)
 
         if len(lanes.recent_ans) > 5:
-        lanes.recent_ans = lanes.recent_ans[1:]
+            lanes.recent_ans = lanes.recent_ans[1:]
 
         # Calculate average detection
         lanes.avg_ans = np.mean(np.array([i for i in lanes.recent_ans]), axis = 0)
