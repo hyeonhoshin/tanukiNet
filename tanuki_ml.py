@@ -53,7 +53,7 @@ def generate_model(input_shape, pool_size):
     model.add(TimeDistributed(Conv2D(50, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Conv2')))
 
     # Pooling 1
-    model.add(MaxPooling2D(pool_size=pool_size))
+    model.add(TimeDistributed(MaxPooling2D(pool_size=pool_size)))
 
     # Conv Layer 3
     model.add(TimeDistributed(Conv2D(40, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Conv3')))
@@ -68,7 +68,7 @@ def generate_model(input_shape, pool_size):
     model.add(Dropout(0.2))
 
     # Pooling 2
-    model.add(MaxPooling2D(pool_size=pool_size))
+    model.add(TimeDistributed(MaxPooling2D(pool_size=pool_size)))
 
     # Conv Layer 6
     model.add(ConvLSTM2D(filters=10, kernel_size=(3, 3), strides=(1, 1), data_format='channels_last',
