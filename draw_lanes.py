@@ -52,7 +52,7 @@ def road_lines(image):
         # 이전 프레임 지우기
         lanes.recent_fit = np.append(lanes.recent_fit, small_img, axis=0)
         lanes.recent_fit = lanes.recent_fit[1:]
-        prediction = model.predict(lanes.recent_fit)[0]*255
+        prediction = model.predict(lanes.recent_fit[np.newaxis])[0]*255
 
         print("prediction is {}".format(prediction.shape))
 
