@@ -44,7 +44,7 @@ def road_lines(image):
     # Image를 memory size 만큼 받아서 한번에 predict
     small_img = fromarray(image).resize(resized_shape)
     small_img = np.asarray(small_img,dtype="uint8")
-    small_img = small_img[None,:,:,:]/255.0
+    small_img = small_img[None,:,:,:]/255.0 # (1, 96, 272, 1)
 
     if lanes.recent_fit.shape[0] >= memory_size:
         print("=== Case 0 : memory size overflow ===")
@@ -79,9 +79,9 @@ def road_lines(image):
 
     elif lanes.initialized == False:
         print("=== Case 2 : initializing ===")
-        lanes.recent_fit = small_img[np.newaxis]# (1, 96, 272, 1)
+        lanes.recent_fit = small_img# (1, 96, 272, 1)
         result = fromarray(image).resize((1280, 720))
-        result = np.array(result) 
+        result = np.array(result) # (720, 1280, 3) 
         lanes.initialized = True
 
     print("result is {}".format(result.shape))
