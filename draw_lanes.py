@@ -50,7 +50,7 @@ def road_lines(image):
         print("=== Case 0 : memory size overflow ===")
         # 이 경우에만 예측과 갈아치우기를 한다.
         # 이전 프레임 지우기
-        lanes.recent_fit = np.vstack(lanes.recent_fit, small_img)
+        lanes.recent_fit = np.append(lanes.recent_fit, small_img, axis=0)
         lanes.recent_fit = lanes.recent_fit[1:]
         prediction = model.predict(lanes.recent_fit)[0]*255
 
@@ -73,18 +73,19 @@ def road_lines(image):
 
     elif lanes.initialized == True:
         print("=== Case 1 : image stacking only ===")
-        lanes.recent_fit = np.vstack(lanes.recent_fit, small_img)
+        lanes.recent_fit = np.append(lanes.recent_fit, small_img, axis=0)
         result = fromarray(image).resize((1280, 720))
         result = np.array(result)
 
     elif lanes.initialized == False:
         print("=== Case 2 : initializing ===")
-        lanes.recent_fit = small_img
+        lanes.recent_fit = small_img[np.newaxis]# (1, 96, 272, 1)
         result = fromarray(image).resize((1280, 720))
-        result = np.array(result)
+        result = np.array(result) 
         lanes.initialized = True
 
     print("result is {}".format(result.shape))
+    print("lanes.recent_fit is {}".format(lanes.recent_fit.shape))
 
     return result
 
