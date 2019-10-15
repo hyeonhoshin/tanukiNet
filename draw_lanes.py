@@ -69,6 +69,7 @@ def road_lines(image):
         result = fromarray(image).resize((1280, 720))
     elif lanes.recent_fit.shape[0] == 1:
         lanes.recent_fit = small_img
+        result = fromarray(image).resize((1280, 720))
 
     return result
 
