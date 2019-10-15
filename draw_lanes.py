@@ -47,21 +47,16 @@ def road_lines(image):
     small_img = small_img[None,:,:,:]/255.0 # (1, 96, 272, 1)
 
     if lanes.recent_fit.shape[0] >= memory_size:
-        print("=== Case 0 : memory size overflow ===")
         # 이 경우에만 예측과 갈아치우기를 한다.
         # 이전 프레임 지우기
         lanes.recent_fit = np.append(lanes.recent_fit, small_img, axis=0)
         lanes.recent_fit = lanes.recent_fit[1:]
         prediction = model.predict(lanes.recent_fit[np.newaxis])[0]*255
 
-        print("prediction is {}".format(prediction.shape))
-
         # Generate fake R & B color dimensions, stack with G
         blanks = np.zeros_like(prediction)
         lane_drawn = np.dstack((blanks, prediction, blanks))
         lane_drawn = lane_drawn.astype("uint8")
-
-        print("lane_drawn is {}".format(lane_drawn.shape))
 
         # Re-size to match the original image
         lane_image = fromarray(lane_drawn)
