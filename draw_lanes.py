@@ -4,7 +4,7 @@ draw_lanes.py memory_size input_video output_video
 
 import numpy as np
 import cv2
-from PIL.Image import fromarray
+from PIL.Image import fromarray, BILINEAR
 from moviepy.editor import VideoFileClip
 from IPython.display import HTML
 from keras.models import model_from_json
@@ -28,6 +28,11 @@ model.load_weights(weights_fname)
 
 model.summary()
 
+# Class to average lanes with
+class Lanes():
+    def __init__(self):
+        self.recent_fit = np.empty((1, 96, 272, 1))
+
 def road_lines(image):
     """ Takes in a road image, re-sizes for the model,
     predicts the lane to be drawn from the model in G color,
@@ -40,12 +45,12 @@ def road_lines(image):
     small_img = np.asarray(small_img,dtype="uint8")
     small_img = small_img[None,:,:,:]/255.0
 
-    if len(imgs) > memory_size:
+    if lanes.recent_fit.shape[0] > memory_size:
         # 이 경우에만 예측과 갈아치우기를 한다.
         # 이전 프레임 지우기
-        imgs = np.vstack(imgs, small_img)
-        imgs = imgs[1:]
-        prediction = model.predict(np.array(imgs))[0]*255
+        lanes.recent_fit = np.vstack(lanes.recent_fit, small_img)
+        lanes.recent_fit = lanes.recent_fit[1:]
+        prediction = model.predict(lanes.recent_fit)[0]*255
 
         # Generate fake R & B color dimensions, stack with G
         blanks = np.zeros_like(prediction)
@@ -59,16 +64,16 @@ def road_lines(image):
 
         # Merge the lane drawing onto the original image
         result = cv2.addWeighted(image, 1, lane_image, 1, 0)
-    elif len(imgs) > 1:
-        imgs = np.vstack(imgs, small_img)
+    elif lanes.recent_fit.shape[0] > 1:
+        lanes.recent_fit = np.vstack(lanes.recent_fit, small_img)
         result = fromarray(image).resize((1280, 720))
-    elif len(imgs) == 1:
-        imgs = small_img
+    elif lanes.recent_fit.shape[0] == 1:
+        lanes.recent_fit = small_img
 
     return result
 
-# Global variable imgs
-imgs = []
+# Global variable lanes.recent_fit
+lanes = Lanes()
 
 # Where to save the output video
 vid_output = sys.argv[3]
