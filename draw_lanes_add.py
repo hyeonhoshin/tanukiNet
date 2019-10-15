@@ -32,8 +32,10 @@ model.summary()
 # Class to average lanes with
 class Lanes():
     def __init__(self):
-        self.recent_fit = np.empty((1, 96, 272, 1))
+        self.recent_question = np.empty((1, 96, 272, 1))
         self.initialized = False
+        self.recent_ans = []
+        self.avg_ans = []
 
 def road_lines(image):
     """ Takes in a road image, re-sizes for the model,
@@ -47,16 +49,24 @@ def road_lines(image):
     small_img = np.asarray(small_img,dtype="uint8")
     small_img = small_img[None,:,:,:]/255.0 # (1, 96, 272, 1)
 
-    if lanes.recent_fit.shape[0] >= memory_size:
+    if lanes.recent_question.shape[0] >= memory_size:
         # 이 경우에만 예측과 갈아치우기를 한다.
         # 이전 프레임 지우기
-        lanes.recent_fit = np.append(lanes.recent_fit, small_img, axis=0)
-        lanes.recent_fit = lanes.recent_fit[1:]
-        prediction = model.predict(lanes.recent_fit[np.newaxis])[0]*255
+        lanes.recent_question = np.append(lanes.recent_question, small_img, axis=0)
+        lanes.recent_question = lanes.recent_question[1:]
+        prediction = model.predict(lanes.recent_question[np.newaxis])[0]*255
+
+        lanes.recent_ans.append(prediction)
+
+        if len(lanes.recent_ans) > 5:
+        lanes.recent_ans = lanes.recent_ans[1:]
+
+        # Calculate average detection
+        lanes.avg_ans = np.mean(np.array([i for i in lanes.recent_ans]), axis = 0)
 
         # Generate fake R & B color dimensions, stack with G
-        blanks = np.zeros_like(prediction)
-        lane_drawn = np.dstack((blanks, prediction, blanks))
+        blanks = np.zeros_like(lanes.avg_ans)
+        lane_drawn = np.dstack((blanks, lanes.avg_ans, blanks))
         lane_drawn = lane_drawn.astype("uint8")
 
         # Re-size to match the original image
@@ -69,20 +79,20 @@ def road_lines(image):
 
     elif lanes.initialized == True:
         print("=== Case 1 : image stacking only ===")
-        lanes.recent_fit = np.append(lanes.recent_fit, small_img, axis=0)
+        lanes.recent_question = np.append(lanes.recent_question, small_img, axis=0)
         result = fromarray(image).resize((1280, 720))
         result = np.array(result)
 
     elif lanes.initialized == False:
         print("=== Case 2 : initializing ===")
-        lanes.recent_fit = small_img# (1, 96, 272, 1)
+        lanes.recent_question = small_img# (1, 96, 272, 1)
         result = fromarray(image).resize((1280, 720))
         result = np.array(result) # (720, 1280, 3) 
         lanes.initialized = True
 
     return result
 
-# Global variable lanes.recent_fit
+# Global variable lanes.recent_question
 lanes = Lanes()
 
 # Where to save the output video
