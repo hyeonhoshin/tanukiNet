@@ -31,7 +31,7 @@ model.summary()
 # Class to average lanes with
 class Lanes():
     def __init__(self):
-        self.recent_fit = np.empty((96, 272, 1))
+        self.recent_fit = np.empty((1, 96, 272, 1))
         self.initialized = False
 
 def road_lines(image):
@@ -82,6 +82,7 @@ def road_lines(image):
         lanes.recent_fit = small_img
         result = fromarray(image).resize((1280, 720))
         result = np.array(result)
+        lanes.initialized = True
 
     print("result is {}".format(result.shape))
 
