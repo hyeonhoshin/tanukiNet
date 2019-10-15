@@ -64,12 +64,16 @@ def road_lines(image):
 
         # Merge the lane drawing onto the original image
         result = cv2.addWeighted(image, 1, lane_image, 1, 0)
+        
     elif lanes.recent_fit.shape[0] > 1:
         lanes.recent_fit = np.vstack(lanes.recent_fit, small_img)
         result = fromarray(image).resize((1280, 720))
+        result = np.array(result)
+
     elif lanes.recent_fit.shape[0] == 1:
         lanes.recent_fit = small_img
         result = fromarray(image).resize((1280, 720))
+        result = np.array(result)
 
     return result
 
