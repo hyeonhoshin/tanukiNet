@@ -79,9 +79,6 @@ def road_lines(image):
         result = np.array(result) # (720, 1280, 3) 
         lanes.initialized = True
 
-    print("result is {}".format(result.shape))
-    print("lanes.recent_fit is {}".format(lanes.recent_fit.shape))
-
     return result
 
 # Global variable lanes.recent_fit
