@@ -11,6 +11,7 @@ from keras.layers import Activation, Dropout, UpSampling2D
 from keras.layers import Conv2DTranspose, Conv2D, MaxPooling2D
 from keras.layers.normalization import BatchNormalization
 from keras.preprocessing.image import ImageDataGenerator
+from loss_functions import softmax_sparse_crossentropy_ignoring_last_label
 
 import tanuki_ml
 
@@ -43,7 +44,7 @@ input_shape = X_train.shape[1:]
 
 # Model generation
 model = tanuki_ml.generate_model(input_shape, pool_size)
-model.compile(optimizer='Adam', loss='mean_squared_error')
+model.compile(optimizer='Adam', loss=softmax_sparse_crossentropy_ignoring_last_label, validation_data=(X_val, y_val))
 model.summary()
 
 # 학습
@@ -53,11 +54,6 @@ model.fit(X_train, y_train, batch_size, epochs, shuffle = True)
 # Channel shifts help with shadows slightly
 datagen = ImageDataGenerator(channel_shift_range=0.2)
 datagen.fit(X_train)
-
-# Compiling and training the model
-model.compile(optimizer='Adam', loss='mean_squared_error')
-model.fit_generator(datagen.flow(X_train, y_train, batch_size=batch_size), steps_per_epoch = len(X_train),
-                    epochs=epochs, verbose=1, validation_data=(X_val, y_val))
 
 # Save model architecture and weights
 model_json = model.to_json()
