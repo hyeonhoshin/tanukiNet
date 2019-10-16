@@ -10,7 +10,7 @@ dirs_data = os.listdir(path_data)
 dirs_data.sort()
 
 # 처리
-scaler = 2
+scaler = 3
 resized_shape = (1640//scaler, 590//scaler)
 
 X_train = []
