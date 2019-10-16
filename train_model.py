@@ -23,6 +23,8 @@ input_shape = train_images.shape[1:]
 
 # Make into arrays as the neural network wants these
 labels = labels[..., np.newaxis]
+blanks = np.zeros_like(labels)
+labels = np.append(labels,blanks, axis = 3)
 
 print("Train_imgs is {}, labels is {}".format(train_images.shape, labels.shape))
 
