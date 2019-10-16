@@ -6,6 +6,8 @@ from IPython.display import HTML
 from keras.models import model_from_json
 import sys
 import warnings
+from tanuki_ml import BilinearUpSampling2D
+
 warnings.filterwarnings(action='ignore') # 귀찮은 경고 감추기
 
 # Load Keras model
