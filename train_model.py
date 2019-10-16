@@ -31,14 +31,8 @@ print("Train_imgs is {}, labels is {}".format(train_images.shape, labels.shape))
 # Normalize labels - training images get normalized to start in the network
 labels = labels / 255
 
-# Shuffle images along with their labels, then split into training/validation sets
-train_images, labels = shuffle(train_images, labels)
-
-# Test size may be 10% or 20%
-X_train, X_val, y_train, y_val = train_test_split(train_images, labels, test_size=0.1)
-
 # Batch size, epochs and pool size below are all paramaters to fiddle with for optimization
-batch_size = 128
+batch_size = 32
 epochs = 10
 pool_size = (2, 2)
 input_shape = X_train.shape[1:]
@@ -49,7 +43,7 @@ model.compile(optimizer='Adam', loss=softmax_sparse_crossentropy_ignoring_last_l
 model.summary()
 
 # 학습
-model.fit(X_train, y_train, batch_size, epochs, shuffle = True, validation_data=(X_val, y_val))
+model.fit(train_images,labels, batch_size, epochs, shuffle = True, validation_split = 0.1))
 
 # Using a generator to help the model use less data
 # Channel shifts help with shadows slightly
