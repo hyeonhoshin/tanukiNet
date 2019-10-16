@@ -16,8 +16,8 @@ scaler = 6
 resized_shape = (1640//scaler, 590//scaler)
 
 memory_size = int(sys.argv[1])
-json_fname = "model_structure_when_mem_is_{}.json".format(memory_size,add)
-weights_fname ="mem_is_{}.h5".format(memory_size,add)
+json_fname = "model_structure_when_mem_is_{}.json".format(memory_size)
+weights_fname ="mem_is_{}.h5".format(memory_size)
 
 # Load Keras model
 json_file = open(json_fname, 'r')
