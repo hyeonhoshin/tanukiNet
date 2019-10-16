@@ -39,16 +39,11 @@ input_shape = X_train.shape[1:]
 
 # Model generation
 model = tanuki_ml.generate_model(input_shape, pool_size)
-model.compile(optimizer='Adam', loss='binary_crossentropy', metrics = ['accuracy'])
+model.compile(optimizer='Adam', loss='mean_squared_error', metrics = ['accuracy'])
 model.summary()
 
 # 학습
 model.fit(X_train,labels, batch_size, epochs, shuffle = True, validation_split = 0.1)
-
-# Using a generator to help the model use less data
-# Channel shifts help with shadows slightly
-datagen = ImageDataGenerator(channel_shift_range=0.2)
-datagen.fit(X_train)
 
 # Save model architecture and weights
 model_json = model.to_json()
