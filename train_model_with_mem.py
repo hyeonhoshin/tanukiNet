@@ -35,7 +35,7 @@ print("Final data will be written in", "mem_is_{}.h5".format(memory_size))
 X_train_t, y_train_t = pickle.load(open("train_mem_{}.p".format(memory_size), "rb" ))
 
 # Model generation
-model = tanuki_ml.generate_model_LSTM_model(input_shape, pool_size)
+model = tanuki_ml.generate_model(input_shape, pool_size)
 model.compile(optimizer='Adam', loss='mean_squared_error')
 model.summary()
 
