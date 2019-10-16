@@ -6,22 +6,21 @@ from IPython.display import HTML
 from keras.models import model_from_json
 import sys
 import warnings
-from tanuki_ml import BilinearUpSampling2D
+import tanuki_ml
 
 warnings.filterwarnings(action='ignore') # 귀찮은 경고 감추기
 
+scaler = 6
+resized_shape = (1640//scaler, 590//scaler)
+input_shape = (1640//scaler, 590//scaler, 3)
+pool_size = (2,2)
+
 # Load Keras model
-json_file = open('model.json', 'r')
-json_model = json_file.read()
-json_file.close()
-model = model_from_json(json_model)
+model = tanuki_ml.generate_model(input_shape, pool_size)
 model.load_weights('model.h5')
 model.compile(optimizer = 'Adam', loss='mean_squared_error', metrics = ['accuracy'])
 
 model.summary()
-
-scaler = 6
-resized_shape = (1640//scaler, 590//scaler)
 
 # Class to average lanes with
 class Lanes():
