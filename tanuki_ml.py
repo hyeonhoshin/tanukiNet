@@ -170,7 +170,7 @@ def generate_model(input_shape, pool_size, weight_decay=0.):
     x = Conv2D(1024, (1, 1), activation='relu', padding='same', name='fc2', kernel_regularizer=l2(weight_decay))(x)
     x = Dropout(0.5)(x)
     #classifying layer
-    x = Conv2D(2, (1, 1), kernel_initializer='he_normal', activation='linear', padding='valid', strides=(1, 1), kernel_regularizer=l2(weight_decay))(x)
+    x = Conv2D(1, (1, 1), kernel_initializer='he_normal', activation='linear', padding='valid', strides=(1, 1), kernel_regularizer=l2(weight_decay))(x)
 
     x = BilinearUpSampling2D(target_size=image_size)(x)
 
