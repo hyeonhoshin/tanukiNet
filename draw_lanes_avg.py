@@ -1,5 +1,5 @@
 '''
-draw_lanes.py memory_size input_video output_video add
+draw_lanes.py memory_size input_video output_video 
 '''
 
 import numpy as np
@@ -15,7 +15,6 @@ warnings.filterwarnings(action='ignore') # 귀찮은 경고 감추기
 scaler = 6
 resized_shape = (1640//scaler, 590//scaler)
 
-add = int(sys.argv[4])
 memory_size = int(sys.argv[1])
 json_fname = "model_structure_when_mem_is_{}.json".format(memory_size,add)
 weights_fname ="mem_is_{}.h5".format(memory_size,add)
