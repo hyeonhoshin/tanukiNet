@@ -22,7 +22,7 @@ train_images,labels, _ = pickle.load(open("tanuki_train.p", "rb" ))
 input_shape = train_images.shape[1:]
 
 # Make into arrays as the neural network wants these
-labels = labels[:,1:-1,:-1, np.newaxis]
+labels = labels[..., np.newaxis]
 
 print("Train_imgs is {}, labels is {}".format(train_images.shape, labels.shape))
 
