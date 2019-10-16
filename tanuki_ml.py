@@ -81,31 +81,31 @@ def generate_model(input_shape, pool_size):
     model.add(UpSampling2D(size=pool_size))
 
     # Deconv 1
-    model.add(Conv2DTranspose(10, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Deconv1'))
+    model.add(Conv2DTranspose(10, (3, 3), padding='valid', strides=(1, 1), activation='relu',output_shape = model.layers[8].output_shape[1:], name='Deconv1'))
 
     # Deconv 2
-    model.add(Conv2DTranspose(20, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Deconv2'))
+    model.add(Conv2DTranspose(20, (3, 3), padding='valid', strides=(1, 1), activation='relu',output_shape = model.layers[7].output_shape[1:], name='Deconv2'))
 
     # Upsample 2
     model.add(UpSampling2D(size=pool_size))
 
     # Deconv 3
-    model.add(Conv2DTranspose(30, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Deconv3'))
+    model.add(Conv2DTranspose(30, (3, 3), padding='valid', strides=(1, 1), activation='relu',output_shape = model.layers[5].output_shape, name='Deconv3'))
 
     # Deconv 4
-    model.add(Conv2DTranspose(40, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Deconv4'))
+    model.add(Conv2DTranspose(40, (3, 3), padding='valid', strides=(1, 1), activation='relu',output_shape = model.layers[4].output_shape, name='Deconv4'))
 
     # Deconv 5
-    model.add(Conv2DTranspose(50, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Deconv5'))
+    model.add(Conv2DTranspose(50, (3, 3), padding='valid', strides=(1, 1), activation='relu',output_shape = model.layers[3].output_shape, name='Deconv5'))
 
     # Upsample 3
     model.add(UpSampling2D(size=pool_size))
 
     # Deconv 6
-    model.add(Conv2DTranspose(60, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Deconv6'))
+    model.add(Conv2DTranspose(60, (3, 3), padding='valid', strides=(1, 1), activation='relu',output_shape = model.layers[1].output_shape, name='Deconv6'))
 
     # Final layer - only including one channel so 1 filter
-    model.add(Conv2DTranspose(1, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Final'))
+    model.add(Conv2DTranspose(1, (3, 3), padding='valid', strides=(1, 1), activation='relu',output_shape = model.layers[0].output_shape, name='Final'))
 
     return model
 
