@@ -35,7 +35,7 @@ print("Final data will be written in", "mem_is_{}.h5".format(memory_size))
 X_train_t, y_train_t = pickle.load(open("train_mem_{}.p".format(memory_size), "rb" ))
 
 # Model generation
-model = tanuki_ml.generate_model(input_shape, pool_size)
+model = tanuki_ml.generate_model_LSTM_model(input_shape, pool_size)
 model.compile(optimizer='Adam', loss='mean_squared_error')
 model.summary()
 
@@ -49,16 +49,16 @@ end_train = time.time()
 end_total = time.time()
 
 # Weights 저장
-model.save_weights("mem_is_{}.h5".format(memory_size))
+model.save_weights("lstm_mem_is_{}.h5".format(memory_size))
 print("Saved model to disk")
 
 # Model 구조 저장
 model_json = model.to_json()
-with open("model_structure_when_mem_is_{}.json".format(memory_size), "w") as json_file :
+with open("lstm_model_structure_when_mem_is_{}.json".format(memory_size), "w") as json_file :
     json_file.write(model_json)
 
 ## 실험 데이터 저장
-f=open("train_result_mem_is_{}.txt".format(memory_size),'w')
+f=open("lstm_train_result_mem_is_{}.txt".format(memory_size),'w')
 
 # 총 걸린 시간
 min, sec = divmod(end_total-start_total, 60)
