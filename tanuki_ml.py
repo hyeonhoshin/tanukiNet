@@ -7,7 +7,7 @@ from keras.models import Sequential
 from keras.layers import Activation, Dropout, UpSampling2D
 from keras.layers import Conv2DTranspose, Conv2D, MaxPooling2D
 from keras.layers.normalization import BatchNormalization
-from keras.regularizers import l2(weight_decay)
+from keras.regularizers import l2
 
 from keras.models import *
 from keras.layers import *
