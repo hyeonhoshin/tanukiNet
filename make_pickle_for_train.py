@@ -10,7 +10,7 @@ dirs_data = os.listdir(path_data)
 dirs_data.sort()
 
 # 처리
-scaler = 6
+scaler = 2
 resized_shape = (1640//scaler, 590//scaler)
 
 X_train = []
@@ -38,5 +38,5 @@ X_train = np.array(X_train, dtype='uint8')
 y_train = np.array(y_train, dtype='uint8')
 
 # 저장
-with open('tanuki_train.p','wb') as f :
+with open('big_train.p','wb') as f :
     pickle.dump((X_train, y_train, folder_name), f, protocol=4)

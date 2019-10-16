@@ -19,7 +19,7 @@ import tanuki_ml
 print("Training start")
 
 # Load training images
-train_images,labels, _ = pickle.load(open("tanuki_train.p", "rb" ))
+train_images,labels, _ = pickle.load(open("large_train.p", "rb" ))
 
 input_shape = train_images.shape[1:]
 
