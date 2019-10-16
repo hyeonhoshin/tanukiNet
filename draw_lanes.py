@@ -12,7 +12,7 @@ warnings.filterwarnings(action='ignore') # 귀찮은 경고 감추기
 
 scaler = 6
 resized_shape = (1640//scaler, 590//scaler)
-input_shape = (1640//scaler, 590//scaler, 3)
+input_shape = (590//scaler,1640//scaler, 3)
 pool_size = (2,2)
 
 # Load Keras model
