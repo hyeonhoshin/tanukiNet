@@ -237,7 +237,7 @@ def generate_prior_model(input_shape, pool_size):
 
     return model
 
-def generate_model_without_Dropout(input_shape, pool_size):
+def generate_LSTM_model(input_shape, pool_size):
     # 만약 이게 결과가 더 잘 나오면 학습 속도가 매우 느린거임.
     ### Here is the actual neural network ###
     model = Sequential()
