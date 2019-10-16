@@ -33,13 +33,13 @@ labels = labels / 255
 
 # Batch size, epochs and pool size below are all paramaters to fiddle with for optimization
 batch_size = 32
-epochs = 10
+epochs = 3
 pool_size = (2, 2)
 input_shape = X_train.shape[1:]
 
 # Model generation
 model = tanuki_ml.generate_model(input_shape, pool_size)
-model.compile(optimizer='Adam', loss=softmax_sparse_crossentropy_ignoring_last_label, metrics = ['accuracy'])
+model.compile(optimizer='Adam', loss='sparse_categorical_crossentropy', metrics = ['accuracy'])
 model.summary()
 
 # 학습
