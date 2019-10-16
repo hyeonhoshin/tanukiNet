@@ -43,7 +43,7 @@ model.compile(optimizer='Adam', loss=softmax_sparse_crossentropy_ignoring_last_l
 model.summary()
 
 # 학습
-model.fit(train_images,labels, batch_size, epochs, shuffle = True, validation_split = 0.1))
+model.fit(train_images,labels, batch_size, epochs, shuffle = True, validation_split = 0.1)
 
 # Using a generator to help the model use less data
 # Channel shifts help with shadows slightly
