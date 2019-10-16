@@ -39,7 +39,7 @@ input_shape = X_train.shape[1:]
 
 # Model generation
 model = tanuki_ml.generate_model(input_shape, pool_size)
-model.compile(optimizer='Adam', loss='sparse_categorical_crossentropy', metrics = ['accuracy'])
+model.compile(optimizer='Adam', loss='binary_crossentropy', metrics = ['accuracy'])
 model.summary()
 
 # 학습
