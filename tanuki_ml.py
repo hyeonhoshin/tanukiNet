@@ -46,10 +46,9 @@ def generate_model(input_shape, pool_size):
     model.add(BatchNormalization(input_shape=input_shape))
 
     # Below layers were re-named for easier reading of model summary; this not necessary
-    # LSTM Conv Layer 1
+    # Conv Layer 1
     model.add(TimeDistributed(Conv2D(60, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Conv1')))
-
-    # LSTM Conv Layer 2
+    # Conv Layer 2
     model.add(TimeDistributed(Conv2D(50, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Conv2')))
 
     # Pooling 1
@@ -57,28 +56,23 @@ def generate_model(input_shape, pool_size):
 
     # Conv Layer 3
     model.add(TimeDistributed(Conv2D(40, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Conv3')))
-    model.add(Dropout(0.2))
-
     # Conv Layer 4
     model.add(TimeDistributed(Conv2D(30, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Conv4')))
-    model.add(Dropout(0.2))
-
     # Conv Layer 5
     model.add(TimeDistributed(Conv2D(20, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Conv5')))
-    model.add(Dropout(0.2))
-
     # Pooling 2
     model.add(TimeDistributed(MaxPooling2D(pool_size=pool_size)))
 
     # Conv Layer 6
-    model.add(ConvLSTM2D(filters=10, kernel_size=(3, 3), strides=(1, 1), data_format='channels_last',
+    model.add(ConvLSTM2D(filters=20, kernel_size=(3, 3), strides=(1, 1), activation='relu', data_format='channels_last',
+                         padding='same', return_sequences=True))
+
+    model.add(ConvLSTM2D(filters=10, kernel_size=(3, 3), strides=(1, 1), activation='relu', data_format='channels_last',
                          padding='valid', return_sequences=True))
-    model.add(Dropout(0.2))
 
     # Conv Layer 7
-    model.add(ConvLSTM2D(filters=5, kernel_size=(3, 3), strides=(1, 1), data_format='channels_last',
+    model.add(ConvLSTM2D(filters=5, kernel_size=(3, 3), strides=(1, 1), activation='relu', data_format='channels_last',
                          padding='valid', return_sequences=False))
-    model.add(Dropout(0.2))
 
     # Pooling 3
     model.add(MaxPooling2D(pool_size=pool_size))
@@ -88,26 +82,21 @@ def generate_model(input_shape, pool_size):
 
     # Deconv 1
     model.add(Conv2DTranspose(10, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Deconv1'))
-    model.add(Dropout(0.2))
 
     # Deconv 2
     model.add(Conv2DTranspose(20, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Deconv2'))
-    model.add(Dropout(0.2))
 
     # Upsample 2
     model.add(UpSampling2D(size=pool_size))
 
     # Deconv 3
     model.add(Conv2DTranspose(30, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Deconv3'))
-    model.add(Dropout(0.2))
 
     # Deconv 4
     model.add(Conv2DTranspose(40, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Deconv4'))
-    model.add(Dropout(0.2))
 
     # Deconv 5
     model.add(Conv2DTranspose(50, (3, 3), padding='valid', strides=(1, 1), activation='relu', name='Deconv5'))
-    model.add(Dropout(0.2))
 
     # Upsample 3
     model.add(UpSampling2D(size=pool_size))
