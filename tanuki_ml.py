@@ -7,7 +7,7 @@ from keras.models import Sequential
 from keras.layers import Activation, Dropout, UpSampling2D
 from keras.layers import Conv2DTranspose, Conv2D, MaxPooling2D
 from keras.layers.normalization import BatchNormalization
-from keras.regularizers import l2
+from keras.regularizers import l2(weight_decay)
 
 from keras.models import *
 from keras.layers import *
@@ -131,46 +131,46 @@ class BilinearUpSampling2D(Layer):
         base_config = super(BilinearUpSampling2D, self).get_config()
         return dict(list(base_config.items()) + list(config.items()))
 
-def generate_model(input_shape, pool_size):
+def generate_model(input_shape, pool_size, weight_decay=0.):
     # Keras FCN : AtrousFCN 수정
     img_input = Input(shape=input_shape)
     image_size = input_shape[0:2]
 
     # Block 1
-    x = Conv2D(8, (3, 3), activation='relu', padding='same', name='block1_conv1', kernel_regularizer=l2)(img_input)
-    x = Conv2D(8, (3, 3), activation='relu', padding='same', name='block1_conv2', kernel_regularizer=l2)(x)
+    x = Conv2D(8, (3, 3), activation='relu', padding='same', name='block1_conv1', kernel_regularizer=l2(weight_decay))(img_input)
+    x = Conv2D(8, (3, 3), activation='relu', padding='same', name='block1_conv2', kernel_regularizer=l2(weight_decay))(x)
     x = MaxPooling2D((2, 2), strides=(2, 2), name='block1_pool')(x)
 
     # Block 2
-    x = Conv2D(16, (3, 3), activation='relu', padding='same', name='block2_conv1', kernel_regularizer=l2)(x)
-    x = Conv2D(16, (3, 3), activation='relu', padding='same', name='block2_conv2', kernel_regularizer=l2)(x)
+    x = Conv2D(16, (3, 3), activation='relu', padding='same', name='block2_conv1', kernel_regularizer=l2(weight_decay))(x)
+    x = Conv2D(16, (3, 3), activation='relu', padding='same', name='block2_conv2', kernel_regularizer=l2(weight_decay))(x)
     x = MaxPooling2D((2, 2), strides=(2, 2), name='block2_pool')(x)
 
     # Block 3
-    x = Conv2D(32, (3, 3), activation='relu', padding='same', name='block3_conv1', kernel_regularizer=l2)(x)
-    x = Conv2D(32, (3, 3), activation='relu', padding='same', name='block3_conv2', kernel_regularizer=l2)(x)
-    x = Conv2D(32, (3, 3), activation='relu', padding='same', name='block3_conv3', kernel_regularizer=l2)(x)
+    x = Conv2D(32, (3, 3), activation='relu', padding='same', name='block3_conv1', kernel_regularizer=l2(weight_decay))(x)
+    x = Conv2D(32, (3, 3), activation='relu', padding='same', name='block3_conv2', kernel_regularizer=l2(weight_decay))(x)
+    x = Conv2D(32, (3, 3), activation='relu', padding='same', name='block3_conv3', kernel_regularizer=l2(weight_decay))(x)
     x = MaxPooling2D((2, 2), strides=(2, 2), name='block3_pool')(x)
 
     # Block 4
-    x = Conv2D(64, (3, 3), activation='relu', padding='same', name='block4_conv1', kernel_regularizer=l2)(x)
-    x = Conv2D(64, (3, 3), activation='relu', padding='same', name='block4_conv2', kernel_regularizer=l2)(x)
-    x = Conv2D(64, (3, 3), activation='relu', padding='same', name='block4_conv3', kernel_regularizer=l2)(x)
+    x = Conv2D(64, (3, 3), activation='relu', padding='same', name='block4_conv1', kernel_regularizer=l2(weight_decay))(x)
+    x = Conv2D(64, (3, 3), activation='relu', padding='same', name='block4_conv2', kernel_regularizer=l2(weight_decay))(x)
+    x = Conv2D(64, (3, 3), activation='relu', padding='same', name='block4_conv3', kernel_regularizer=l2(weight_decay))(x)
     x = MaxPooling2D((2, 2), strides=(2, 2), name='block4_pool')(x)
 
     # Block 5
-    x = Conv2D(128, (3, 3), activation='relu', padding='same', name='block5_conv1', kernel_regularizer=l2)(x)
-    x = Conv2D(128, (3, 3), activation='relu', padding='same', name='block5_conv2', kernel_regularizer=l2)(x)
-    x = Conv2D(128, (3, 3), activation='relu', padding='same', name='block5_conv3', kernel_regularizer=l2)(x)
+    x = Conv2D(128, (3, 3), activation='relu', padding='same', name='block5_conv1', kernel_regularizer=l2(weight_decay))(x)
+    x = Conv2D(128, (3, 3), activation='relu', padding='same', name='block5_conv2', kernel_regularizer=l2(weight_decay))(x)
+    x = Conv2D(128, (3, 3), activation='relu', padding='same', name='block5_conv3', kernel_regularizer=l2(weight_decay))(x)
 
     # Convolutional layers transfered from fully-connected layers
     x = Conv2D(1024, (7, 7), activation='relu', padding='same', dilation_rate=(2, 2),
-                      name='fc1', kernel_regularizer=l2)(x)
+                      name='fc1', kernel_regularizer=l2(weight_decay))(x)
     x = Dropout(0.5)(x)
-    x = Conv2D(1024, (1, 1), activation='relu', padding='same', name='fc2', kernel_regularizer=l2)(x)
+    x = Conv2D(1024, (1, 1), activation='relu', padding='same', name='fc2', kernel_regularizer=l2(weight_decay))(x)
     x = Dropout(0.5)(x)
     #classifying layer
-    x = Conv2D(2, (1, 1), kernel_initializer='he_normal', activation='linear', padding='valid', strides=(1, 1), kernel_regularizer=l2)(x)
+    x = Conv2D(2, (1, 1), kernel_initializer='he_normal', activation='linear', padding='valid', strides=(1, 1), kernel_regularizer=l2(weight_decay))(x)
 
     x = BilinearUpSampling2D(target_size=image_size)(x)
 
