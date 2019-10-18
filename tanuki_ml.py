@@ -61,8 +61,6 @@ def generate_model(input_shape, pool_size):
     pool3 = MaxPooling2D(pool_size=pool_size)(drop5)
 
     up = UpSampling2D(size = pool_size)(pool3)
-
-    up6 = Conv2D(64, 2, activation = 'relu', padding = 'valid', kernel_initializer = 'he_normal')(up)
     deconv1 = Conv2DTranspose(64, (3, 3), padding='valid', strides=(1, 1), activation='relu')(up6)
     drop5 = Dropout(0.2)(deconv1)
     deconv1 = Conv2DTranspose(64, (3, 3), padding='valid', strides=(1, 1), activation='relu')(drop5)
