@@ -53,7 +53,7 @@ def generate_model(input_shape, pool_size):
     conv2 = Conv2D(16, 3, activation = 'relu', padding = 'valid', kernel_initializer = 'he_normal')(drop2)
     drop3 = Dropout(0.2)(conv2)
     pool2 = MaxPooling2D(pool_size=pool_size)(drop3)
-
+    #
     conv3 = Conv2D(32, 3, activation = 'relu', padding = 'valid', kernel_initializer = 'he_normal')(pool2)
     drop4 = Dropout(0.2)(conv3)
     conv3 = Conv2D(32, 3, activation = 'relu', padding = 'valid', kernel_initializer = 'he_normal')(drop4)
@@ -61,12 +61,15 @@ def generate_model(input_shape, pool_size):
     pool3 = MaxPooling2D(pool_size=pool_size)(drop5)
 
     up = UpSampling2D(size = pool_size)(pool3)
-    deconv1 = Conv2DTranspose(64, (3, 3), padding='valid', strides=(1, 1), activation='relu')(up6)
+    deconv1 = Conv2DTranspose(64, (3, 3), padding='valid', strides=(1, 1), activation='relu')(up)
     drop5 = Dropout(0.2)(deconv1)
     deconv1 = Conv2DTranspose(64, (3, 3), padding='valid', strides=(1, 1), activation='relu')(drop5)
     drop5 = Dropout(0.2)(deconv1)
 
-    up = UpSampling2D(size = pool_size)(drop5)
+    # Unet 따라하기
+    merge = concatenate([pool2,drop5], axis = 3)
+
+    up = UpSampling2D(size = pool_size)(merge)
     deconv1 = Conv2DTranspose(32, (3, 3), padding='valid', strides=(1, 1), activation='relu')(up)
     drop5 = Dropout(0.2)(deconv1)
     deconv1 = Conv2DTranspose(32, (3, 3), padding='valid', strides=(1, 1), activation='relu')(drop5)
