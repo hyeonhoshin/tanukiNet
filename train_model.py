@@ -24,7 +24,7 @@ scaler = 6
 input_shape = (590//scaler, 1640//scaler, color_num)
 resized_shape = (1640//scaler, 590//scaler)
 batch_size = 50
-epochs = 20
+epochs = 5
 pool_size = (2, 2)
 
 print("Training start")
