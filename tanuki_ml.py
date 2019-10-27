@@ -47,28 +47,32 @@ def generate_model(input_shape, pool_size):
     conv1 = Conv2D(50, 3, activation = 'relu', padding = 'valid', kernel_initializer = 'he_normal')(conv1)
     pool1 = MaxPooling2D(pool_size=pool_size)(conv1)
 
-    conv2 = Conv2D(40, 3, activation = 'relu', padding = 'valid', kernel_initializer = 'he_normal')(pool1)
+    batch = BatchNormalization()(pool1)
+    conv2 = Conv2D(40, 3, activation = 'relu', padding = 'valid', kernel_initializer = 'he_normal')(batch)
     drop1 = Dropout(0.2)(conv2)
     conv2 = Conv2D(30, 3, activation = 'relu', padding = 'valid', kernel_initializer = 'he_normal')(drop1)
     drop2 = Dropout(0.2)(conv2)
     conv2 = Conv2D(20, 3, activation = 'relu', padding = 'valid', kernel_initializer = 'he_normal')(drop2)
     drop3 = Dropout(0.2)(conv2)
     pool2 = MaxPooling2D(pool_size=pool_size)(drop3)
-    #
-    conv3 = Conv2D(10, 3, activation = 'relu', padding = 'valid', kernel_initializer = 'he_normal')(pool2)
+    
+    batch = BatchNormalization()(pool2)
+    conv3 = Conv2D(10, 3, activation = 'relu', padding = 'valid', kernel_initializer = 'he_normal')(batch)
     drop4 = Dropout(0.2)(conv3)
     conv3 = Conv2D(5, 3, activation = 'relu', padding = 'valid', kernel_initializer = 'he_normal')(drop4)
     drop5 = Dropout(0.2)(conv3)
     pool3 = MaxPooling2D(pool_size=pool_size)(drop5)
 
     up = UpSampling2D(size = pool_size)(pool3)
-    deconv1 = Conv2DTranspose(10, (3, 3), padding='valid', strides=(1, 1), activation='relu')(up)
+    batch = BatchNormalization()(up)
+    deconv1 = Conv2DTranspose(10, (3, 3), padding='valid', strides=(1, 1), activation='relu')(batch)
     drop5 = Dropout(0.2)(deconv1)
     deconv1 = Conv2DTranspose(20, (3, 3), padding='valid', strides=(1, 1), activation='relu')(drop5)
     drop5 = Dropout(0.2)(deconv1)
 
     up = UpSampling2D(size = pool_size)(drop5)
-    deconv1 = Conv2DTranspose(30, (3, 3), padding='valid', strides=(1, 1), activation='relu')(up)
+    batch = BatchNormalization()(up)
+    deconv1 = Conv2DTranspose(30, (3, 3), padding='valid', strides=(1, 1), activation='relu')(batch)
     drop5 = Dropout(0.2)(deconv1)
     deconv1 = Conv2DTranspose(40, (3, 3), padding='valid', strides=(1, 1), activation='relu')(drop5)
     drop5 = Dropout(0.2)(deconv1)
@@ -76,7 +80,8 @@ def generate_model(input_shape, pool_size):
     drop5 = Dropout(0.2)(deconv1)
 
     up = UpSampling2D(size = pool_size)(drop5)
-    deconv1 = Conv2DTranspose(60, (3, 3), padding='valid', strides=(1, 1), activation='relu')(up)
+    batch = BatchNormalization()(up)
+    deconv1 = Conv2DTranspose(60, (3, 3), padding='valid', strides=(1, 1), activation='relu')(batch)
     deconv_final = Conv2DTranspose(1, (3, 3), padding='valid', strides=(1, 1), activation='relu')(deconv1)
     
     model = Model(input = inputs, output = deconv_final)
