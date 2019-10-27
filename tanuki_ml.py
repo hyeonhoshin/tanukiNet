@@ -38,81 +38,45 @@ def give_time(X, y, memory_size = 3):
 
 def generate_model(input_shape, pool_size):
 
-    ### Here is the actual neural network ###
-    model = Sequential()
-    # Normalizes incoming inputs. First layer needs the input shape to work
-    model.add(BatchNormalization(input_shape=input_shape))
+    inputs = Input(input_shape)
+    batch = BatchNormalization()(inputs)
+    conv1 = Conv2D(60, (3, 3), padding = 'valid', activation = 'relu', kernel_initializer='he_normal')(batch)
+    conv1 = Conv2D(50, (3, 3), padding = 'valid', activation = 'relu', kernel_initializer='he_normal')(conv1)
+    pool1 = MaxPooling2D(pool_size=pool_size)(conv1)
 
-    # Below layers were re-named for easier reading of model summary; this not necessary
-    # Conv Layer 1
-    model.add(Conv2D(60, (3, 3), padding='valid', strides=(1,1), activation = 'relu', name = 'Conv1'))
+    conv2 = Conv2D(40, (3, 3), padding = 'valid', activation = 'relu', kernel_initializer='he_normal')(pool1)
+    drop1 = Dropout(0.2)(conv2)
+    conv2 = Conv2D(30, (3, 3), padding = 'valid', activation = 'relu', kernel_initializer='he_normal')(drop1)
+    drop2 = Dropout(0.2)(conv2)
+    conv2 = Conv2D(20, (3, 3), padding = 'valid', activation = 'relu', kernel_initializer='he_normal')(drop2)
+    drop3 = Dropout(0.2)(conv2)
+    pool2 = MaxPooling2D(pool_size=pool_size)(drop3)
 
-    # Conv Layer 2
-    model.add(Conv2D(50, (3, 3), padding='valid', strides=(1,1), activation = 'relu', name = 'Conv2'))
+    conv3 = Conv2D(10, (3, 3), padding = 'valid', activation = 'relu', kernel_initializer='he_normal')(pool2)
+    drop4 = Dropout(0.2)(conv3)
+    conv3 = Conv2D(5, (3, 3), padding = 'valid', activation = 'relu', kernel_initializer='he_normal')(drop4)
+    drop5 = Dropout(0.2)(conv3)
+    pool3 = MaxPooling2D(pool_size=pool_size)(drop5)
 
-    # Pooling 1
-    model.add(MaxPooling2D(pool_size=pool_size))
+    up = UpSampling2D(size = pool_size)(pool3)
+    deconv1 = Conv2DTranspose(10, (3, 3), padding='valid', strides=(1, 1), activation='relu')(up)
+    drop5 = Dropout(0.2)(deconv1)
+    deconv1 = Conv2DTranspose(20, (3, 3), padding='valid', strides=(1, 1), activation='relu')(drop5)
+    drop5 = Dropout(0.2)(deconv1)
 
-    # Conv Layer 3
-    model.add(Conv2D(40, (3, 3), padding='valid', strides=(1,1), activation = 'relu', name = 'Conv3'))
-    model.add(Dropout(rate=0.2))
+    up = UpSampling2D(size = pool_size)(drop5)
+    deconv1 = Conv2DTranspose(30, (3, 3), padding='valid', strides=(1, 1), activation='relu')(up)
+    drop5 = Dropout(0.2)(deconv1)
+    deconv1 = Conv2DTranspose(40, (3, 3), padding='valid', strides=(1, 1), activation='relu')(drop5)
+    drop5 = Dropout(0.2)(deconv1)
+    deconv1 = Conv2DTranspose(50, (3, 3), padding='valid', strides=(1, 1), activation='relu')(drop5)
+    drop5 = Dropout(0.2)(deconv1)
 
-    # Conv Layer 4
-    model.add(Conv2D(30, (3, 3), padding='valid', strides=(1,1), activation = 'relu', name = 'Conv4'))
-    model.add(Dropout(rate=0.2))
+    up = UpSampling2D(size = pool_size)(drop5)
+    deconv1 = Conv2DTranspose(60, (3, 3), padding='valid', strides=(1, 1), activation='relu')(up)
+    deconv_final = Conv2DTranspose(1, (3, 3), padding='valid', strides=(1, 1), activation='relu')(deconv1)
 
-    # Conv Layer 5
-    model.add(Conv2D(20, (3, 3), padding='valid', strides=(1,1), activation = 'relu', name = 'Conv5'))
-    model.add(Dropout(rate=0.2))
-
-    # Pooling 2
-    model.add(MaxPooling2D(pool_size=pool_size))
-
-    # Conv Layer 6
-    model.add(Conv2D(10, (3, 3), padding='valid', strides=(1,1), activation = 'relu', name = 'Conv6'))
-    model.add(Dropout(rate=0.2))
-
-    # Conv Layer 7
-    model.add(Conv2D(5, (3, 3), padding='valid', strides=(1,1), activation = 'relu', name = 'Conv7'))
-    model.add(Dropout(rate=0.2))
-
-    # Pooling 3
-    model.add(MaxPooling2D(pool_size=pool_size))
-
-    # Upsample 1
-    model.add(UpSampling2D(size=pool_size))
-
-    # Deconv 1
-    model.add(Conv2DTranspose(10, (3, 3), padding='valid', strides=(1,1), activation = 'relu', name = 'Deconv1'))
-    model.add(Dropout(rate=0.2))
-
-    # Deconv 2
-    model.add(Conv2DTranspose(20, (3, 3), padding='valid', strides=(1,1), activation = 'relu', name = 'Deconv2'))
-    model.add(Dropout(rate=0.2))
-
-    # Upsample 2
-    model.add(UpSampling2D(size=pool_size))
-
-    # Deconv 3
-    model.add(Conv2DTranspose(30, (3, 3), padding='valid', strides=(1,1), activation = 'relu', name = 'Deconv3'))
-    model.add(Dropout(rate=0.2))
-
-    # Deconv 4
-    model.add(Conv2DTranspose(40, (3, 3), padding='valid', strides=(1,1), activation = 'relu', name = 'Deconv4'))
-    model.add(Dropout(rate=0.2))
-
-    # Deconv 5
-    model.add(Conv2DTranspose(50, (3, 3), padding='valid', strides=(1,1), activation = 'relu', name = 'Deconv5'))
-    model.add(Dropout(rate=0.2))
-
-    # Upsample 3
-    model.add(UpSampling2D(size=pool_size))
-
-    # Deconv 6
-    model.add(Conv2DTranspose(60, (3, 3), padding='valid', strides=(1,1), activation = 'relu', name = 'Deconv6'))
-
-    # Final layer - only including one channel so 1 filter
-    model.add(Conv2DTranspose(1, (3, 3), padding='valid', strides=(1,1), activation = 'relu', name = 'Final'))
+    model = Model(inputs = inputs, outputs = deconv_final)
     
     return model
 
