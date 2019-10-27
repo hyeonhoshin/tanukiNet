@@ -4,3 +4,7 @@ test/
 .vscode/
 __pycache__/
 reinforced_imgs/
+.DS_Store
+.idea/
+prior_weights/
+prototype/
