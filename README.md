@@ -1,15 +1,15 @@
-# tanukiNet v1
+# tanukiNet v1 _ distributed ver
 
 ### Abstact
-- Deconvolutional 구조를 가지는 Lane detection algorithm
-- [CULane Dataset](https://xingangpan.github.io/projects/CULane.html)중, driver_182.zip을 train data로써 활용
-- tanukiNetv1.json = 모델 구조 파일, tanukiNetv1.h5 = Weights of Model
-- make_pickle_for_train.py -> 데이터 이미지의 해상도를 1/6로 낮추어 Pickle 파일로 통합 (다루기 쉽도록)
-- make_labels_strong.py -> 주어진 CUlane의 경우, 인식된 부분이 255가 아니라 1,2,3등으로 표기되어 있어 255로 변경
-- timed_pickle_baker.py -> LSTM 버전을 위한 학습 데이터 생성기. 
+- 해당 Branch는 Functional API로는 왜 Sequential한 구현이 안되는지를 실험한 Branch임
+- 19-10-28 오전 3시 12분경을 기준으로, Sequential한 tanukiNet과 동일한 성능을 만드는데 성공
 
-### Neural Net Structure
-![tanukiNet v1 구조](./readme/structure.png)
-
-- Deconvolutional 구조
-- 일반 Segmentation과는 달리 Core layer에 가까워질수록, 필터 수가 적어지는 구조
+### 원인
+- __he_normal kernel initializer가 오히려 나쁜 성능을 냄__
+- 중복 선언 자체에는 문제가 없었음.
+- Compile을 함수안에서 함. (3분 딥러닝 책도 이렇게 구현)
+- 인수의 순서도 text형식으로 힌트가 있는 인수는 상관이 없었음.
+- 가독성을 위해 dropout과 conv2d는 묶어 기록함.
+- 구조, parameter의 수, activation function 모두 동일했었음.
+- --optimizer 이름을 'Adam'에서 'adam'으로 변경, 함수형태로 부를때만 adam으로 쓰는듯..?-- 이건 원인 아님을 확인
+- 3-> (3,3) 이 자체만으로는 원인이 아님.
