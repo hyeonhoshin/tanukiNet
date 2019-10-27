@@ -23,7 +23,7 @@ color_num = 3
 scaler = 6
 input_shape = (590//scaler, 1640//scaler, color_num)
 resized_shape = (1640//scaler, 590//scaler)
-batch_size = 64
+batch_size = 50
 epochs = 20
 pool_size = (2, 2)
 
@@ -31,7 +31,7 @@ print("Training start")
 
 # Load training images
 X_train, y_train, _ = pickle.load(open("tanuki_train.p", "rb" ))
-y_train = y_train[:, 1:-1,:-1, np.newaxis]
+y_train = y_train[:, 1:-1,:-1, np.newaxis]/255.0
 
 # Model generation
 model = tanuki_ml.generate_model(input_shape, pool_size)
