@@ -49,8 +49,8 @@ def generate_model(input_shape, pool_size):
     h = Dropout(0.2)(Conv2D(20, (3, 3), padding = 'valid', activation = 'relu', kernel_initializer='he_normal')(h))
     pool = MaxPooling2D(pool_size=pool_size)(h)
 
-    h = Dropout(0.2)(Conv2D(40, (3, 3), padding = 'valid', activation = 'relu', kernel_initializer='he_normal')(pool))
-    h = Dropout(0.2)(Conv2D(30, (3, 3), padding = 'valid', activation = 'relu', kernel_initializer='he_normal')(h))
+    h = Dropout(0.2)(Conv2D(10, (3, 3), padding = 'valid', activation = 'relu', kernel_initializer='he_normal')(pool))
+    h = Dropout(0.2)(Conv2D(5, (3, 3), padding = 'valid', activation = 'relu', kernel_initializer='he_normal')(h))
     pool = MaxPooling2D(pool_size=pool_size)(h)
 
     up = UpSampling2D(size = pool_size)(pool)
