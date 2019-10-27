@@ -40,22 +40,22 @@ def generate_model(input_shape, pool_size):
 
     inputs = Input(input_shape)
     batch = BatchNormalization()(inputs)
-    h = Conv2D(60, (3, 3), padding = 'valid', activation = 'relu', kernel_initializer='he_normal')(batch)
-    h = Conv2D(50, (3, 3), padding = 'valid', activation = 'relu', kernel_initializer='he_normal')(h)
+    h = Conv2D(60, (3, 3), padding = 'valid', activation = 'relu')(batch)
+    h = Conv2D(50, (3, 3), padding = 'valid', activation = 'relu')(h)
     pool = MaxPooling2D(pool_size=pool_size)(h)
 
-    h1 = Dropout(0.2)(Conv2D(40, (3, 3), padding = 'valid', activation = 'relu', kernel_initializer='he_normal')(pool))
-    h = Dropout(0.2)(Conv2D(30, (3, 3), padding = 'valid', activation = 'relu', kernel_initializer='he_normal')(h))
-    h = Dropout(0.2)(Conv2D(20, (3, 3), padding = 'valid', activation = 'relu', kernel_initializer='he_normal')(h))
+    h = Dropout(0.2)(Conv2D(40, (3, 3), padding = 'valid', activation = 'relu')(pool))
+    h = Dropout(0.2)(Conv2D(30, (3, 3), padding = 'valid', activation = 'relu')(h))
+    h = Dropout(0.2)(Conv2D(20, (3, 3), padding = 'valid', activation = 'relu')(h))
     pool = MaxPooling2D(pool_size=pool_size)(h)
 
-    h = Dropout(0.2)(Conv2D(10, (3, 3), padding = 'valid', activation = 'relu', kernel_initializer='he_normal')(pool))
-    h = Dropout(0.2)(Conv2D(5, (3, 3), padding = 'valid', activation = 'relu', kernel_initializer='he_normal')(h))
+    h = Dropout(0.2)(Conv2D(10, (3, 3), padding = 'valid', activation = 'relu')(pool))
+    h = Dropout(0.2)(Conv2D(5, (3, 3), padding = 'valid', activation = 'relu')(h))
     pool = MaxPooling2D(pool_size=pool_size)(h)
 
     up = UpSampling2D(size = pool_size)(pool)
     h = Dropout(0.2)(Conv2DTranspose(10, (3, 3), padding='valid', strides=(1, 1), activation='relu')(up))
-    h = Dropout(0.2)(Conv2DTranspose(20, (3, 3), padding='valid', strides=(1, 1), activation='relu')(h1))
+    h = Dropout(0.2)(Conv2DTranspose(20, (3, 3), padding='valid', strides=(1, 1), activation='relu')(h))
 
     up = UpSampling2D(size = pool_size)(h)
     h = Dropout(0.2)(Conv2DTranspose(30, (3, 3), padding='valid', strides=(1, 1), activation='relu')(up))
