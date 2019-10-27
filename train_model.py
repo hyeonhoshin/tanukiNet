@@ -48,16 +48,16 @@ end_train = time.time()
 end_total = time.time()
 
 # Weights 저장
-model.save_weights("model.h5")
+model.save_weights("tanukiNetv1.h5")
 print("Saved model to disk")
 
 # Model 구조 저장
 model_json = model.to_json()
-with open("model.json", "w") as json_file :
+with open("tanukiNetv1.json", "w") as json_file :
     json_file.write(model_json)
 
 ## 실험 데이터 저장
-f=open("lstm_train_result_mem_is_{}.txt",'w')
+f=open("train_result.txt",'w')
 
 # 총 걸린 시간
 min, sec = divmod(end_total-start_total, 60)
