@@ -3,9 +3,6 @@ import os
 from PIL import Image
 
 # Import necessary items from Keras
-from keras.models import Sequential
-from keras.layers import Activation, Dropout, UpSampling2D
-from keras.layers import Conv2DTranspose, Conv2D, MaxPooling2D, ConvLSTM2D
 from keras.layers.normalization import BatchNormalization
 from keras.preprocessing.image import ImageDataGenerator
 from keras import regularizers
@@ -41,45 +38,88 @@ def give_time(X, y, memory_size = 3):
 
 def generate_model(input_shape, pool_size):
 
-    inputs = Input(input_shape)
-    batch = BatchNormalization()(inputs)
-    conv1 = Conv2D(60, 3, activation = 'relu', padding = 'valid', kernel_initializer='he_normal')(batch)
-    conv1 = Conv2D(50, 3, activation = 'relu', padding = 'valid', kernel_initializer='he_normal')(conv1)
-    pool1 = MaxPooling2D(pool_size=pool_size)(conv1)
+    ### Here is the actual neural network ###
+    model = Sequential()
+    # Normalizes incoming inputs. First layer needs the input shape to work
+    model.add(BatchNormalization(input_shape=input_shape))
 
-    conv2 = Conv2D(40, 3, activation = 'relu', padding = 'valid', kernel_initializer='he_normal')(pool1)
-    drop1 = Dropout(0.2)(conv2)
-    conv2 = Conv2D(30, 3, activation = 'relu', padding = 'valid', kernel_initializer='he_normal')(drop1)
-    drop2 = Dropout(0.2)(conv2)
-    conv2 = Conv2D(20, 3, activation = 'relu', padding = 'valid', kernel_initializer='he_normal')(drop2)
-    drop3 = Dropout(0.2)(conv2)
-    pool2 = MaxPooling2D(pool_size=pool_size)(drop3)
-    
-    conv3 = Conv2D(10, 3, activation = 'relu', padding = 'valid', kernel_initializer='he_normal')(pool2)
-    drop4 = Dropout(0.2)(conv3)
-    conv3 = Conv2D(5, 3, activation = 'relu', padding = 'valid', kernel_initializer='he_normal')(drop4)
-    drop5 = Dropout(0.2)(conv3)
-    pool3 = MaxPooling2D(pool_size=pool_size)(drop5)
+    # Below layers were re-named for easier reading of model summary; this not necessary
+    # Conv Layer 1
+    model.add(Convolution2D(60, 3, 3, border_mode='valid', subsample=(1,1), activation = 'relu', name = 'Conv1'))
 
-    up = UpSampling2D(size = pool_size)(pool3)
-    deconv1 = Conv2DTranspose(10, (3, 3), padding='valid', strides=(1, 1), activation='relu')(up)
-    drop5 = Dropout(0.2)(deconv1)
-    deconv1 = Conv2DTranspose(20, (3, 3), padding='valid', strides=(1, 1), activation='relu')(drop5)
-    drop5 = Dropout(0.2)(deconv1)
+    # Conv Layer 2
+    model.add(Convolution2D(50, 3, 3, border_mode='valid', subsample=(1,1), activation = 'relu', name = 'Conv2'))
 
-    up = UpSampling2D(size = pool_size)(drop5)
-    deconv1 = Conv2DTranspose(30, (3, 3), padding='valid', strides=(1, 1), activation='relu')(up)
-    drop5 = Dropout(0.2)(deconv1)
-    deconv1 = Conv2DTranspose(40, (3, 3), padding='valid', strides=(1, 1), activation='relu')(drop5)
-    drop5 = Dropout(0.2)(deconv1)
-    deconv1 = Conv2DTranspose(50, (3, 3), padding='valid', strides=(1, 1), activation='relu')(drop5)
-    drop5 = Dropout(0.2)(deconv1)
+    # Pooling 1
+    model.add(MaxPooling2D(pool_size=pool_size))
 
-    up = UpSampling2D(size = pool_size)(drop5)
-    deconv1 = Conv2DTranspose(60, (3, 3), padding='valid', strides=(1, 1), activation='relu')(up)
-    deconv_final = Conv2DTranspose(1, (3, 3), padding='valid', strides=(1, 1), activation='relu')(deconv1)
-    
-    model = Model(input = inputs, output = deconv_final)
+    # Conv Layer 3
+    model.add(Convolution2D(40, 3, 3, border_mode='valid', subsample=(1,1), activation = 'relu', name = 'Conv3'))
+    model.add(Dropout(0.2))
+
+    # Conv Layer 4
+    model.add(Convolution2D(30, 3, 3, border_mode='valid', subsample=(1,1), activation = 'relu', name = 'Conv4'))
+    model.add(Dropout(0.2))
+
+    # Conv Layer 5
+    model.add(Convolution2D(20, 3, 3, border_mode='valid', subsample=(1,1), activation = 'relu', name = 'Conv5'))
+    model.add(Dropout(0.2))
+
+    # Pooling 2
+    model.add(MaxPooling2D(pool_size=pool_size))
+
+    # Conv Layer 6
+    model.add(Convolution2D(10, 3, 3, border_mode='valid', subsample=(1,1), activation = 'relu', name = 'Conv6'))
+    model.add(Dropout(0.2))
+
+    # Conv Layer 7
+    model.add(Convolution2D(5, 3, 3, border_mode='valid', subsample=(1,1), activation = 'relu', name = 'Conv7'))
+    model.add(Dropout(0.2))
+
+    # Pooling 3
+    model.add(MaxPooling2D(pool_size=pool_size))
+
+    # Upsample 1
+    model.add(UpSampling2D(size=pool_size))
+
+    # Deconv 1
+    model.add(Deconvolution2D(10, 3, 3, border_mode='valid', subsample=(1,1), activation = 'relu', 
+                            output_shape = model.layers[8].output_shape, name = 'Deconv1'))
+    model.add(Dropout(0.2))
+
+    # Deconv 2
+    model.add(Deconvolution2D(20, 3, 3, border_mode='valid', subsample=(1,1), activation = 'relu', 
+                            output_shape = model.layers[7].output_shape, name = 'Deconv2'))
+    model.add(Dropout(0.2))
+
+    # Upsample 2
+    model.add(UpSampling2D(size=pool_size))
+
+    # Deconv 3
+    model.add(Deconvolution2D(30, 3, 3, border_mode='valid', subsample=(1,1), activation = 'relu', 
+                            output_shape = model.layers[5].output_shape, name = 'Deconv3'))
+    model.add(Dropout(0.2))
+
+    # Deconv 4
+    model.add(Deconvolution2D(40, 3, 3, border_mode='valid', subsample=(1,1), activation = 'relu', 
+                            output_shape = model.layers[4].output_shape, name = 'Deconv4'))
+    model.add(Dropout(0.2))
+
+    # Deconv 5
+    model.add(Deconvolution2D(50, 3, 3, border_mode='valid', subsample=(1,1), activation = 'relu', 
+                            output_shape = model.layers[3].output_shape, name = 'Deconv5'))
+    model.add(Dropout(0.2))
+
+    # Upsample 3
+    model.add(UpSampling2D(size=pool_size))
+
+    # Deconv 6
+    model.add(Deconvolution2D(60, 3, 3, border_mode='valid', subsample=(1,1), activation = 'relu', 
+                            output_shape = model.layers[1].output_shape, name = 'Deconv6'))
+
+    # Final layer - only including one channel so 1 filter
+    model.add(Deconvolution2D(1, 3, 3, border_mode='valid', subsample=(1,1), activation = 'relu', 
+                            output_shape = model.layers[0].output_shape, name = 'Final'))
     
     return model
 
