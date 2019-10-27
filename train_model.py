@@ -35,7 +35,6 @@ y_train = y_train[:, 1:-1,:-1, np.newaxis]/255.0
 
 # Model generation
 model = tanuki_ml.generate_model(input_shape, pool_size)
-model.compile(optimizer='Adam', loss='mean_squared_error')
 model.summary()
 
 # Data 부풀리기 - 일단 안함. Flip 정도는 후에 구현
