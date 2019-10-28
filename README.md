@@ -1,9 +1,7 @@
-# tanukiNet v1 _ deepRobust with dice loss
+# tanukiNet v1 _ deepRobust with jaccard loss
 
 ### Abstact
-- 해당 Branch는 deepRobust에서 파생되었으며, Segmentaion용 loss중 하나인 Dice loss를 사용하여 그 성능을 평가한다.
+- Balance 문제를 해결한 dice loss인 [jaccard loss](https://gist.github.com/wassname/f1452b748efcbeb4cb9b1d059dce6f96)를 적용.
 
 ### 분석
-- epoch 1에서도 loss가 크게 감소하지 않고 0.0121정도에서 크게 변화없음
-- 지속적으로 감소하는 경향을 보이기는 하나 epoch 10 정도 수준에서는 의미가 크게 없는 결과를 보임
-- epoch을 증대시킨다고 더 증대된 성능을 보일거라는 확신이 안슴
+- 아직 모름
