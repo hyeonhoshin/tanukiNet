@@ -42,21 +42,21 @@ def give_time(X, y, memory_size = 3):
 def generate_model(input_shape, pool_size):
 
     inputs = Input(input_shape)
-    conv1 = Conv2D(16, 3, activation = 'relu', padding = 'valid', kernel_initializer = 'he_normal')(inputs)
-    conv1 = Conv2D(16, 3, activation = 'relu', padding = 'valid', kernel_initializer = 'he_normal')(conv1)
+    conv1 = Conv2D(16, 3, activation = 'relu', padding = 'valid')(inputs)
+    conv1 = Conv2D(16, 3, activation = 'relu', padding = 'valid')(conv1)
     pool1 = MaxPooling2D(pool_size=pool_size)(conv1)
 
-    conv2 = Conv2D(32, 3, activation = 'relu', padding = 'valid', kernel_initializer = 'he_normal')(pool1)
+    conv2 = Conv2D(32, 3, activation = 'relu', padding = 'valid')(pool1)
     drop1 = Dropout(0.2)(conv2)
-    conv2 = Conv2D(32, 3, activation = 'relu', padding = 'valid', kernel_initializer = 'he_normal')(drop1)
+    conv2 = Conv2D(32, 3, activation = 'relu', padding = 'valid')(drop1)
     drop2 = Dropout(0.2)(conv2)
-    conv2 = Conv2D(32, 3, activation = 'relu', padding = 'valid', kernel_initializer = 'he_normal')(drop2)
+    conv2 = Conv2D(32, 3, activation = 'relu', padding = 'valid')(drop2)
     drop3 = Dropout(0.2)(conv2)
     pool2 = MaxPooling2D(pool_size=pool_size)(drop3)
     #
-    conv3 = Conv2D(64, 3, activation = 'relu', padding = 'valid', kernel_initializer = 'he_normal')(pool2)
+    conv3 = Conv2D(64, 3, activation = 'relu', padding = 'valid')(pool2)
     drop4 = Dropout(0.2)(conv3)
-    conv3 = Conv2D(64, 3, activation = 'relu', padding = 'valid', kernel_initializer = 'he_normal')(drop4)
+    conv3 = Conv2D(64, 3, activation = 'relu', padding = 'valid')(drop4)
     drop5 = Dropout(0.2)(conv3)
     pool3 = MaxPooling2D(pool_size=pool_size)(drop5)
 

@@ -59,7 +59,7 @@ with open("model.json", "w") as json_file :
     json_file.write(model_json)
 
 ## 실험 데이터 저장
-f=open("lstm_train_result_mem_is_{}.txt",'w')
+f=open("train.txt",'w')
 
 # 총 걸린 시간
 min, sec = divmod(end_total-start_total, 60)
