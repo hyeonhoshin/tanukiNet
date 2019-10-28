@@ -8,4 +8,7 @@
 - train_model.py를 실행 시, history.p에 history파일 저장되며, tanukiNetv1.json, tanukiNetv1.h5에 파일이 저장됨.
 
 ### 분석
-- 아직 안됨.
+- Validation loss 기준 기존 tanukiNetv1 + Adaptive LR + epoch 20보다 더 빠르게 val_loss가 감소하는 경향을 보임
+- epochs 7만에 기존 tanukiNet보다 val_loss가 낮아짐. 8이후부터는 val_loss 증가
+- Adaptve LR 1%, relax = 5정도로 epoch 20돌리면 성능이 더 오르지 않을까 기대됨
+- 영상은 좋으나 그림자 아래에서 아무것도 안보이며, 작은 변화에도 민감 -> 아마 overfitting
