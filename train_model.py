@@ -44,7 +44,7 @@ y_test = y_test[:, 1:-1,:-1, np.newaxis]/255.0
 
 # Adaptive Learning rate 기능
 callback_list = [
-  tanuki_ml.AdaptiveLearningrate(threshold=0.1, decay=0.5, verbose=1)
+  tanuki_ml.AdaptiveLearningrate(threshold=0.03, decay=0.5, verbose=1)
 ]
 
 # 학습
