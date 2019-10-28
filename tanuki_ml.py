@@ -194,8 +194,8 @@ class AdaptiveLearningrate(Callback):
         if len(self.losses) > 1 and (self.relax == self.relaxMax):
             # 만약 이전 epoch의 loss와의 차이가 threshold
             progress = self.losses[epoch-1] - loss # 0.0186 - 0.0183 = 0.0003 -> 0.0183의 3%이하 -> 업데이트
-            self.relax = 0 # relax하도록 Relax Time 초기화
             if progress < loss * self.threshold:
+                self.relax = 0 # relax하도록 Relax Time 초기화
                 # lr Update.
                 lr = lr_prev * self.decay
                 K.set_value(self.model.optimizer.lr, lr)
