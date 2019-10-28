@@ -24,7 +24,7 @@ scaler = 6
 input_shape = (590//scaler, 1640//scaler, color_num)
 resized_shape = (1640//scaler, 590//scaler)
 batch_size = 32
-epochs = 20
+epochs = 5
 pool_size = (2, 2)
 
 print("Training start")
@@ -38,14 +38,14 @@ model = tanuki_ml.generate_model(input_shape, pool_size)
 model.compile(optimizer='Adam', loss='mean_squared_error')
 model.summary()
 
-# Data 부풀리기 - 일단 안함. Flip 정도는 후에 구현
+# Load test data
+X_test, y_test, _ = pickle.load(open("tanuki_test.p", "rb" ))
+y_test = y_test[:, 1:-1,:-1, np.newaxis]/255.0
 
 # 학습
 start_train = time.time()
-model.fit(X_train, y_train, batch_size, epochs, shuffle = True)
+hist = model.fit(X_train, y_train, batch_size, epochs, validation_data = (X_test, y_test), shuffle = True)
 end_train = time.time()
-
-end_total = time.time()
 
 # Weights 저장
 model.save_weights("model.h5")
