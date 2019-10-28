@@ -18,3 +18,4 @@
 
 ### test loss 추이
 - 더 정확한 분석을 위해 test loss 또한 기록.
+- validation set을 추가하자 test loss가 감소하질 않음. -> RAM 부족인가 싶어 batch size 감소, 아마 shuffle 때문인듯
