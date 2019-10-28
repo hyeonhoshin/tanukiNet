@@ -200,7 +200,7 @@ class AdaptiveLearningrate(Callback):
                     print("[Adaptive LR] @ epoch {} : Update! {} -> {}\n".format(epoch, lr_prev, lr))
 
             if self.verbose > 0:
-                print("[Adaptive LR] @ epoch {} : No change}\n".format(epoch))
+                print("[Adaptive LR] @ epoch {} : No change\n".format(epoch))
 
         else:
             if self.verbose > 0:
