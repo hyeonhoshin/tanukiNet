@@ -54,7 +54,7 @@ def generate_model(input_shape, pool_size):
     pool = MaxPooling2D(pool_size=pool_size)(h1)
 
     up = UpSampling2D(size = pool_size)(pool)
-    merge = Concatenate(axis=-1)(h1,up)
+    merge = Concatenate(axis=-1)([h1,up])
     h = Dropout(0.2)(Conv2DTranspose(10, (3, 3), padding='valid', strides=(1, 1), activation='relu')(merge))
     h = Dropout(0.2)(Conv2DTranspose(20, (3, 3), padding='valid', strides=(1, 1), activation='relu')(h))
 
