@@ -196,11 +196,11 @@ class AdaptiveLearningrate(Callback):
                 lr = lr_prev * self.decay
                 K.set_value(self.model.opimizer.lr, lr)
                 if self.verbose > 0:
-                    print("[Adaptive LR] @ epoch {} : Update! Change of loss = {} - {}".format(epoch, self.losses[epoch-1], loss))
-                    print("[Adaptive LR] @ epoch {} : {} -> {}}\n".format(epoch, lr_prev, lr))
+                    print("[Adaptive LR] @ epoch {} : Change of loss = {} - {}".format(epoch, self.losses[epoch-1], loss))
+                    print("[Adaptive LR] @ epoch {} : Update! {} -> {}}\n".format(epoch, lr_prev, lr))
 
             if self.verbose > 0:
-                print("[Adaptive LR] @ epoch {} : {} -> {}}\n".format(epoch, lr_prev, lr_prev))
+                print("[Adaptive LR] @ epoch {} : No change}\n".format(epoch))
 
         else:
             if self.verbose > 0:
