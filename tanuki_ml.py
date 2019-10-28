@@ -194,7 +194,7 @@ class AdaptiveLearningrate(Callback):
             if progress < loss * self.threshold:
                 # lr Update.
                 lr = lr_prev * self.decay
-                K.set_value(self.model.opimizer.lr, lr)
+                K.set_value(self.model.optimizer.lr, lr)
                 if self.verbose > 0:
                     print("[Adaptive LR] @ epoch {} : Change of loss = {} - {}".format(epoch, self.losses[epoch-1], loss))
                     print("[Adaptive LR] @ epoch {} : Update! {} -> {}\n".format(epoch, lr_prev, lr))
