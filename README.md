@@ -1,7 +1,7 @@
-# tanukiNet v1 _ deepRobust
+# tanukiNet v1 _ deepRobust with dice loss
 
 ### Abstact
-- 해당 Branch는 deeper branch에서 파생되었으며, 해당 Branch에서 overfitting이 관측되어 이를 해결하기 위해 filter의 수를 줄인 버전이다.
+- 해당 Branch는 deepRobust에서 파생되었으며, Segmentaion용 loss중 하나인 Dice loss를 사용하여 그 성능을 평가한다.
 
 ### 분석
 - Yet

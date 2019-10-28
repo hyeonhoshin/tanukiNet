@@ -12,6 +12,7 @@ from keras.layers import *
 from keras.optimizers import *
 from keras.callbacks import ModelCheckpoint, LearningRateScheduler
 from keras import backend as keras
+from loss import dice
 
 def give_time(X, y, memory_size = 3):
     # Make time-dependent data
@@ -76,7 +77,7 @@ def generate_model(input_shape, pool_size):
 
     model = Model(inputs = inputs, outputs = deconv_final)
 
-    model.compile(optimizer='adam', loss='mean_squared_error')
+    model.compile(optimizer='adam', loss=dice)
     
     return model
 
