@@ -47,6 +47,8 @@ start_train = time.time()
 hist = model.fit(X_train, y_train, batch_size, epochs, validation_data = (X_test, y_test), shuffle = True)
 end_train = time.time()
 
+end_total = time.time()
+
 # Weights 저장
 model.save_weights("model.h5")
 print("Saved model to disk")
