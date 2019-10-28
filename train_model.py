@@ -31,7 +31,7 @@ print("Training start")
 
 # Load training images
 X_train, y_train, _ = pickle.load(open("tanuki_train.p", "rb" ))
-y_train = y_train[:, 1:-1,:-1, np.newaxis]/255.0
+y_train = y_train/255.0
 
 # Model generation
 model = tanuki_ml.generate_model(input_shape, pool_size)
@@ -39,7 +39,7 @@ model.summary()
 
 # Load test data
 X_test, y_test, _ = pickle.load(open("tanuki_test.p", "rb" ))
-y_test = y_test[:, 1:-1,:-1, np.newaxis]/255.0
+y_test = y_test/255.0
 
 # 학습
 start_train = time.time()
