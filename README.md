@@ -1,17 +1,6 @@
-# tanukiNet v1
+# tanukiNet v1 Adaptive Learning rate version
 
 ### Abstact
-- Deconvolutional 구조를 가지는 Lane detection algorithm
-- [CULane Dataset](https://xingangpan.github.io/projects/CULane.html)중, driver_182.zip을 train data로써 활용
-- tanukiNetv1.json = 모델 구조 파일, tanukiNetv1.h5 = Weights of Model
-- make_pickle_for_train.py -> 데이터 이미지의 해상도를 1/6로 낮추어 Pickle 파일로 통합 (다루기 쉽도록)
-- make_labels_strong.py -> 주어진 CUlane의 경우, 인식된 부분이 255가 아니라 1,2,3등으로 표기되어 있어 255로 변경
-- timed_pickle_baker.py -> LSTM 버전을 위한 학습 데이터 생성기. 
-- 오전 3시 24분. 10-28일. 최종 작동 확인 완료.
-- history.p에 history파일 저장됨.
-
-### Neural Net Structure
-![tanukiNet v1 구조](./readme/structure.png)
-
-- Deconvolutional 구조
-- 일반 Segmentation과는 달리 Core layer에 가까워질수록, 필터 수가 적어지는 구조
+- Sequential tanukiNet에 미리 설정된 threshold값에 따라 Learning rate를 조작.
+- 현재 알고리즘. Loss의 10%이하로 loss의 개선량이 낮아지면 learning rate를 절반으로 낮춘다.
+    - 문제점. -> Learning rate가 낮아지면 속도 또한 낮아지기에 악순환이 지속. 일단 th를 3%로 낮춰보고 생각.
