@@ -159,10 +159,13 @@ def generate_model(input_shape, pool_size, weight_decay=0.):
     x = MaxPooling2D((2, 2), strides=(2, 2), name='block4_pool')(x)
 
     # Convolutional layers transfered from fully-connected layers
-    x = Conv2D(2048, (7, 7), activation='relu', padding='same', dilation_rate=(2, 2),
+    x = Conv2D(1024,(3, 3), activation='relu', padding='same', dilation_rate=(4, 4),
                       name='fc1', kernel_regularizer=l2(weight_decay))(x)
     x = Dropout(0.5)(x)
-    x = Conv2D(2048, (1, 1), activation='relu', padding='same', dilation_rate=(4, 4), name='fc2', kernel_regularizer=l2(weight_decay))(x)
+    x = Conv2D(1024,(3, 3), activation='relu', padding='same', dilation_rate=(4, 4),
+                      name='fc1', kernel_regularizer=l2(weight_decay))(x)
+    x = Dropout(0.5)(x)
+    x = Conv2D(1024, (1, 1), activation='relu', padding='same', name='fc2', kernel_regularizer=l2(weight_decay))(x)
     x = Dropout(0.5)(x)
     #classifying layer
     x = Conv2D(1, (1, 1), kernel_initializer='he_normal', activation='linear', padding='valid', strides=(1, 1), kernel_regularizer=l2(weight_decay))(x)
@@ -171,7 +174,7 @@ def generate_model(input_shape, pool_size, weight_decay=0.):
 
     model = Model(img_input, x)
     model.compile(optimizer='adam', loss='mean_squared_error')
-    
+
     return model
 
 def read_set(target, resized_shape):
