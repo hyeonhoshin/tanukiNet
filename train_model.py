@@ -67,3 +67,7 @@ min, sec = divmod(end_train-start_train, 60)
 f.write("Pure training time : {}min {}sec\n".format(int(min),int(sec)))
 
 f.close()
+
+# History 저장
+with open('history.p','wb') as f :
+    pickle.dump(hist, f, protocol=4)
