@@ -178,7 +178,7 @@ class AdaptiveLearningrate(Callback):
         print("\n\n===== Adaptive Learning rate Manager =====\n")
         print("Programming by Hyeonho Shin, Hanyang University")
         print("Threshold rate is set to {}, Decay rate is set to {}".format(self.threshold, self.decay))
-        print("When updating, lr updater have a break during {} epochs\n".format(self.relaxMax))
+        print("After updating, lr updater have a break during {} epochs\n".format(self.relaxMax))
 
     def on_epoch_end(self, epoch, logs=None):
         # Error 처리 - optimizer의 lr이 없을 경우.
