@@ -37,11 +37,13 @@ y_train = y_train[:, 1:-1,:-1, np.newaxis]/255.0
 model = tanuki_ml.generate_model(input_shape, pool_size)
 model.summary()
 
-# Data 부풀리기 - 일단 안함. Flip 정도는 후에 구현
+# Load test data
+X_test, y_test, _ = pickle.load(open("tanuki_test.p", "rb" ))
+y_test = y_test[:, 1:-1,:-1, np.newaxis]/255.0
 
 # 학습
 start_train = time.time()
-hist = model.fit(X_train, y_train, batch_size, epochs, shuffle = True)
+hist = model.fit(X_train, y_train, batch_size, epochs, validation_data = (X_test, y_test), shuffle = True)
 end_train = time.time()
 
 end_total = time.time()
