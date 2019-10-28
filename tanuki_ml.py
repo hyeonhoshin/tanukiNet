@@ -72,11 +72,11 @@ def generate_model(input_shape, pool_size):
     h = Conv2DTranspose(40, (3, 3), padding='valid', strides=(1, 1), activation='relu')(up)
     h = Conv2DTranspose(40, (3, 3), padding='valid', strides=(1, 1), activation='relu')(h)
     h = Conv2DTranspose(60, (3, 3), padding='valid', strides=(1, 1), activation='relu')(h)
-    deconv_final = Conv2DTranspose(1, (3, 3), padding='valid', strides=(1, 1), activation='relu')(h)
+    deconv_final = Conv2DTranspose(1, (3, 3), padding='valid', strides=(1, 1), activation='softmax')(h)
 
     model = Model(inputs = inputs, outputs = deconv_final)
 
-    model.compile(optimizer='adam', loss='mean_squared_error')
+    model.compile(optimizer='adam', loss='binary_crossentropy')
     
     return model
 
