@@ -13,3 +13,4 @@
 - 구조, parameter의 수, activation function 모두 동일했었음.
 - --optimizer 이름을 'Adam'에서 'adam'으로 변경, 함수형태로 부를때만 adam으로 쓰는듯..?-- 이건 원인 아님을 확인
 - 3-> (3,3) 이 자체만으로는 원인이 아님.
+- history.p에 history파일 저장됨.
