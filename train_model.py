@@ -42,9 +42,14 @@ model.summary()
 X_test, y_test, _ = pickle.load(open("tanuki_test.p", "rb" ))
 y_test = y_test[:, 1:-1,:-1, np.newaxis]/255.0
 
+# Adaptive Learning rate 기능
+callback_list = [
+  tanuki_ml.AdaptiveLearningrate(threshold=0.03, decay=0.5, verbose=1)
+]
+
 # 학습
 start_train = time.time()
-hist = model.fit(X_train, y_train, batch_size, epochs, validation_data = (X_test, y_test), shuffle = True)
+hist = model.fit(X_train, y_train, batch_size, epochs, validation_data = (X_test, y_test), shuffle = True, callbacks=callback_list)
 end_train = time.time()
 
 end_total = time.time()
