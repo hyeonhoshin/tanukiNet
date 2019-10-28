@@ -41,7 +41,7 @@ model.summary()
 
 # 학습
 start_train = time.time()
-model.fit(X_train, y_train, batch_size, epochs, shuffle = True)
+hist = model.fit(X_train, y_train, batch_size, epochs, shuffle = True)
 end_train = time.time()
 
 end_total = time.time()
