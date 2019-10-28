@@ -173,16 +173,16 @@ class AdaptiveLearningrate(Callback):
         self.verbose = verbose
         self.losses = []
         self.decay = decay
-        print("===== Adaptive Learning rate Manager =====")
+        print("\n\n===== Adaptive Learning rate Manager =====\n")
         print("Programming by Hyeonho Shin, Hanyang University")
-        print("Threshold rate is set to {}, Decay rate is set to {}".format(self.threshold, self.decay))
+        print("Threshold rate is set to {}, Decay rate is set to {}\n".format(self.threshold, self.decay))
 
     def on_epoch_end(self, epoch, logs=None):
         # Error 처리 - optimizer의 lr이 없을 경우.
         if not hasattr(self.model.optimizer, 'lr'):
             raise ValueError('Optimizer must have a "lr" attribute.')
 
-        lr_default = float(K.get_value(self.model.optimizer.lr))
+        lr_prev = float(K.get_value(self.model.optimizer.lr))
 
         logs = logs or {}
         loss = logs.get('val_loss')
@@ -193,13 +193,15 @@ class AdaptiveLearningrate(Callback):
             progress = self.losses[epoch-1] - loss # 0.0186 - 0.0183 = 0.0003 -> 0.0183의 3%이하 -> 업데이트
             if progress < loss * self.threshold:
                 # lr Update.
-                lr = lr_default * self.decay
+                lr = lr_prev * self.decay
                 K.set_value(self.model.opimizer.lr, lr)
-                print("Progress is small, Update Occur. {} < {}")
+                if self.verbose > 0:
+                    print("[Adaptive LR] @ epoch {} : Update! Change of loss = {} - {}".format(epoch, self.losses[epoch-1], loss))
+                    print("[Adaptive LR] @ epoch {} : {} -> {}}\n".format(epoch, lr_prev, lr))
 
             if self.verbose > 0:
-                print("[Adaptive LR] @ epoch {} : {} -> {}}".format(epoch, lr_default, lr))
+                print("[Adaptive LR] @ epoch {} : {} -> {}}\n".format(epoch, lr_prev, lr_prev))
 
         else:
             if self.verbose > 0:
-                print("[Adaptive LR] @ epoch 0 : epoch 0 직후에는 lr을 업데이트하지 않습니다.")
+                print("[Adaptive LR] @ epoch 0 : epoch 0 직후에는 lr을 업데이트하지 않습니다.\n")
