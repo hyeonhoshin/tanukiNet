@@ -7,3 +7,4 @@
 
 ## 실험결과
 - epoch = 2 즈음에서 overfitting 보임. 따라서 이때의 값으로 lane detect시도.
+- 영상 자체도 의미없게 나오는군. 음
