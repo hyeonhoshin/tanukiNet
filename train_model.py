@@ -72,4 +72,4 @@ f.close()
 
 # History 저장
 with open('history.p','wb') as f :
-    pickle.dump(hist, f, protocol=4)
+    pickle.dump(hist.history, f, protocol=4)
