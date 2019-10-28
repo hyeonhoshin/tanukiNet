@@ -11,8 +11,8 @@ warnings.filterwarnings(action='ignore') # 귀찮은 경고 감추기
 scaler = 6
 resized_shape = (1640//scaler, 590//scaler)
 
-json_fname = "tanukiNetv1.json"
-weights_fname ="tanukiNetv1.h5"
+json_fname = "model.json"
+weights_fname ="model.h5"
 
 # Load Keras model
 json_file = open(json_fname, 'r')
