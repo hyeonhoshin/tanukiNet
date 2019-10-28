@@ -170,6 +170,8 @@ def generate_model(input_shape, pool_size, weight_decay=0.):
     x = BilinearUpSampling2D(target_size=image_size)(x)
 
     model = Model(img_input, x)
+    model.compile(optimizer='adam', loss='mean_squared_error')
+    
     return model
 
 def read_set(target, resized_shape):
