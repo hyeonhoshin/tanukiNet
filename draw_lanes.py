@@ -17,7 +17,7 @@ pool_size = (2,2)
 
 # Load Keras model
 model = tanuki_ml.generate_model(input_shape, pool_size)
-model.load_weights('model.h5')
+model.load_weights('tanukiNetv1.h5')
 model.compile(optimizer = 'Adam', loss='mean_squared_error', metrics = ['accuracy'])
 
 model.summary()
