@@ -12,7 +12,6 @@ from keras.layers import *
 from keras.optimizers import *
 from keras.callbacks import ModelCheckpoint, LearningRateScheduler
 from keras import backend as keras
-from loss import *
 
 def give_time(X, y, memory_size = 3):
     # Make time-dependent data
@@ -77,7 +76,7 @@ def generate_model(input_shape, pool_size):
 
     model = Model(inputs = inputs, outputs = deconv_final)
 
-    model.compile(optimizer='adam', loss=jaccard_distance_loss)
+    model.compile(optimizer='adam', loss='mean_absolute_error')
     
     return model
 
