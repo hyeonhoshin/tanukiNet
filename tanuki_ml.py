@@ -71,7 +71,11 @@ def generate_model(input_shape, pool_size):
 
     model = Model(inputs = inputs, outputs = deconv_final)
 
+<<<<<<< HEAD
+    model.compile(optimizer='adam', loss='mean_squared_error', metrics = [iou_loss_core, competitionMetric2])
+=======
     model.compile(optimizer='adam', loss='mean_squared_error', metrics=[iou_loss_core, competitionMetric2, 'accuracy'])
+>>>>>>> 4fe29ca65f66f46136b83397ae484b4eb92caf5a
     
     return model
 
@@ -124,6 +128,8 @@ def read_set(target, resized_shape):
     
     return X, y
 
+<<<<<<< HEAD
+=======
 class AdaptiveLearningrate(Callback):
     def __init__(self, threshold=0.03, decay=0.5, relax=3, verbose=0):
         super(AdaptiveLearningrate, self).__init__()
@@ -168,3 +174,4 @@ class AdaptiveLearningrate(Callback):
         else:
             if self.verbose > 0:
                 print("[Adaptive LR] @ epoch 0 : epoch 0 직후에는 lr을 업데이트하지 않습니다.\n")
+>>>>>>> 4fe29ca65f66f46136b83397ae484b4eb92caf5a
