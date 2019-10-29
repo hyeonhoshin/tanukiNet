@@ -18,4 +18,4 @@
 - epoch = 9쯤에서 val_iou_loss_core가 가장 높다.
 
 #### ver 2.
-- 영상 분석 후, CBAM 버전이랑 boundary나 dice loss 적용
+- 영상 상에 어떤 것도 보이지 않음.
