@@ -12,6 +12,7 @@ from keras.layers import *
 from keras.optimizers import *
 from keras.callbacks import ModelCheckpoint, LearningRateScheduler
 from keras import backend as keras
+from metrics import *
 
 def give_time(X, y, memory_size = 3):
     # Make time-dependent data
@@ -69,7 +70,7 @@ def generate_model(input_shape, pool_size):
 
     model = Model(inputs = inputs, outputs = deconv_final)
 
-    model.compile(optimizer='adam', loss='mean_squared_error', metrics = ['accuracy','binary_accuracy','categorical_accuracy'])
+    model.compile(optimizer='adam', loss='mean_squared_error', metrics = ['binary_accuracy', competitionMetric2])
     
     return model
 
@@ -121,3 +122,4 @@ def read_set(target, resized_shape):
     del(imgs)
     
     return X, y
+
