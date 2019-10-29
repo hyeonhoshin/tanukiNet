@@ -77,7 +77,7 @@ def generate_model(input_shape, pool_size):
 
     model = Model(inputs = inputs, outputs = deconv_final)
 
-    model.compile(optimizer='adam', loss=focal_loss)
+    model.compile(optimizer='adam', loss=binary_focal_loss(gamma=2., alpha=.25))
     
     return model
 
