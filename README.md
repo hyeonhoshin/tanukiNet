@@ -6,7 +6,6 @@
 
 ### 실험 방법
 - Dropout을 Batch norm으로 변경
-- Network in network를 끝 부분에 적용.
+- 학습이 너무 오래걸려서 nin은 제거
 
 ### 분석 결과
-- 

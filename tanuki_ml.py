@@ -44,8 +44,7 @@ def generate_model(input_shape, pool_size):
 
     inputs = Input(input_shape)
     batch = BatchNormalization()(inputs)
-    h = Conv2D(128, (3, 3), padding = 'valid', activation = 'relu', kernel_initializer='he_normal')(batch)
-    h = Conv2D(64, (1, 1), padding = 'same', kernel_initializer='he_normal')(h)
+    h = Conv2D(72, (3, 3), padding = 'valid', activation = 'relu', kernel_initializer='he_normal')(batch)
     h = Conv2D(64, (3, 3), padding = 'valid', activation = 'relu', kernel_initializer='he_normal')(h)
     h = attach_attention_module(h, attention_module = 'cbam_block')
     pool = MaxPooling2D(pool_size=pool_size)(h)
@@ -71,8 +70,7 @@ def generate_model(input_shape, pool_size):
     h = BatchNormalization()(Conv2DTranspose(64, (3, 3), padding='valid', strides=(1, 1), activation='relu', kernel_initializer='he_normal')(h))
 
     up = UpSampling2D(size = pool_size)(h)
-    h = Conv2DTranspose(64, (1, 1), padding='same', strides=(1, 1), kernel_initializer='he_normal')(up)
-    h = Conv2DTranspose(128, (3, 3), padding='valid', strides=(1, 1), activation='relu', kernel_initializer='he_normal')(h)
+    h = Conv2DTranspose(72, (3, 3), padding='valid', strides=(1, 1), activation='relu', kernel_initializer='he_normal')(up)
     deconv_final = Conv2DTranspose(1, (3, 3), padding='valid', strides=(1, 1), activation='relu', kernel_initializer='he_normal')(h)
 
     model = Model(inputs = inputs, outputs = deconv_final)
