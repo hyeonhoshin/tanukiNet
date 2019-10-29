@@ -9,3 +9,5 @@ reinforced_imgs/
 prior_weights/
 prototype/
 history_plotter.py
+tanuki_train.p
+tanuki_test.p
