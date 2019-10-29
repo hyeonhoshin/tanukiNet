@@ -70,7 +70,7 @@ def generate_model(input_shape, pool_size):
 
     model = Model(inputs = inputs, outputs = deconv_final)
 
-    model.compile(optimizer='adam', loss='mean_squared_error', metrics = ['binary_accuracy', competitionMetric2])
+    model.compile(optimizer='adam', loss='mean_squared_error', metrics = [iou_loss_core, competitionMetric2])
     
     return model
 
