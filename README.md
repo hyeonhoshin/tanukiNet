@@ -5,13 +5,17 @@
 - merge layers는 제거
 - loss function은 iou추가, [출처](https://www.kaggle.com/c/tgs-salt-identification-challenge/discussion/63044)
 - Adaptive LR추가
-- loss는 음... MSE일단.(그 다음에는 )
+- loss는 음... MSE일단.
 - history reader 추가
 
-### 분석 결과
-#### Try 1.
-- epoch = 20, no merge, loss = MSE
-- 
+### Update
+#### ver 2.
+- Optimizing. epoch = 9에서 멈춤
 
-#### Try 2.
-- BAM and CBAM Layer 후보군 추가 ( branch 생성 필요 )
+### 분석 결과
+#### ver 1.
+- epoch = 20, no merge, loss = MSE
+- epoch = 9쯤에서 val_iou_loss_core가 가장 높다.
+
+#### ver 2.
+- 영상 분석 후, CBAM 버전이랑 boundary나 dice loss 적용

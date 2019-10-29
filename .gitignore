@@ -8,3 +8,4 @@ reinforced_imgs/
 .idea/
 prior_weights/
 prototype/
+history_plotter.py
