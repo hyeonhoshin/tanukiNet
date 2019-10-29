@@ -44,8 +44,7 @@ def give_time(X, y, memory_size = 3):
 def generate_model(input_shape, pool_size):
 
     inputs = Input(input_shape)
-    batch = BatchNormalization()(inputs)
-    h = Conv2D(72, (3, 3), padding = 'valid', activation = 'relu', kernel_initializer='he_normal')(batch)
+    h = Conv2D(72, (3, 3), padding = 'valid', activation = 'relu', kernel_initializer='he_normal')(inputs)
     h = Conv2D(64, (3, 3), padding = 'valid', activation = 'relu', kernel_initializer='he_normal')(h)
     h = attach_attention_module(h, attention_module = 'cbam_block')
     pool = MaxPooling2D(pool_size=pool_size)(h)
