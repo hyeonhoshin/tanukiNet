@@ -49,7 +49,7 @@ callback_list = [
 
 # 학습
 start_train = time.time()
-hist = model.fit(X_train, y_train, batch_size, epochs, validation_data = (X_test, y_test), shuffle = True, callbacks=callback_list)
+hist = model.fit(X_train, y_train, batch_size, epochs, validation_data = (X_test, y_test), shuffle = True, callbacks=callback_list, verbose=2)
 end_train = time.time()
 
 end_total = time.time()
