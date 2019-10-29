@@ -44,7 +44,7 @@ def give_time(X, y, memory_size = 3):
 def generate_model(input_shape, pool_size):
 
     inputs = Input(input_shape)
-    h = Conv2D(60, (3, 3), padding = 'valid', activation = 'relu')(inputs)
+    h = Conv2D(70, (3, 3), padding = 'valid', activation = 'relu')(inputs)
     h = Conv2D(50, (3, 3), padding = 'valid', activation = 'relu')(h)
     h = attach_attention_module(h, attention_module = 'cbam_block')
     pool = MaxPooling2D(pool_size=pool_size)(h)
@@ -55,13 +55,13 @@ def generate_model(input_shape, pool_size):
     h = attach_attention_module(h, attention_module = 'cbam_block')
     pool = MaxPooling2D(pool_size=pool_size)(h)
 
-    h = BatchNormalization()(Conv2D(10, (3, 3), padding = 'valid', activation = 'relu')(pool))
-    h = BatchNormalization()(Conv2D(5, (3, 3), padding = 'valid', activation = 'relu')(h))
+    h = BatchNormalization()(Conv2D(16, (3, 3), padding = 'valid', activation = 'relu')(pool))
+    h = BatchNormalization()(Conv2D(8, (3, 3), padding = 'valid', activation = 'relu')(h))
     h = attach_attention_module(h, attention_module = 'cbam_block')
     pool = MaxPooling2D(pool_size=pool_size)(h)
 
     up = UpSampling2D(size = pool_size)(pool)
-    h = BatchNormalization()(Conv2DTranspose(10, (3, 3), padding='valid', strides=(1, 1), activation='relu')(up))
+    h = BatchNormalization()(Conv2DTranspose(16, (3, 3), padding='valid', strides=(1, 1), activation='relu')(up))
     h = BatchNormalization()(Conv2DTranspose(20, (3, 3), padding='valid', strides=(1, 1), activation='relu')(h))
 
     up = UpSampling2D(size = pool_size)(h)
@@ -70,7 +70,7 @@ def generate_model(input_shape, pool_size):
     h = BatchNormalization()(Conv2DTranspose(50, (3, 3), padding='valid', strides=(1, 1), activation='relu')(h))
 
     up = UpSampling2D(size = pool_size)(h)
-    h = Conv2DTranspose(60, (3, 3), padding='valid', strides=(1, 1), activation='relu')(up)
+    h = Conv2DTranspose(70, (3, 3), padding='valid', strides=(1, 1), activation='relu')(up)
     deconv_final = Conv2DTranspose(1, (3, 3), padding='valid', strides=(1, 1), activation='relu')(h)
 
     model = Model(inputs = inputs, outputs = deconv_final)
