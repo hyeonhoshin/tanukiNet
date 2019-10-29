@@ -1,3 +1,6 @@
+from keras import backend as K
+import tensorflow as tf
+
 def castF(x):
     return K.cast(x, K.floatx())
 
