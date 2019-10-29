@@ -15,7 +15,7 @@ from keras import backend as keras
 from keras.callbacks import Callback
 
 from metrics import *
-from attention_module = 'cbam_block' import attach_attention_module
+from attention_module import attach_attention_module
 
 def give_time(X, y, memory_size = 3):
     # Make time-dependent data

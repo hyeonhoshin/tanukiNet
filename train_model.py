@@ -13,9 +13,9 @@ import numpy as np
 import sys
 import time
 import pickle
+import tanuki_ml
 
 from sklearn.utils import shuffle
-import tanuki_ml
 
 start_total = time.time()
 
