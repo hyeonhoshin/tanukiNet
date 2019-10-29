@@ -13,6 +13,8 @@ from keras.optimizers import *
 from keras.callbacks import ModelCheckpoint, LearningRateScheduler
 from keras import backend as keras
 
+from metrics import *
+
 def give_time(X, y, memory_size = 3):
     # Make time-dependent data
     # X : (data_idx, x, y) -> (data_idx, looking, x, y)
@@ -50,12 +52,11 @@ def generate_model(input_shape, pool_size):
     pool = MaxPooling2D(pool_size=pool_size)(h)
 
     h = Dropout(0.2)(Conv2D(16, (3, 3), padding = 'valid', activation = 'relu')(pool))
-    h1 = Dropout(0.2)(Conv2D(8, (3, 3), padding = 'valid', activation = 'relu')(h))
-    pool = MaxPooling2D(pool_size=pool_size)(h1)
+    h = Dropout(0.2)(Conv2D(8, (3, 3), padding = 'valid', activation = 'relu')(h))
+    pool = MaxPooling2D(pool_size=pool_size)(h)
 
     up = UpSampling2D(size = pool_size)(pool)
-    merge = Concatenate(axis=-1)([h1,up])
-    h = Dropout(0.2)(Conv2DTranspose(16, (3, 3), padding='valid', strides=(1, 1), activation='relu')(merge))
+    h = Dropout(0.2)(Conv2DTranspose(16, (3, 3), padding='valid', strides=(1, 1), activation='relu')(up))
     h = Dropout(0.2)(Conv2DTranspose(32, (3, 3), padding='valid', strides=(1, 1), activation='relu')(h))
 
     up = UpSampling2D(size = pool_size)(h)
@@ -69,7 +70,7 @@ def generate_model(input_shape, pool_size):
 
     model = Model(inputs = inputs, outputs = deconv_final)
 
-    model.compile(optimizer='adam', loss='mean_squared_error')
+    model.compile(optimizer='adam', loss='mean_squared_error', metrics=[iou_loss_core, competitionMetric2, 'accuracy'])
     
     return model
 
