@@ -9,3 +9,5 @@
 
 ### 분석 결과
 #### Try 1.
+- epoch = 20, no merge, loss = MSE
+- 
