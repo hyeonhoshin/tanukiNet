@@ -77,7 +77,7 @@ def generate_model(input_shape, pool_size):
 
     model = Model(inputs = inputs, outputs = deconv_final)
 
-    model.compile(optimizer='adam', loss=jaccard_distance_loss)
+    model.compile(optimizer='adam', loss=focal_loss)
     
     return model
 
