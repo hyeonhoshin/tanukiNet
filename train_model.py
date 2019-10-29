@@ -25,7 +25,7 @@ scaler = 6
 input_shape = (590//scaler, 1640//scaler, color_num)
 resized_shape = (1640//scaler, 590//scaler)
 batch_size = 32
-epochs = 20
+epochs = 30
 pool_size = (2, 2)
 
 print("Training start")
@@ -44,7 +44,7 @@ y_test = y_test[:, 1:-1,:-1, np.newaxis]/255.0
 
 # Adaptive Learning rate 기능
 callback_list = [
-  tanuki_ml.AdaptiveLearningrate(threshold=0.01, decay=0.5, relax=5, verbose=1)
+  tanuki_ml.AdaptiveLearningrate(threshold=0.01, decay=0.8, relax=3, verbose=1)
 ]
 
 # 학습

@@ -1,11 +1,8 @@
-# tanukiNet v2 - condinfox
+# tanukiNet v2 - condinfox-dice
 
 ### Abstact
-- tanukiNetv2-CBAM에 깊은 모델을 더 잘 학습시키기 위한 세가지 기법 동시 적용
-- 적용 방법은 [codinfox 블로그](https://buomsoo-kim.github.io/keras/2018/05/05/Easy-deep-learning-with-Keras-11.md/) 참조
-
-### 실험 방법
-- Dropout을 Batch norm으로 변경
-- 학습이 너무 오래걸려서 nin은 제거
+- tanukiNetv2-codinfox branch에 loss를 dice로 변경하여 최종 테스트
+- 학습이 느린 경향이 있었으므로, epoch은 넉넉히 30정도 줌.
+- Cosine Adaptive LR을 모방하기 위해 rest간격을 짧게 하는 대신 감소 비율을 0.8로 변경
 
 ### 분석 결과
