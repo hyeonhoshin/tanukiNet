@@ -1,21 +1,11 @@
-# tanukiNet v2
+# tanukiNet v2 - CBAM
 
 ### Abstact
-- 필터 수 증가 from filter up
-- merge layers는 제거
-- loss function은 iou추가, [출처](https://www.kaggle.com/c/tgs-salt-identification-challenge/discussion/63044)
-- Adaptive LR추가
-- loss는 음... MSE일단.
-- history reader 추가
+- tanukiNetv2 ver 2에 CBAM Layer 추가 버전
 
-### Update
-#### ver 2.
-- Optimizing. epoch = 9에서 멈춤
+### 실험 방법
+- 이전 tanukiNet이 epoch 9에서 최적값을 가졌으므로 epoch 9로 실험
+- 일단 Conv에만 CBAM을 추가
 
 ### 분석 결과
-#### ver 1.
-- epoch = 20, no merge, loss = MSE
-- epoch = 9쯤에서 val_iou_loss_core가 가장 높다.
-
-#### ver 2.
-- 영상 분석 후, CBAM 버전이랑 boundary나 dice loss 적용
+- 
