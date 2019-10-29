@@ -12,6 +12,8 @@ from keras.layers import *
 from keras.optimizers import *
 from keras.callbacks import ModelCheckpoint, LearningRateScheduler
 from keras import backend as keras
+from keras.callbacks import Callback
+
 from metrics import *
 
 def give_time(X, y, memory_size = 3):
@@ -51,12 +53,11 @@ def generate_model(input_shape, pool_size):
     pool = MaxPooling2D(pool_size=pool_size)(h)
 
     h = Dropout(0.2)(Conv2D(16, (3, 3), padding = 'valid', activation = 'relu')(pool))
-    h1 = Dropout(0.2)(Conv2D(8, (3, 3), padding = 'valid', activation = 'relu')(h))
-    pool = MaxPooling2D(pool_size=pool_size)(h1)
+    h = Dropout(0.2)(Conv2D(8, (3, 3), padding = 'valid', activation = 'relu')(h))
+    pool = MaxPooling2D(pool_size=pool_size)(h)
 
     up = UpSampling2D(size = pool_size)(pool)
-    merge = Concatenate(axis=-1)([h1,up])
-    h = Dropout(0.2)(Conv2DTranspose(16, (3, 3), padding='valid', strides=(1, 1), activation='relu')(merge))
+    h = Dropout(0.2)(Conv2DTranspose(16, (3, 3), padding='valid', strides=(1, 1), activation='relu')(up))
     h = Dropout(0.2)(Conv2DTranspose(32, (3, 3), padding='valid', strides=(1, 1), activation='relu')(h))
 
     up = UpSampling2D(size = pool_size)(h)
@@ -70,7 +71,11 @@ def generate_model(input_shape, pool_size):
 
     model = Model(inputs = inputs, outputs = deconv_final)
 
+<<<<<<< HEAD
     model.compile(optimizer='adam', loss='mean_squared_error', metrics = [iou_loss_core, competitionMetric2])
+=======
+    model.compile(optimizer='adam', loss='mean_squared_error', metrics=[iou_loss_core, competitionMetric2, 'accuracy'])
+>>>>>>> 4fe29ca65f66f46136b83397ae484b4eb92caf5a
     
     return model
 
@@ -123,3 +128,50 @@ def read_set(target, resized_shape):
     
     return X, y
 
+<<<<<<< HEAD
+=======
+class AdaptiveLearningrate(Callback):
+    def __init__(self, threshold=0.03, decay=0.5, relax=3, verbose=0):
+        super(AdaptiveLearningrate, self).__init__()
+        self.threshold = threshold
+        self.verbose = verbose
+        self.losses = []
+        self.decay = decay
+        self.relax = relax
+        self.relaxMax = relax
+        print("\n\n===== Adaptive Learning rate Manager =====\n")
+        print("Programming by Hyeonho Shin, Hanyang University")
+        print("Threshold rate is set to {}, Decay rate is set to {}".format(self.threshold, self.decay))
+        print("After updating, lr updater have a break during {} epochs\n".format(self.relaxMax))
+
+    def on_epoch_end(self, epoch, logs=None):
+        # Error 처리 - optimizer의 lr이 없을 경우.
+        if not hasattr(self.model.optimizer, 'lr'):
+            raise ValueError('Optimizer must have a "lr" attribute.')
+
+        lr_prev = float(K.get_value(self.model.optimizer.lr))
+
+        logs = logs or {}
+        loss = logs.get('val_loss')
+        self.losses.append(loss)
+
+        if len(self.losses) > 1 and (self.relax == self.relaxMax):
+            # 만약 이전 epoch의 loss와의 차이가 threshold
+            progress = self.losses[epoch-1] - loss # 0.0186 - 0.0183 = 0.0003 -> 0.0183의 3%이하 -> 업데이트
+            if progress < loss * self.threshold:
+                self.relax = 0 # relax하도록 Relax Time 초기화
+                # lr Update.
+                lr = lr_prev * self.decay
+                K.set_value(self.model.optimizer.lr, lr)
+                if self.verbose > 0:
+                    print("[Adaptive LR] @ epoch {} : Change of loss = {} - {}".format(epoch, self.losses[epoch-1], loss))
+                    print("[Adaptive LR] @ epoch {} : Update! {} -> {}\n".format(epoch, lr_prev, lr))
+            elif self.verbose > 0:
+                print("[Adaptive LR] @ epoch {} : Large progress - No change\n".format(epoch))
+        elif self.relax != self.relaxMax:
+            print("[Adaptive LR] @ epoch {} : Relax time - no change\n".format(epoch))
+            self.relax += 1
+        else:
+            if self.verbose > 0:
+                print("[Adaptive LR] @ epoch 0 : epoch 0 직후에는 lr을 업데이트하지 않습니다.\n")
+>>>>>>> 4fe29ca65f66f46136b83397ae484b4eb92caf5a

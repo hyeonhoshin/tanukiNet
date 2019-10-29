@@ -16,6 +16,8 @@ import time
 import pickle
 
 from sklearn.utils import shuffle
+import tanuki_ml
+
 start_total = time.time()
 
 # 초기화
@@ -24,7 +26,7 @@ scaler = 6
 input_shape = (590//scaler, 1640//scaler, color_num)
 resized_shape = (1640//scaler, 590//scaler)
 batch_size = 32
-epochs = 10
+epochs = 20
 pool_size = (2, 2)
 
 print("Training start")
@@ -41,12 +43,15 @@ model.summary()
 X_test, y_test, _ = pickle.load(open("tanuki_test.p", "rb" ))
 y_test = y_test[:, 1:-1,:-1, np.newaxis]/255.0
 
-# 학습
-start_train = time.time()
-hist = model.fit(X_train, y_train, batch_size, epochs, validation_data = (X_test, y_test), shuffle = True)
-end_train = time.time()
+# Adaptive Learning rate 기능
+callback_list = [ tanuki_ml.AdaptiveLearningrate(threshold=0.01, decay=0.5, relax=5, verbose=1)]
 
-end_total = time.time()
+# 학습
+start_train = time.time()
+hist = model.fit(X_train, y_train, batch_size, epochs, validation_data = (X_test, y_test), shuffle = True, callbacks=callback_list)
+end_train = time.time()
+
+end_total = time.time()
 
 # Weights 저장
 model.save_weights("tanukiNetv1.h5")
