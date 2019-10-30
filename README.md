@@ -7,5 +7,8 @@
 - 최상위 layer에 batch norm이 있는 이유를 모르겠어서 제거
 - 빠른 학습을 위해 kernel 수 v1과 동일하도록 감소 시킴
 - he_init도 loss가 정체되는 현상이 여전히 나타나서 안함.
+- ** 이것 전부 효과가 없을 경우 filter 수 좀 늘린거에 adaptive lr이랑 attention이랑 MSE만 추가해서 제출할거임. 으으 batch norm쓰면 오히려 성능이 떨어지는거 같기도... **
 
 ### 분석 결과
+- dice를 적용하니, 오히려 val loss등이 감소하거나 하지 않음.
+- 폐기.
