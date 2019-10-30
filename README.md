@@ -1,14 +1,9 @@
-# tanukiNet v2 - CBAM
+# CBAM-dice20
 
 ### Abstact
-- tanukiNetv2 ver 2에 CBAM Layer 추가 버전
-
-### 실험 방법
-- 일단 Conv에만 CBAM을 추가
-- tanukiNetv2 ver 2에서 epoch 9에서 어떤 결과도 나오지 않은 것을 바탕으로, epoch을 30까지 늘려봄.
+- tanukiNetv2-CBAM이 가능성을 보여주었으므로 그나마 가능성을 보여준 dice loss의 경우와 통합하여 그 결과를 평가
+- decay = 0.8, rest는 3마다 일어남.
+- epoch을 dice branch의 두 배인 20으로 끌어올림
 
 ### 분석 결과
-- 중간에 중복된 선에 의해 열화가 심하게 일어남
-- 그림자에서의 성능은 거의 비슷
-- val_loss는 epochs = 25이후로 거의 변하지 않음.
-- Competion metric은 점점 증가.
+- 
