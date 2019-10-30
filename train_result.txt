@@ -1,0 +1,2 @@
+Total run time : 38min 2sec
+Pure training time : 37min 58sec
