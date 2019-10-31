@@ -43,31 +43,30 @@ def give_time(X, y, memory_size = 3):
 def generate_model(input_shape, pool_size):
 
     inputs = Input(input_shape)
-    batch = BatchNormalization()(inputs)
-    h = Conv2D(128, (3, 3), padding = 'valid', activation = 'relu')(batch)
+    h = Conv2D(128, (3, 3), padding = 'valid', activation = 'relu')(inputs)
     h = Conv2D(64, (3, 3), padding = 'valid', activation = 'relu')(h)
     h = attach_attention_module(h, attention_module = 'cbam_block')
     pool = MaxPooling2D(pool_size=pool_size)(h)
 
-    h = Dropout(0.2)(Conv2D(32, (3, 3), padding = 'valid', activation = 'relu')(pool))
-    h = Dropout(0.2)(Conv2D(32, (3, 3), padding = 'valid', activation = 'relu')(h))
-    h = Dropout(0.2)(Conv2D(32, (3, 3), padding = 'valid', activation = 'relu')(h))
+    h = BatchNormalization()(Conv2D(56, (3, 3), padding = 'valid', activation = 'relu')(pool))
+    h = BatchNormalization()(Conv2D(48, (3, 3), padding = 'valid', activation = 'relu')(h))
+    h = BatchNormalization()(Conv2D(32, (3, 3), padding = 'valid', activation = 'relu')(h))
     h = attach_attention_module(h, attention_module = 'cbam_block')
     pool = MaxPooling2D(pool_size=pool_size)(h)
 
-    h = Dropout(0.2)(Conv2D(16, (3, 3), padding = 'valid', activation = 'relu')(pool))
-    h = Dropout(0.2)(Conv2D(8, (3, 3), padding = 'valid', activation = 'relu')(h))
+    h = BatchNormalization()(Conv2D(16, (3, 3), padding = 'valid', activation = 'relu')(pool))
+    h = BatchNormalization()(Conv2D(8, (3, 3), padding = 'valid', activation = 'relu')(h))
     h = attach_attention_module(h, attention_module = 'cbam_block')
     pool = MaxPooling2D(pool_size=pool_size)(h)
 
     up = UpSampling2D(size = pool_size)(pool)
-    h = Dropout(0.2)(Conv2DTranspose(16, (3, 3), padding='valid', strides=(1, 1), activation='relu')(up))
-    h = Dropout(0.2)(Conv2DTranspose(32, (3, 3), padding='valid', strides=(1, 1), activation='relu')(h))
+    h = BatchNormalization()(Conv2DTranspose(16, (3, 3), padding='valid', strides=(1, 1), activation='relu')(up))
+    h = BatchNormalization()(Conv2DTranspose(32, (3, 3), padding='valid', strides=(1, 1), activation='relu')(h))
 
     up = UpSampling2D(size = pool_size)(h)
-    h = Dropout(0.2)(Conv2DTranspose(64, (3, 3), padding='valid', strides=(1, 1), activation='relu')(up))
-    h = Dropout(0.2)(Conv2DTranspose(64, (3, 3), padding='valid', strides=(1, 1), activation='relu')(h))
-    h = Dropout(0.2)(Conv2DTranspose(64, (3, 3), padding='valid', strides=(1, 1), activation='relu')(h))
+    h = BatchNormalization()(Conv2DTranspose(32, (3, 3), padding='valid', strides=(1, 1), activation='relu')(up))
+    h = BatchNormalization()(Conv2DTranspose(48, (3, 3), padding='valid', strides=(1, 1), activation='relu')(h))
+    h = BatchNormalization()(Conv2DTranspose(56, (3, 3), padding='valid', strides=(1, 1), activation='relu')(h))
 
     up = UpSampling2D(size = pool_size)(h)
     h = Conv2DTranspose(128, (3, 3), padding='valid', strides=(1, 1), activation='relu')(up)
