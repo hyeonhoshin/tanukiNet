@@ -56,8 +56,6 @@ def road_lines(image):
 
     # Calculate average detection
     if len(lanes.recent_fit) == save:
-        print(lanes.weights)
-        print(np.array([i for i in lanes.recent_fit]))
         lanes.avg_fit = np.average(np.array([i for i in lanes.recent_fit]), axis = 0, weights=lanes.weights)
     else:
         lanes.avg_fit = np.average(np.array([i for i in lanes.recent_fit]), axis = 0)
