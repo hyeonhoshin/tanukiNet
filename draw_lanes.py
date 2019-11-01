@@ -48,11 +48,11 @@ def road_lines(image):
     # Add lane prediction to list for averaging
     lanes.recent_fit.append(prediction)
     # Only using last five for average
-    if len(lanes.recent_fit) > 5:
+    if len(lanes.recent_fit) > 6:
         lanes.recent_fit = lanes.recent_fit[1:]
 
     # Calculate average detection
-    lanes.avg_fit = np.mean(np.array([i for i in lanes.recent_fit]), axis = 0)
+    lanes.avg_fit = np.median(np.array([i for i in lanes.recent_fit]), axis = 0)
 
     # Generate fake R & B color dimensions, stack with G
     blanks = np.zeros_like(lanes.avg_fit)
