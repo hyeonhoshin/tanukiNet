@@ -48,7 +48,7 @@ def road_lines(image):
     # Add lane prediction to list for averaging
     lanes.recent_fit.append(prediction)
     # Only using last five for average
-    if len(lanes.recent_fit) > 6:
+    if len(lanes.recent_fit) > 3:
         lanes.recent_fit = lanes.recent_fit[1:]
 
     # Calculate average detection
