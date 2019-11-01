@@ -32,7 +32,7 @@ class Lanes():
     def __init__(self, weights = np.arange(-save//2+1,save//2+1)):
         self.recent_fit = []
         self.avg_fit = []
-        self.weights = weights
+        self.weights = np.exp(weights)
 
 def road_lines(image):
     """ Takes in a road image, re-sizes for the model,
