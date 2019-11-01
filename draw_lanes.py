@@ -25,7 +25,7 @@ model.summary()
 scaler = 6
 resized_shape = (1640//scaler, 590//scaler)
 
-save = 5
+save = 10
 
 # Class to average lanes with
 class Lanes():
