@@ -25,11 +25,14 @@ model.summary()
 scaler = 6
 resized_shape = (1640//scaler, 590//scaler)
 
+save = 5
+
 # Class to average lanes with
 class Lanes():
-    def __init__(self):
+    def __init__(self, weights = np.arange(-save//2,save//2+1)):
         self.recent_fit = []
         self.avg_fit = []
+        self.weights = weights
 
 def road_lines(image):
     """ Takes in a road image, re-sizes for the model,
@@ -48,11 +51,11 @@ def road_lines(image):
     # Add lane prediction to list for averaging
     lanes.recent_fit.append(prediction)
     # Only using last five for average
-    if len(lanes.recent_fit) > 3:
+    if len(lanes.recent_fit) > save:
         lanes.recent_fit = lanes.recent_fit[1:]
 
     # Calculate average detection
-    lanes.avg_fit = np.median(np.array([i for i in lanes.recent_fit]), axis = 0)
+    lanes.avg_fit = np.average(np.array([i for i in lanes.recent_fit]), axis = 0, weights=self.weights)
 
     # Generate fake R & B color dimensions, stack with G
     blanks = np.zeros_like(lanes.avg_fit)
