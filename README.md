@@ -1,21 +1,51 @@
 # tanukiNet v2
 
 ### Abstact
-- 필터 수 증가 from filter up
-- merge layers는 제거
-- loss function은 iou추가, [출처](https://www.kaggle.com/c/tgs-salt-identification-challenge/discussion/63044)
-- Adaptive LR추가
-- loss는 음... MSE일단.
-- history reader 추가
+- tanukiNetv1의 개선 버전
+- train_model.py이나 draw_lanes.py는 --help 옵션으로 상세 사용법을 확인가능
 
-### Update
-#### ver 2.
-- Optimizing. epoch = 9에서 멈춤
+### 적용 기법
+#### Adaptive LR
+- Learning rate를 loss 감소량과 시간 변화에 따라서 감소시켜, Local minimum에서 진동이 일어나지 않도록 설정.
+#### CBAM Layer 추가
+- 이전 Conv layer에서 생성된 feature layer를 강화하는 기능.
+#### Weighted Stabilizer
+- 차선 생성 시, 각 프레임에 가중치를 두어 현재 인식 중인 Lane을 유추함.
 
-### 분석 결과
-#### ver 1.
-- epoch = 20, no merge, loss = MSE
-- epoch = 9쯤에서 val_iou_loss_core가 가장 높다.
+### 사용 방법
+#### 0. Prequisite
+* python 3.6.9
+* numpy
+* moviepy
+* pickle
+* keras
+* Pillow
+* scikit-learn
+* opencv-python
 
-#### ver 2.
-- 영상 상에 어떤 것도 보이지 않음.
+If you are using Anaconda, I recommend to use 'tanukiNet_env.yml' for generating a copy of my python environment.
+
+#### 1. Git 저장소 다운로드
+<pre><code>git clone https://github.com/Tanukimong/capstone.git</code></pre>
+
+#### 2. tanukiNetv2 branch로 전환
+<pre><code>git checkout tanukiNetv2</code></pre>
+
+#### 3. draw_lanes.py 실행
+- draw_lanes.py는 같은 폴더내에 존재하는 tanukiNetv2.json(신경망 구조 파일)과 tanukiNetv2.h5(신경망 내 가중치 파일)을 읽어들여 Lane detection을 시행
+<pre><code>python draw_lanes.py -i input_filename -o output_filename</code></pre>
+
+#### Roles of files
+|      File      |                                  Role                                  |
+|:--------------:|:----------------------------------------------------------------------:|
+|  draw_lanes.py |      Draw detected lanes using tanukiNetv2.json and tanukiNetv2.h5     |
+|   output.mp4   |             Lane detection result from challenge_video.mp4             |
+|  tanuki_ml.py  |                     tanukiNetv2's stucture is here                     |
+| train_model.py | train tanukiNetv2 by tanuki_train.p and get test loss by tanuki_test.p |
+
+#### Data sets
+These are originated from [CULane Project](https://xingangpan.github.io/projects/CULane.html)
+|      File      |            Description            |     Link     |
+|:--------------:|:---------------------------------:|:------------:|
+| tanuki_train.p | Train set, Resolution = (273, 98) | [Google drive](https://drive.google.com/open?id=1IA7znH0iWGnarn74MxIRNHC1WrUSI9wk) |
+|  tanuki_test.p |  Test set, Resolution = (273, 98) | [Google drive](https://drive.google.com/open?id=1zOBfQBksbFk2MTfANOaN7KlnDPe4xRyb) |

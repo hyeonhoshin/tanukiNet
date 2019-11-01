@@ -6,13 +6,25 @@ from IPython.display import HTML
 from keras.models import model_from_json
 import sys
 import warnings
+
+# 인자 처리
+import argparse
+parser = argparse.ArgumentParser(description="Find lanes in given video", epilog='Improved by Hyeonho Shin,\nmotivated from https://github.com/mvirgo/MLND-Capstone')
+
+parser.add_argument('-i','--input',type=str, required=False, default="challenge_video.mp4" ,help = 'Input file name')
+parser.add_argument('-o','--output',type=str, required=False, default="output.mp4", help = 'Output file name')
+
+args = parser.parse_args()
+
+print("\nDetect lanes in [{}], and then generate output video file in [{}]\n".format(args.input, args.output))
+
 warnings.filterwarnings(action='ignore') # 귀찮은 경고 감추기
 
 scaler = 6
 resized_shape = (1640//scaler, 590//scaler)
 
-json_fname = "tanukiNetv1.json"
-weights_fname ="tanukiNetv1.h5"
+json_fname = "tanukiNetv2.json"
+weights_fname ="tanukiNetv2.h5"
 
 # Load Keras model
 json_file = open(json_fname, 'r')
@@ -25,11 +37,14 @@ model.summary()
 scaler = 6
 resized_shape = (1640//scaler, 590//scaler)
 
+save = 15
+
 # Class to average lanes with
 class Lanes():
-    def __init__(self):
+    def __init__(self, weights = np.log(np.arange(2,save+2))):
         self.recent_fit = []
         self.avg_fit = []
+        self.weights = weights
 
 def road_lines(image):
     """ Takes in a road image, re-sizes for the model,
@@ -48,11 +63,14 @@ def road_lines(image):
     # Add lane prediction to list for averaging
     lanes.recent_fit.append(prediction)
     # Only using last five for average
-    if len(lanes.recent_fit) > 5:
+    if len(lanes.recent_fit) > save:
         lanes.recent_fit = lanes.recent_fit[1:]
 
     # Calculate average detection
-    lanes.avg_fit = np.mean(np.array([i for i in lanes.recent_fit]), axis = 0)
+    if len(lanes.recent_fit) == save:
+        lanes.avg_fit = np.average(np.array([i for i in lanes.recent_fit]), axis = 0, weights=lanes.weights)
+    else:
+        lanes.avg_fit = np.average(np.array([i for i in lanes.recent_fit]), axis = 0)
 
     # Generate fake R & B color dimensions, stack with G
     blanks = np.zeros_like(lanes.avg_fit)
@@ -71,11 +89,9 @@ def road_lines(image):
 
 lanes = Lanes()
 
-# Where to save the output video
-vid_output = "output.mp4"
 
-# Location of the input video
-clip1 = VideoFileClip("challenge_video.mp4")
+vid_output = args.output
+clip1 = VideoFileClip(args.input)
 
 vid_clip = clip1.fl_image(road_lines)
 vid_clip.write_videofile(vid_output, audio=False)
