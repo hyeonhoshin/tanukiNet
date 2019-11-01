@@ -29,10 +29,10 @@ save = 5
 
 # Class to average lanes with
 class Lanes():
-    def __init__(self, weights = np.arange(-save//2+1,save//2+1)):
+    def __init__(self, weights = np.exp(np.arange(-save//2+1,save//2+1))):
         self.recent_fit = []
         self.avg_fit = []
-        self.weights = np.exp(weights)
+        self.weights = weights
 
 def road_lines(image):
     """ Takes in a road image, re-sizes for the model,
@@ -56,6 +56,8 @@ def road_lines(image):
 
     # Calculate average detection
     if len(lanes.recent_fit) == save:
+        print(lanes.weights)
+        print(np.array([i for i in lanes.recent_fit]))
         lanes.avg_fit = np.average(np.array([i for i in lanes.recent_fit]), axis = 0, weights=lanes.weights)
     else:
         lanes.avg_fit = np.average(np.array([i for i in lanes.recent_fit]), axis = 0)
