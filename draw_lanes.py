@@ -55,7 +55,7 @@ def road_lines(image):
         lanes.recent_fit = lanes.recent_fit[1:]
 
     # Calculate average detection
-    lanes.avg_fit = np.average(np.array([i for i in lanes.recent_fit]), axis = 0, weights=self.weights)
+    lanes.avg_fit = np.average(np.array([i for i in lanes.recent_fit]), axis = 0, weights=lanes.weights)
 
     # Generate fake R & B color dimensions, stack with G
     blanks = np.zeros_like(lanes.avg_fit)
