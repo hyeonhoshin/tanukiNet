@@ -29,7 +29,7 @@ save = 5
 
 # Class to average lanes with
 class Lanes():
-    def __init__(self, weights = np.arange(-save//2,save//2+1)):
+    def __init__(self, weights = np.arange(-save//2-1,save//2+1)):
         self.recent_fit = []
         self.avg_fit = []
         self.weights = weights
