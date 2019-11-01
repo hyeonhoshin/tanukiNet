@@ -36,6 +36,7 @@ If you are using Anaconda, I recommend to use 'tanukiNet_env.yml' for generating
 <pre><code>python draw_lanes.py -i input_filename -o output_filename</code></pre>
 
 #### Roles of files
+
 |      File      |                                  Role                                  |
 |:--------------:|:----------------------------------------------------------------------:|
 |  draw_lanes.py |      Draw detected lanes using tanukiNetv2.json and tanukiNetv2.h5     |
