@@ -1,15 +1,3 @@
-# File open
-## Memory 절약을 위해 중간 평가는 Test set이 아니라, Validation split으로 진행
-import os
-from PIL import Image
-import numpy as np
-import sys
-import time
-import pickle
-import tanuki_ml
-
-from sklearn.utils import shuffle
-
 # 인자 처리
 import argparse
 parser = argparse.ArgumentParser(description="Training tanukiNetv2", epilog='Improved by Hyeonho Shin,\nmotivated from https://github.com/mvirgo/MLND-Capstone')
@@ -21,6 +9,17 @@ parser.add_argument('-str','--structure',type=str, required=False, default="tanu
 parser.add_argument('-hist','--history',type=str, required=False, default='history.p', help = 'Train history file name')
 
 args = parser.parse_args()
+
+# 학습 관련 시작
+import os
+from PIL import Image
+import numpy as np
+import sys
+import time
+import pickle
+import tanuki_ml
+
+from sklearn.utils import shuffle
 
 print("\n=========Training start=========\n")
 print("  Model structure will be saved as [{}]".format(args.structure))

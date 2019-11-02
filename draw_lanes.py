@@ -1,12 +1,3 @@
-import numpy as np
-import cv2
-from PIL.Image import fromarray, BILINEAR
-from moviepy.editor import VideoFileClip
-from IPython.display import HTML
-from keras.models import model_from_json
-import sys
-import warnings
-
 # 인자 처리
 import argparse
 parser = argparse.ArgumentParser(description="Find lanes in given video", epilog='Improved by Hyeonho Shin,\nmotivated from https://github.com/mvirgo/MLND-Capstone')
@@ -17,6 +8,15 @@ parser.add_argument('-o','--output',type=str, required=False, default="output.mp
 args = parser.parse_args()
 
 print("\nDetect lanes in [{}], and then generate output video file in [{}]\n".format(args.input, args.output))
+
+import numpy as np
+import cv2
+from PIL.Image import fromarray, BILINEAR
+from moviepy.editor import VideoFileClip
+from IPython.display import HTML
+from keras.models import model_from_json
+import sys
+import warnings
 
 warnings.filterwarnings(action='ignore') # 귀찮은 경고 감추기
 
