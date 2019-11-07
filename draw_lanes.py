@@ -17,6 +17,7 @@ from IPython.display import HTML
 from keras.models import model_from_json
 import sys
 import warnings
+import time
 
 warnings.filterwarnings(action='ignore') # 귀찮은 경고 감추기
 
@@ -89,9 +90,16 @@ def road_lines(image):
 
 lanes = Lanes()
 
-
+start_eval = time.time() # Time check
 vid_output = args.output
 clip1 = VideoFileClip(args.input)
 
 vid_clip = clip1.fl_image(road_lines)
 vid_clip.write_videofile(vid_output, audio=False)
+stop_eval = time.time() # Time check
+
+# 총 걸린 시간
+f=open("draw_time.txt",'w')
+min, sec = divmod(end_eval-start_eval, 60)
+f.write("Total run time : {}min {}sec\n".format(int(min),int(sec)))
+f.close()
