@@ -100,6 +100,6 @@ stop_eval = time.time() # Time check
 
 # 총 걸린 시간
 f=open("draw_time.txt",'w')
-min, sec = divmod(end_eval-start_eval, 60)
+min, sec = divmod(stop_eval-start_eval, 60)
 f.write("Total run time : {}min {}sec\n".format(int(min),int(sec)))
 f.close()
