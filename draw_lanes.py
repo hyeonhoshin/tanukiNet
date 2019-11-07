@@ -4,6 +4,7 @@ from PIL.Image import fromarray, BILINEAR
 from moviepy.editor import VideoFileClip
 from IPython.display import HTML
 from keras.models import model_from_json
+import time
 import sys
 import warnings
 warnings.filterwarnings(action='ignore') # 귀찮은 경고 감추기
@@ -71,6 +72,8 @@ def road_lines(image):
 
 lanes = Lanes()
 
+start_eval = time.time()
+
 # Where to save the output video
 vid_output = "output.mp4"
 
@@ -79,3 +82,10 @@ clip1 = VideoFileClip("challenge_video.mp4")
 
 vid_clip = clip1.fl_image(road_lines)
 vid_clip.write_videofile(vid_output, audio=False)
+stop_eval = time.time()
+
+# 총 걸린 시간
+f=open("draw_time.txt",'w')
+min, sec = divmod(stop_eval-start_eval, 60)
+f.write("Total run time : {}min {}sec\n".format(int(min),int(sec)))
+f.close()
