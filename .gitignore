@@ -8,3 +8,5 @@ reinforced_imgs/
 .idea/
 prior_weights/
 prototype/
+tanuki_train.p
+tanuki_test.p
