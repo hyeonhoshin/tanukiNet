@@ -4,6 +4,7 @@ parser = argparse.ArgumentParser(description="Find lanes in given video", epilog
 
 parser.add_argument('-i','--input',type=str, required=False, default="challenge_video.mp4" ,help = 'Input file name')
 parser.add_argument('-o','--output',type=str, required=False, default="output.mp4", help = 'Output file name')
+parser.add_argument('-f','--frames',type=int, required=False, default=15, help = 'Number of memorized frames')
 
 args = parser.parse_args()
 
@@ -38,7 +39,7 @@ model.summary()
 scaler = 6
 resized_shape = (1640//scaler, 590//scaler)
 
-save = 15
+save = args.frames
 
 vid_output = args.output
 clip1 = VideoFileClip(args.input)
