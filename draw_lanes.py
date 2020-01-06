@@ -40,6 +40,10 @@ resized_shape = (1640//scaler, 590//scaler)
 
 save = 15
 
+vid_output = args.output
+clip1 = VideoFileClip(args.input)
+original_size = clip1.size
+
 # Class to average lanes with
 class Lanes():
     def __init__(self, weights = np.log(np.arange(2,save+2))):
@@ -80,7 +84,7 @@ def road_lines(image):
 
     # Re-size to match the original image
     lane_image = fromarray(lane_drawn)
-    lane_image = lane_image.resize((1280, 720),BILINEAR)
+    lane_image = lane_image.resize(original_size,BILINEAR)
     lane_image = np.asarray(lane_image,dtype="uint8")
 
     # Merge the lane drawing onto the original image
@@ -91,8 +95,6 @@ def road_lines(image):
 lanes = Lanes()
 
 start_eval = time.time() # Time check
-vid_output = args.output
-clip1 = VideoFileClip(args.input)
 
 vid_clip = clip1.fl_image(road_lines)
 vid_clip.write_videofile(vid_output, audio=False)
