@@ -21,6 +21,8 @@ import sys
 import warnings
 import time
 import matplotlib.pyplot as plt
+
+from skimage.draw import line_aa
 '''
 HPF = np.array([[-1,0,1,0,-1],
                 [0,0,1,0,0],
@@ -102,11 +104,13 @@ def road_lines(image):
         plt.imshow(lanes.avg_fit*0)
         plt.plot((s[0],e[0]),(s[1],e[1]))
 
-        theta_line_img=tanuki_ml.figure_to_array(fig)
+        rr,cc,val=line_aa(s[0],s[1],e[0],e[1])
+        line_img = np.zeros_like(lanes.avg_fit)
+        line_img[rr, cc] = val * 255
         #print("theta_line_img shape = ",theta_line_img.shape)
 
         blanks = np.zeros_like(lanes.avg_fit)
-        lane_drawn = np.dstack((blanks, theta_line_img, blanks))
+        lane_drawn = np.dstack((blanks, line_img, blanks))
         lane_drawn = lane_drawn.astype("uint8")
 
         # Re-size to match the original image

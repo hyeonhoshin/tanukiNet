@@ -174,7 +174,6 @@ class AdaptiveLearningrate(Callback):
             if self.verbose > 0:
                 print("[Adaptive LR] @ epoch 0 : epoch 0 직후에는 lr을 업데이트하지 않습니다.\n")
 
-
 class path_determiner:
     def tan(self,p_start,p_end):
         return (p_end[1]-p_start[1])/(p_end[0]-p_start[0])
