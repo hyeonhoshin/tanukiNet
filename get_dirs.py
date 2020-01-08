@@ -99,11 +99,6 @@ def road_lines(image):
     if len(path)==2:
         s, e = path
 
-        # Draw img
-        fig = plt.figure()
-        plt.imshow(lanes.avg_fit*0)
-        plt.plot((s[0],e[0]),(s[1],e[1]))
-
         rr,cc,val=line_aa(s[0],s[1],e[0],e[1])
         line_img = np.zeros_like(lanes.avg_fit)
         line_img[rr, cc] = val * 255
