@@ -99,7 +99,7 @@ def road_lines(image):
         # Draw img
         theta_line_img = np.zeros_like(lanes.avg_fit)
         for e in idxs:
-            theta_line_img[e[0],e[1]] = 255
+            theta_line_img[e[1],e[0]] = 255
 
         blanks = np.zeros_like(theta_line_img)
         lane_drawn = np.dstack((blanks, theta_line_img, blanks))
