@@ -16,6 +16,8 @@ from keras.callbacks import Callback
 from metrics import iou_loss_core, competitionMetric2, K
 from attention_module import attach_attention_module
 
+from skimage import feature, transform
+
 def give_time(X, y, memory_size = 3):
     # Make time-dependent data
     # X : (data_idx, x, y) -> (data_idx, looking, x, y)
@@ -179,12 +181,14 @@ class path_determiner:
     def approx_path(self,img):
 
         # Check img's dimension
-        if len(img.shape) != 2:
+        if len(img.shape) == 3 and img.shape[2] == 1:
+            img = img[..., 0]
+        elif len(img.shape) != 2:
             print("[Error] Input dimension is not proper!")
             print(" Img shape = {}".format(img.shape))
             exit()
         
-        sample = feature.canny(sample,sigma=1,high_threshold=150,low_threshold=50)
+        sample = feature.canny(img,sigma=1,high_threshold=150,low_threshold=50)
 
         lines = transform.probabilistic_hough_line(sample,line_length=50)
         
