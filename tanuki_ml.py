@@ -241,3 +241,13 @@ class path_determiner:
         idx.append(p2)
 
         return idx
+
+def figure_to_array(fig):
+    """
+    plt.figure를 RGBA로 변환(layer가 4개)
+    shape: height, width, layer
+    """
+    fig.canvas.draw()
+    rgba = np.array(fig.canvas.renderer._renderer)
+    y = 0.2125*rgba[0] + 0.7154*rgba[1] + 0.0721*rgba[2]
+    return y

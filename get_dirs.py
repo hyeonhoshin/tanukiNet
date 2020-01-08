@@ -20,6 +20,7 @@ from keras.models import model_from_json
 import sys
 import warnings
 import time
+import matplotlib.pyplot as plt
 '''
 HPF = np.array([[-1,0,1,0,-1],
                 [0,0,1,0,0],
@@ -94,12 +95,13 @@ def road_lines(image):
     # Calculate theta
     path = m1.approx_path(lanes.avg_fit)
     if len(path)==2:
-        idxs=m1.draw_line(path[0], path[1])
+        s, e = path
 
         # Draw img
-        theta_line_img = np.zeros_like(lanes.avg_fit)
-        for e in idxs:
-            theta_line_img[e[1],e[0]] = 255
+        fig = plt.imshow(lanes.avg_fit*0)
+        plt.plot((s[0],e[0]),(s[1],e[1]))
+
+        theta_line_img=tanuki_ml.figure_to_array(fig)
 
         blanks = np.zeros_like(theta_line_img)
         lane_drawn = np.dstack((blanks, theta_line_img, blanks))
