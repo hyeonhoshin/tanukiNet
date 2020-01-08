@@ -108,7 +108,7 @@ def road_lines(image):
 
         # Re-size to match the original image
         #lane_image = cv2.filter2D(lane_drawn,-1,HPF)
-        lane_image = fromarray(lane_image)
+        lane_image = fromarray(lane_drawn)
         lane_image = lane_image.resize(original_size,BILINEAR)
         lane_image = np.asarray(lane_image,dtype="uint8")
 
