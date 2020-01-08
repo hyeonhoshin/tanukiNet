@@ -101,7 +101,7 @@ def road_lines(image):
 
         rr,cc,val=line_aa(s[0],s[1],e[0],e[1])
         line_img = np.zeros_like(lanes.avg_fit[..., 0])
-        line_img[rr, cc] = val * 255
+        line_img[cc, rr] = val * 255
         #print("theta_line_img shape = ",theta_line_img.shape)
 
         blanks = np.zeros_like(lanes.avg_fit)
