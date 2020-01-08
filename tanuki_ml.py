@@ -224,13 +224,21 @@ class path_determiner:
         if not(p1[1] < p2[1]):
             p1, p2 = p2, p1 # Swap
         
-        tan = self.tan(p1,p2)
+        try:
+            tan = self.tan(p1,p2)
 
-        idx = []
+            idx = []
 
-        for x in range(p1[0],p2[0]):
-            y = p1[1]+tan*(x-p1[0])
-            idx.append([x,int(y)])
+            for x in range(p1[0],p2[0]):
+                y = p1[1]+tan*(x-p1[0])
+                idx.append([x,int(y)])
+        except ZeroDivisionError:
+            tan = self.tan(p1,p2)
+
+            idx = []
+
+            for y in range(p1[1],p2[1]):
+                idx.append([p1[1],y])
 
         idx.append(p2)
 
