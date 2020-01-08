@@ -102,3 +102,14 @@ def road_lines(image):
 
     return result
 
+start_eval = time.time() # Time check
+
+vid_clip = clip1.fl_image(road_lines)
+vid_clip.write_videofile(vid_output, audio=False)
+stop_eval = time.time() # Time check
+
+# 총 걸린 시간
+f=open("Estimate_theta_time.txt",'w')
+min, sec = divmod(stop_eval-start_eval, 60)
+f.write("Total run time : {}min {}sec\n".format(int(min),int(sec)))
+f.close()
