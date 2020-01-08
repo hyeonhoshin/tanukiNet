@@ -87,13 +87,13 @@ def road_lines(image):
     # Calculate theta
     path = m1.approx_path(lanes.avg_fit)
     if len(path)!=0:
-        terminals = m1.get_terminal_point(paths)
+        terminals = m1.get_terminal_point(path)
         idxs=m1.draw_line(terminals[0], terminals[1])
 
         # Draw img
         theta_line_img = np.zeros_like(lanes.avg_fit)
-        for e in theta_line:
-            theta_line_img[e[0],e[i]] = 255
+        for e in idxs:
+            theta_line_img[e[0],e[1]] = 255
 
         blanks = np.zeros_like(theta_line_img)
         lane_drawn = np.dstack((blanks, theta_line_img, blanks))
