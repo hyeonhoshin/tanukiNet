@@ -233,8 +233,6 @@ class path_determiner:
                 y = p1[1]+tan*(x-p1[0])
                 idx.append([x,int(y)])
         except ZeroDivisionError:
-            tan = self.tan(p1,p2)
-
             idx = []
 
             for y in range(p1[1],p2[1]):
