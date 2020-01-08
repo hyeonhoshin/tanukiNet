@@ -248,6 +248,6 @@ def figure_to_array(fig):
     shape: height, width, layer
     """
     fig.canvas.draw()
-    rgba = np.array(fig.canvas.renderer._renderer)[:,:,:]
+    rgba = fig.canvas.renderer.buffer_rgba()[:,:,:]
     y = 0.2125*rgba[..., 0] + 0.7154*rgba[..., 1] + 0.0721*rgba[..., 2]
     return y[..., np.newaxis]
