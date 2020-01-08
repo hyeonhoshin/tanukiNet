@@ -111,3 +111,4 @@ import pickle
 
 with open("a_lane.p","wb") as f:
     pickle.dump(lanes.avg_fit,f)
+    print("Dump finished")
