@@ -184,18 +184,18 @@ class path_determiner:
             print(" Img shape = {}".format(img.shape))
             exit()
         
-        row = img.shape[0]
-        col = img.shape[1]
+        row_num = img.shape[0]
+        col_num = img.shape[1]
 
-        mid = row//2
+        mid = row_num//2
 
         path = []
 
-        for i in range(col):
+        for i in range(row_num):
             # 한 줄마다 Index를 얻어내기
-            for j in range(row):
+            for j in range(col_num):
                 idxs = []
-                if img[i,j] > 225:
+                if img[i,j,0] > 225:
                     idxs.append(j)
                 idxs = np.array(idxs)
             
