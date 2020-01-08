@@ -7,14 +7,13 @@ from keras.layers.normalization import BatchNormalization
 from keras.preprocessing.image import ImageDataGenerator
 from keras import regularizers
 
-from keras.models import *
-from keras.layers import *
-from keras.optimizers import *
+from keras.models import Model
+from keras.layers import Conv2D, Input, MaxPooling2D, Dropout, UpSampling2D,Conv2DTranspose
 from keras.callbacks import ModelCheckpoint, LearningRateScheduler
 from keras import backend as keras
 from keras.callbacks import Callback
 
-from metrics import *
+from metrics import iou_loss_core, competitionMetric2, K
 from attention_module import attach_attention_module
 
 def give_time(X, y, memory_size = 3):
@@ -30,7 +29,7 @@ def give_time(X, y, memory_size = 3):
 
     end_idx = 0
 
-    for i, e in enumerate(X):
+    for i, _ in enumerate(X):
         try:
             X_t[i] = X[i:i + memory_size]
         except:
@@ -172,3 +171,84 @@ class AdaptiveLearningrate(Callback):
         else:
             if self.verbose > 0:
                 print("[Adaptive LR] @ epoch 0 : epoch 0 직후에는 lr을 업데이트하지 않습니다.\n")
+
+
+class path_determiner:
+    def tan(self,p_start,p_end):
+        return (p_end[1]-p_start[1])/(p_end[0]-p_start[0])
+    def approx_path(self,img):
+
+        # Check img's dimension
+        if len(img.shape) != 3 or img.shape[2] != 1:
+            print("[Error] Input dimension is not proper!")
+            print(" Img shape = {}".format(img.shape))
+            exit()
+        
+        row = img.shape[0]
+        col = img.shape[1]
+
+        mid = row//2
+
+        path = []
+
+        for i in range(col):
+            # 한 줄마다 Index를 얻어내기
+            for j in range(row):
+                idxs = []
+                if img[i,j] > 225:
+                    idxs.append(j)
+                idxs = np.array(idxs)
+            
+            # 중심에 가까운 Index만을 취하기
+                priority = np.abs(idxs - mid)
+                pos = np.argsort(priority)
+
+                try:
+                    p_line = np.mean(pos[0],pos[1],dtype=np.int32)
+                    path.append([i, p_line])
+                
+                except:
+                    # 해당 row를 지나는 Line이 하나뿐이거나 아예 인식되지 않는 경우.
+                    pass # Do nothing
+        
+        path = np.array(path)
+
+        return path
+
+
+    def get_theta(self, path):
+        # Path must be sorted
+        p_start, p_end = self.get_terminal_point(path)
+        tan = self.tan(p_start,p_end) 
+        theta = np.arctan(tan)
+
+        return theta
+
+    def get_terminal_point(self, path):
+        # Path must be sorted
+        path = np.sort(path,axis=0)
+
+        # Get starting point and end point
+        p_start = path[0] 
+        p_end   = path[-1]
+        return p_start, p_end
+
+    def draw_line(self,p1,p2):
+        '''
+        p1 must be upper position relative to the p2
+        '''
+        # Check p1 is more upper than p2
+        if not(p1[1] < p2[1]):
+            p1, p2 = p2, p1 # Swap
+        
+        tan = self.tan(p1,p2)
+
+        idx = [p1]
+
+        for x in range(p1[0],p2[0]):
+            y = p1[1]+tan*(x-p1[0])
+            idx.append([x,int(y)])
+
+        idx.append(p2)
+
+        return idx
