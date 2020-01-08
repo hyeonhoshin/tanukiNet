@@ -86,21 +86,30 @@ def road_lines(image):
 
     # Calculate theta
     path = path_toolbox.approx_path(lanes.avg_fit)
-    theta_line = path_toolbox.draw_line(path[0],path[-1])
+    if len(path)!=0:
+        theta_line = path_toolbox.draw_line(path[0],path[-1])
 
-    blanks = np.zeros_like(theta_line)
-    lane_drawn = np.dstack((blanks, theta_line, blanks))
-    lane_drawn = lane_drawn.astype("uint8")
+        # Draw img
+        theta_line_img = np.zeros_like(lanes.avg_fit)
+        for e in theta_line:
+            theta_line_img[e] = 255
 
-    # Re-size to match the original image
-    lane_image = fromarray(lane_drawn)
-    lane_image = lane_image.resize(original_size,BILINEAR)
-    lane_image = np.asarray(lane_image,dtype="uint8")
+        blanks = np.zeros_like(theta_line_img)
+        lane_drawn = np.dstack((blanks, theta_line_img, blanks))
+        lane_drawn = lane_drawn.astype("uint8")
 
-    # Merge the lane drawing onto the original image
-    result = cv2.addWeighted(image, 1, lane_image, 1, 0)
+        # Re-size to match the original image
+        lane_image = fromarray(lane_drawn)
+        lane_image = lane_image.resize(original_size,BILINEAR)
+        lane_image = np.asarray(lane_image,dtype="uint8")
 
-    return result
+        # Merge the lane drawing onto the original image
+        result = cv2.addWeighted(image, 1, lane_image, 1, 0)
+
+        return result
+    else:
+        # If result is blank, just push original image
+        return image
 
 start_eval = time.time() # Time check
 
