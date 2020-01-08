@@ -98,7 +98,7 @@ def road_lines(image):
         s, e = path
 
         # Draw img
-        fig = figure()
+        fig = plt.figure()
         plt.imshow(lanes.avg_fit*0)
         plt.plot((s[0],e[0]),(s[1],e[1]))
 
