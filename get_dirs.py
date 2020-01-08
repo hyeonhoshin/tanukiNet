@@ -102,8 +102,9 @@ def road_lines(image):
         plt.plot((s[0],e[0]),(s[1],e[1]))
 
         theta_line_img=tanuki_ml.figure_to_array(fig)
+        print("theta_line_img shape = ",theta_line_img.shape)
 
-        blanks = np.zeros_like(theta_line_img)
+        blanks = np.zeros_like(lanes.avg_fit)
         lane_drawn = np.dstack((blanks, theta_line_img, blanks))
         lane_drawn = lane_drawn.astype("uint8")
 
