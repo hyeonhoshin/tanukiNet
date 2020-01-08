@@ -179,65 +179,38 @@ class path_determiner:
     def approx_path(self,img):
 
         # Check img's dimension
-        if len(img.shape) != 3 or img.shape[2] != 1:
+        if len(img.shape) != 2:
             print("[Error] Input dimension is not proper!")
             print(" Img shape = {}".format(img.shape))
             exit()
         
-        row_num = img.shape[0]
-        col_num = img.shape[1]
+        sample = feature.canny(sample,sigma=1,high_threshold=150,low_threshold=50)
 
-        mid = row_num//2
-
-        path = []
-
-        for i in range(row_num):
-            # 한 줄마다 Index를 얻어내기
-            idxs = []
-            for j in range(col_num):
-                if img[i,j,0] > 125:
-                    idxs.append(j)
-            idxs = np.array(idxs)
-
-            if len(idxs) <= 1:
-                continue
-            
-            # 중심에 가까운 Index만을 취하기
-            priority = np.abs(idxs - mid)
-            pos = np.argsort(priority)
-
-            try:
-                p1 = idxs[pos[0]]
-                p2 = idxs[pos[1]]
-
-                p_line = [i, (p1+p2)//2]
-                path.append(p_line)
-                
-            except:
-                # 해당 row를 지나는 Line이 하나뿐이거나 아예 인식되지 않는 경우.
-                pass # Do nothing
+        lines = transform.probabilistic_hough_line(sample,line_length=50)
         
-        path = np.array(path)
+        # 각이 가장 크게 변하는 왼/오른쪽 직선을 찾기
+        theta = []
+        for line in lines:
+            p1, p2 = line
+            theta.append(np.arctan((p2[1]-p1[1])/(p2[0]-p1[0])))
 
-        return path
+        priority = np.argsort(theta)
+        idx1,idx2 = priority[0],priority[-1]
 
+        selected_lines = [lines[idx1],lines[idx2]]
 
-    def get_theta(self, path):
-        # Path must be sorted
-        p_start, p_end = self.get_terminal_point(path)
-        tan = self.tan(p_start,p_end) 
-        theta = np.arctan(tan)
+        # 얻어진 직선으로부터 평균값을 지나는 직선 찾기
+        l1 = selected_lines[0]
+        l2 = selected_lines[1]
 
-        return theta
+        s1,e1 = l1
+        s2,e2 = l2
 
-    def get_terminal_point(self, path):
-        # Path must be sorted
-        path = np.sort(path,axis=0)
+        s_mid = ((s1[0]+s2[0])//2, (s1[1]+s2[1])//2)
+        e_mid = ((e1[0]+e2[0])//2, (e1[1]+e2[1])//2)
+        l_mid = s_mid, e_mid
 
-        # Get starting point and end point
-        p_start = path[0] 
-        p_end   = path[-1]
-        return p_start, p_end
+        return l_mid
 
     def draw_line(self,p1,p2):
         '''
