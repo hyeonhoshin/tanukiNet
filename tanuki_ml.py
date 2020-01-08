@@ -193,23 +193,29 @@ class path_determiner:
 
         for i in range(row_num):
             # 한 줄마다 Index를 얻어내기
+            idxs = []
             for j in range(col_num):
-                idxs = []
                 if img[i,j,0] > 225:
                     idxs.append(j)
-                idxs = np.array(idxs)
+            idxs = np.array(idxs)
+
+            if len(idxs) <= 1:
+                continue
             
             # 중심에 가까운 Index만을 취하기
-                priority = np.abs(idxs - mid)
-                pos = np.argsort(priority)
+            priority = np.abs(idxs - mid)
+            pos = np.argsort(priority)
 
-                try:
-                    p_line = np.mean(pos[0],pos[1],dtype=np.int32)
-                    path.append([i, p_line])
+            try:
+                p1 = idxs[pos[0]]
+                p2 = idxs[pos[1]]
+
+                p_line = [i, (p1+p2)//2]
+                path.append(p_line)
                 
-                except:
-                    # 해당 row를 지나는 Line이 하나뿐이거나 아예 인식되지 않는 경우.
-                    pass # Do nothing
+            except:
+                # 해당 row를 지나는 Line이 하나뿐이거나 아예 인식되지 않는 경우.
+                pass # Do nothing
         
         path = np.array(path)
 
@@ -243,7 +249,7 @@ class path_determiner:
         
         tan = self.tan(p1,p2)
 
-        idx = [p1]
+        idx = []
 
         for x in range(p1[0],p2[0]):
             y = p1[1]+tan*(x-p1[0])

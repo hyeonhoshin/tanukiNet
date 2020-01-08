@@ -46,7 +46,7 @@ vid_output = args.output
 clip1 = VideoFileClip(args.input)
 original_size = clip1.size
 
-path_toolbox = tanuki_ml.path_determiner()
+m1 = tanuki_ml.path_determiner()
 
 # Class to average lanes with
 class Lanes():
@@ -85,14 +85,15 @@ def road_lines(image):
         lanes.avg_fit = np.average(np.array([i for i in lanes.recent_fit]), axis = 0)
 
     # Calculate theta
-    path = path_toolbox.approx_path(lanes.avg_fit)
+    path = m1.approx_path(lanes.avg_fit)
     if len(path)!=0:
-        theta_line = path_toolbox.draw_line(path[0],path[-1])
+        terminals = m1.get_terminal_point(paths)
+        idxs=m1.draw_line(terminals[0], terminals[1])
 
         # Draw img
         theta_line_img = np.zeros_like(lanes.avg_fit)
         for e in theta_line:
-            theta_line_img[e] = 255
+            theta_line_img[e[0],e[i]] = 255
 
         blanks = np.zeros_like(theta_line_img)
         lane_drawn = np.dstack((blanks, theta_line_img, blanks))
