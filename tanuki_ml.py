@@ -250,4 +250,4 @@ def figure_to_array(fig):
     fig.canvas.draw()
     rgba = np.array(fig.canvas.renderer._renderer)[:,:,:]
     y = 0.2125*rgba[..., 0] + 0.7154*rgba[..., 1] + 0.0721*rgba[..., 2]
-    return y
+    return y[..., np.newaxis]
