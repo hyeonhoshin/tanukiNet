@@ -106,3 +106,8 @@ f=open("draw_time.txt",'w')
 min, sec = divmod(stop_eval-start_eval, 60)
 f.write("Total run time : {}min {}sec\n".format(int(min),int(sec)))
 f.close()
+
+import pickle
+
+with open("a_lane.p","wb") as f:
+    pickle.dump(lanes.avg_fit,f)
