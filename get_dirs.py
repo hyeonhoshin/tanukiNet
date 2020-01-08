@@ -21,6 +21,12 @@ import sys
 import warnings
 import time
 
+HPF = np.array([[-1,0,1,0,-1],
+                [0,0,1,0,0],
+                [1,1,1,1,1],
+                [0,0,1,0,0],
+                [-1,0,1,0,-1]])
+
 warnings.filterwarnings(action='ignore') # 귀찮은 경고 감추기
 
 scaler = 6
@@ -101,6 +107,7 @@ def road_lines(image):
 
         # Re-size to match the original image
         lane_image = fromarray(lane_drawn)
+        lane_image = cv2.filter2D(lane_image,-1,HPF)
         lane_image = lane_image.resize(original_size,BILINEAR)
         lane_image = np.asarray(lane_image,dtype="uint8")
 

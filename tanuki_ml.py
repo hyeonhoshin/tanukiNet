@@ -195,7 +195,7 @@ class path_determiner:
             # 한 줄마다 Index를 얻어내기
             idxs = []
             for j in range(col_num):
-                if img[i,j,0] > 225:
+                if img[i,j,0] > 125:
                     idxs.append(j)
             idxs = np.array(idxs)
 
