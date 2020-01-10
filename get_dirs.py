@@ -108,6 +108,8 @@ def road_lines(image):
     else:
         lanes.avg_path = np.average(np.array([i for i in lanes.recent_path]), axis = 0)
 
+        lanes.avg_path = np.asarray(lanes.avg_path, dtype=np.int32)
+
     if len(path)==2:
         s, e = lanes.avg_path
 
