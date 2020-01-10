@@ -18,6 +18,8 @@ from attention_module import attach_attention_module
 
 from skimage import feature, transform
 
+diff_th = 3
+
 def give_time(X, y, memory_size = 3):
     # Make time-dependent data
     # X : (data_idx, x, y) -> (data_idx, looking, x, y)
@@ -209,7 +211,7 @@ class path_determiner:
         s1,e1 = l1
         s2,e2 = l2
 
-        if s1[0]-s2[0] <=8 and s1[0]-s2[0] <=8:
+        if abs(s1[0]-s2[0]) <=diff_th and abs(s1[0]-s2[0]) <=diff_th:
             return -1 # Case in which we got only a line.
 
         s_mid = ((s1[0]+s2[0])//2, (s1[1]+s2[1])//2)
