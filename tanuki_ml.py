@@ -189,7 +189,7 @@ class path_determiner:
         
         sample = feature.canny(img,sigma=1,high_threshold=150,low_threshold=50)
 
-        lines = transform.probabilistic_hough_line(sample,line_length=50)
+        lines = transform.probabilistic_hough_line(sample,line_length=30)
         
         # 각이 가장 크게 변하는 왼/오른쪽 직선을 찾기
         theta = []
