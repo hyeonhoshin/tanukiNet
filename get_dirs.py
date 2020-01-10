@@ -11,18 +11,14 @@ args = parser.parse_args()
 print("\nDetect lanes in [{}], and then generate output video file in [{}]\n".format(args.input, args.output))
 
 import tanuki_ml
-import numpy as np
-import cv2
-from PIL.Image import fromarray, BILINEAR
-from moviepy.editor import VideoFileClip
+
 from IPython.display import HTML
-from keras.models import model_from_json
 import sys
 import warnings
 import time
 import matplotlib.pyplot as plt
 
-from skimage.draw import line_aa
+
 '''
 HPF = np.array([[-1,0,1,0,-1],
                 [0,0,1,0,0],
@@ -31,111 +27,22 @@ HPF = np.array([[-1,0,1,0,-1],
                 [-1,0,1,0,-1]])
                 '''
 
-warnings.filterwarnings(action='ignore') # 귀찮은 경고 감추기
-
-scaler = 6
-resized_shape = (1640//scaler, 590//scaler)
+# 귀찮은 경고 감추기
+warnings.filterwarnings(action='ignore') 
 
 json_fname = "tanukiNetv2.json"
 weights_fname ="tanukiNetv2.h5"
 
-# Load Keras model
-json_file = open(json_fname, 'r')
-json_model = json_file.read()
-json_file.close()
-model = model_from_json(json_model)
-model.load_weights(weights_fname)
-model.summary()
-
-scaler = 6
-resized_shape = (1640//scaler, 590//scaler)
-
-save = args.frames
-
-vid_output = args.output
-clip1 = VideoFileClip(args.input)
-original_size = clip1.size
-
-m1 = tanuki_ml.path_determiner()
-
-# Class to average lanes with
-class Lanes():
-    def __init__(self, weights = np.log(np.arange(2,save+2))):
-        self.recent_fit = []
-        self.avg_fit = []
-        self.weights = weights
-        self.recent_path = []
-        self.avg_path = []
-
-lanes = Lanes()
-
-def road_lines(image):
-    """ Takes in a road image, re-sizes for the model,
-    predicts the lane to be drawn from the model in G color,
-    recreates an RGB image of a lane and merges with the
-    original road image.
-    """
-    # Get image ready for feeding into model
-    small_img = fromarray(image).resize(resized_shape)
-    small_img = np.array(small_img,dtype="uint8")
-    small_img = small_img[None,:,:,:]
-
-    # Make prediction with neural network (un-normalize value by multiplying by 255)
-    prediction = model.predict(small_img)[0] * 255
-
-    # Add lane prediction to list for averaging
-    lanes.recent_fit.append(prediction)
-    # Only using last five for average
-    if len(lanes.recent_fit) > save:
-        lanes.recent_fit = lanes.recent_fit[1:]
-
-    # Calculate average detection
-    if len(lanes.recent_fit) == save:
-        lanes.avg_fit = np.average(np.array([i for i in lanes.recent_fit]), axis = 0, weights=lanes.weights)
-    else:
-        lanes.avg_fit = np.average(np.array([i for i in lanes.recent_fit]), axis = 0)
-
-    # Calculate theta
-    path = m1.approx_path(lanes.avg_fit)
-
-    if path != -1: # 선이 한 개가 아닐때만 Update
-        lanes.recent_path.append(path)
-        if len(lanes.recent_path) > save:
-            lanes.recent_path = lanes.recent_path[1:]
-        
-        # Calculate average theta
-        if len(lanes.recent_path) == save:
-            lanes.avg_path = np.average(np.array([i for i in lanes.recent_path]), axis = 0, weights=lanes.weights)
-        else:
-            lanes.avg_path = np.average(np.array([i for i in lanes.recent_path]), axis = 0)
-
-        lanes.avg_path = np.asarray(lanes.avg_path, dtype=np.int32)
-
-    s, e = lanes.avg_path
-
-    rr,cc,val=line_aa(s[0],s[1],e[0],e[1])
-    line_img = np.zeros_like(lanes.avg_fit[..., 0])
-    line_img[cc, rr] = val * 255
-
-    blanks = np.zeros_like(lanes.avg_fit)
-    lane_drawn = np.dstack((blanks, line_img, blanks))
-    lane_drawn = lane_drawn.astype("uint8")
-
-    # Re-size to match the original image
-    #lane_image = cv2.filter2D(lane_drawn,-1,HPF)
-    lane_image = fromarray(lane_drawn)
-    lane_image = lane_image.resize(original_size,BILINEAR)
-    lane_image = np.asarray(lane_image,dtype="uint8")
-
-    # Merge the lane drawing onto the original image
-    result = cv2.addWeighted(image, 1, lane_image, 1, 0)
-
-    return result
-
 start_eval = time.time() # Time check
 
-vid_clip = clip1.fl_image(road_lines)
-vid_clip.write_videofile(vid_output, audio=False)
+# 얼마나 학습된 이미지의 배율(기본적으로는 6으로 학습되어 있음.)
+scaler = 6
+
+# Lane drawing using Lanes class
+lanes = tanuki_ml.Lanes(save=args.frames,json_fname=json_fname, 
+                        weights_fname=weights_fname, scaler=6)
+lanes.run(args.input_path, args.output_path)
+
 stop_eval = time.time() # Time check
 
 # 총 걸린 시간

@@ -1,8 +1,9 @@
-# tanukiNet v2
+# tanukiNet v2-theta
 
 ### Abstact
 - tanukiNetv1의 개선 버전
 - train_model.py이나 draw_lanes.py는 --help 옵션으로 상세 사용법을 확인가능
+- 방향 추측 함수 추가(get_dirs.py)
 
 ### 적용 기법
 #### Adaptive LR
@@ -11,6 +12,8 @@
 - 이전 Conv layer에서 생성된 feature layer를 강화하는 기능.
 #### Weighted Stabilizer
 - 차선 생성 시, 각 프레임에 가중치를 두어 현재 인식 중인 Lane을 유추함.
+#### 방향 추측
+- Canny연산과 P-Hough transform을 이용하여 Line을 추출
 
 ### 사용 방법
 #### 0. Prequisite
