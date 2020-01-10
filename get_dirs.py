@@ -98,19 +98,18 @@ def road_lines(image):
     # Calculate theta
     path = m1.approx_path(lanes.avg_fit)
 
-    lanes.recent_path.append(path)
-    if len(lanes.recent_path) > save:
-        lanes.recent_path = lanes.recent_path[1:]
-    
-    # Calculate average theta
-    if len(lanes.recent_path) == save:
-        lanes.avg_path = np.average(np.array([i for i in lanes.recent_path]), axis = 0, weights=lanes.weights)
-    else:
-        lanes.avg_path = np.average(np.array([i for i in lanes.recent_path]), axis = 0)
+    if path != -1: # 선이 한 개가 아닐때는 그냥 변경 안함
+        lanes.recent_path.append(path)
+        if len(lanes.recent_path) > save:
+            lanes.recent_path = lanes.recent_path[1:]
+        
+        # Calculate average theta
+        if len(lanes.recent_path) == save:
+            lanes.avg_path = np.average(np.array([i for i in lanes.recent_path]), axis = 0, weights=lanes.weights)
+        else:
+            lanes.avg_path = np.average(np.array([i for i in lanes.recent_path]), axis = 0)
 
-    lanes.avg_path = np.asarray(lanes.avg_path, dtype=np.int32)
-
-    if len(path)==2:
+        lanes.avg_path = np.asarray(lanes.avg_path, dtype=np.int32)
         s, e = lanes.avg_path
 
         rr,cc,val=line_aa(s[0],s[1],e[0],e[1])
