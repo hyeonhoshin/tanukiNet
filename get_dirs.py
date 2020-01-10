@@ -64,7 +64,8 @@ class Lanes():
         self.recent_fit = []
         self.avg_fit = []
         self.weights = weights
-        self.theta = []
+        self.recent_path = []
+        self.avg_path = []
 
 lanes = Lanes()
 
@@ -96,13 +97,23 @@ def road_lines(image):
 
     # Calculate theta
     path = m1.approx_path(lanes.avg_fit)
+
+    lanes.recent_path.append(path)
+    if len(lanes.recent_path) > save:
+        lanes.recent_path = lanes.recent_path[1:]
+    
+    # Calculate average theta
+    if len(lanes.recent_path) == save:
+        lanes.avg_path = np.average(np.array([i for i in lanes.recent_path]), axis = 0, weights=lanes.weights)
+    else:
+        lanes.avg_path = np.average(np.array([i for i in lanes.recent_path]), axis = 0)
+
     if len(path)==2:
-        s, e = path
+        s, e = lanes.avg_path
 
         rr,cc,val=line_aa(s[0],s[1],e[0],e[1])
         line_img = np.zeros_like(lanes.avg_fit[..., 0])
         line_img[cc, rr] = val * 255
-        #print("theta_line_img shape = ",theta_line_img.shape)
 
         blanks = np.zeros_like(lanes.avg_fit)
         lane_drawn = np.dstack((blanks, line_img, blanks))
