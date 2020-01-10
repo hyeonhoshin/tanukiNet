@@ -98,7 +98,7 @@ def road_lines(image):
     # Calculate theta
     path = m1.approx_path(lanes.avg_fit)
 
-    if path != -1: # 선이 한 개가 아닐때는 그냥 변경 안함
+    if path != -1: # 선이 한 개가 아닐때만 Update
         lanes.recent_path.append(path)
         if len(lanes.recent_path) > save:
             lanes.recent_path = lanes.recent_path[1:]
@@ -110,29 +110,27 @@ def road_lines(image):
             lanes.avg_path = np.average(np.array([i for i in lanes.recent_path]), axis = 0)
 
         lanes.avg_path = np.asarray(lanes.avg_path, dtype=np.int32)
-        s, e = lanes.avg_path
 
-        rr,cc,val=line_aa(s[0],s[1],e[0],e[1])
-        line_img = np.zeros_like(lanes.avg_fit[..., 0])
-        line_img[cc, rr] = val * 255
+    s, e = lanes.avg_path
 
-        blanks = np.zeros_like(lanes.avg_fit)
-        lane_drawn = np.dstack((blanks, line_img, blanks))
-        lane_drawn = lane_drawn.astype("uint8")
+    rr,cc,val=line_aa(s[0],s[1],e[0],e[1])
+    line_img = np.zeros_like(lanes.avg_fit[..., 0])
+    line_img[cc, rr] = val * 255
 
-        # Re-size to match the original image
-        #lane_image = cv2.filter2D(lane_drawn,-1,HPF)
-        lane_image = fromarray(lane_drawn)
-        lane_image = lane_image.resize(original_size,BILINEAR)
-        lane_image = np.asarray(lane_image,dtype="uint8")
+    blanks = np.zeros_like(lanes.avg_fit)
+    lane_drawn = np.dstack((blanks, line_img, blanks))
+    lane_drawn = lane_drawn.astype("uint8")
 
-        # Merge the lane drawing onto the original image
-        result = cv2.addWeighted(image, 1, lane_image, 1, 0)
+    # Re-size to match the original image
+    #lane_image = cv2.filter2D(lane_drawn,-1,HPF)
+    lane_image = fromarray(lane_drawn)
+    lane_image = lane_image.resize(original_size,BILINEAR)
+    lane_image = np.asarray(lane_image,dtype="uint8")
 
-        return result
-    else:
-        # If result is blank, just push original image
-        return image
+    # Merge the lane drawing onto the original image
+    result = cv2.addWeighted(image, 1, lane_image, 1, 0)
+
+    return result
 
 start_eval = time.time() # Time check
 

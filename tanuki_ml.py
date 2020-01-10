@@ -18,7 +18,7 @@ from attention_module import attach_attention_module
 
 from skimage import feature, transform
 
-diff_th = 3
+diff_th = 8
 
 def give_time(X, y, memory_size = 3):
     # Make time-dependent data
