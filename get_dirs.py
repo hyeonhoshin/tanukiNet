@@ -41,7 +41,7 @@ scaler = 6
 # Lane drawing using Lanes class
 lanes = tanuki_ml.Lanes(save=args.frames,json_fname=json_fname, 
                         weights_fname=weights_fname, scaler=6)
-lanes.run(args.input, args.output)
+lanes.write_output_video(args.input, args.output)
 
 stop_eval = time.time() # Time check
 

@@ -47,6 +47,29 @@ class Lanes():
         original road image.
         """
         # Get image ready for feeding into model
+        s, e = self._get_line_positions(image)
+
+        rr,cc,val=line_aa(s[0],s[1],e[0],e[1])
+        line_img = np.zeros_like(self.avg_fit[..., 0])
+        line_img[cc, rr] = val * 255
+
+        blanks = np.zeros_like(self.avg_fit)
+        lane_drawn = np.dstack((blanks, line_img, blanks))
+        lane_drawn = lane_drawn.astype("uint8")
+
+        # Re-size to match the original image
+        #lane_image = cv2.filter2D(lane_drawn,-1,HPF)
+        lane_image = fromarray(lane_drawn)
+        lane_image = lane_image.resize(self.original_size,BILINEAR)
+        lane_image = np.asarray(lane_image,dtype="uint8")
+
+        # Merge the lane drawing onto the original image
+        result = cv2.addWeighted(image, 1, lane_image, 1, 0)
+
+        return result
+
+    def _get_line_positions(self, image):
+        # Get image ready for feeding into model
         small_img = fromarray(image).resize(self.resized_shape)
         small_img = np.array(small_img,dtype="uint8")
         small_img = small_img[None,:,:,:]
@@ -73,7 +96,7 @@ class Lanes():
             self.recent_path.append(path)
             if len(self.recent_path) > self.save:
                 self.recent_path = self.recent_path[1:]
-            
+
             # Calculate average theta
             if len(self.recent_path) == self.save:
                 self.avg_path = np.average(np.array([i for i in self.recent_path]), axis = 0, weights=self.weights)
@@ -83,25 +106,7 @@ class Lanes():
             self.avg_path = np.asarray(self.avg_path, dtype=np.int32)
 
         s, e = self.avg_path
-
-        rr,cc,val=line_aa(s[0],s[1],e[0],e[1])
-        line_img = np.zeros_like(self.avg_fit[..., 0])
-        line_img[cc, rr] = val * 255
-
-        blanks = np.zeros_like(self.avg_fit)
-        lane_drawn = np.dstack((blanks, line_img, blanks))
-        lane_drawn = lane_drawn.astype("uint8")
-
-        # Re-size to match the original image
-        #lane_image = cv2.filter2D(lane_drawn,-1,HPF)
-        lane_image = fromarray(lane_drawn)
-        lane_image = lane_image.resize(self.original_size,BILINEAR)
-        lane_image = np.asarray(lane_image,dtype="uint8")
-
-        # Merge the lane drawing onto the original image
-        result = cv2.addWeighted(image, 1, lane_image, 1, 0)
-
-        return result
+        return s, e
 
     def _read_model(self, json_fname, weights_fname):
         # Load Keras model
@@ -155,13 +160,39 @@ class Lanes():
 
         return l_mid
 
-    def run(self, input_path, output_path):
+    def write_output_video(self, input_path, output_path):
         vid_output = output_path
         clip1 = VideoFileClip(input_path)
         self.original_size = clip1.size
 
         vid_clip = clip1.fl_image(self._road_lines)
         vid_clip.write_videofile(vid_output, audio=False)
+
+    def return_theta(self,input_path,output_path):
+        vid_output = output_path
+        clip1 = VideoFileClip(input_path)
+
+        self.original_size = clip1.size
+
+        total_frames = clip1.duration*clip1.fps
+        total_frames = int(total_frames)
+
+        self.spf = 1/clip1.fps
+
+        for current_frame in range(total_frames):
+            current_time = current_frame*self.spf
+            frame = clip1.get_frame(current_time)
+            theta = self._road_thetas(frame)
+
+            print("[Frame {}] : {}".format(current_frame, theta))
+
+    def _road_thetas(self, image):
+        s, e = self._get_line_positions(image)
+
+        tan = (e[1]-s[1])/(e[0]-s[0])
+        theta = np.arctan(tan)-np.pi/2
+
+            return theta
 
 
 
