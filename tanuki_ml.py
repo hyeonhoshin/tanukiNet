@@ -169,8 +169,7 @@ class Lanes():
         vid_clip = clip1.fl_image(self._road_lines)
         vid_clip.write_videofile(vid_output, audio=False)
 
-    def return_theta(self,input_path,output_path):
-        vid_output = output_path
+    def return_theta(self,input_path):
         clip1 = VideoFileClip(input_path)
 
         self.original_size = clip1.size
