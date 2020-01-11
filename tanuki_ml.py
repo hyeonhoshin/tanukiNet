@@ -190,7 +190,7 @@ class Lanes():
         s, e = self._get_line_positions(image)
 
         tan = (e[1]-s[1])/(e[0]-s[0])
-        theta = (np.arctan(tan)+np.pi/2)*rad_to_deg
+        theta = (np.arctan(tan))*rad_to_deg
 
         return theta
 
