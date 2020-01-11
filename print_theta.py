@@ -7,7 +7,7 @@ parser.add_argument('-f','--frames',type=int, required=False, default=15, help =
 
 args = parser.parse_args()
 
-print("\nDetect lanes in [{}], and then generate output video file in [{}]\n".format(args.input, args.output))
+print("\nDetect lanes in [{}]\n".format(args.input))
 
 import tanuki_ml
 import warnings
