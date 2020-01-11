@@ -26,6 +26,7 @@ from moviepy.editor import VideoFileClip
 import cv2
 
 diff_th = 8
+rad_to_deg = 180/np.pi
 
 # Class to average lanes with
 class Lanes():
@@ -190,7 +191,7 @@ class Lanes():
         s, e = self._get_line_positions(image)
 
         tan = (e[1]-s[1])/(e[0]-s[0])
-        theta = np.arctan(tan)-np.pi/2
+        theta = np.arctan(tan)*rad_to_deg
 
         return theta
 
